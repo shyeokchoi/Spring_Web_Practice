@@ -30,7 +30,7 @@ public class MybatisConfig {
 
         // mapper.xml 위치 패키지 주소
         sqlSessionFactoryBean.setMapperLocations(
-                new PathMatchingResourcePatternResolver().getResources("classpath:/mappers/*Mapper.xml"));
+                new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/*Mapper.xml"));
 
         return sqlSessionFactoryBean.getObject();
     }

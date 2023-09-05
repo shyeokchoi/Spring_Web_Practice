@@ -1,5 +1,7 @@
 package com.board.service.member;
 
-public interface MemberService {
+import com.board.dto.member.InsMemberDTO;
 
+public interface MemberService {
+    public Integer insMember(InsMemberDTO insMemberDTO);
 }

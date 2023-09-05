@@ -1,4 +1,4 @@
-package com.board.mapper;
+package com.board.mapper.comment;
 
 import org.apache.ibatis.annotations.Mapper;
 

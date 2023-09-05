@@ -12,10 +12,9 @@ logging:
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    #url: jdbc:log4jdbc:mysql://localhost:3306/PCONSOLEDB?serverTimezone=UTC
-    url: jdbc:log4jdbc:mysql://develop-console-mysql.cqumm9p8ksgp.ap-northeast-2.rds.amazonaws.com:10025/PCONSOLEDB?serverTimezone=UTC
-    username: PCONSOLE_OWN
-    password: Pconsole_own~135
+    url: jdbc:log4jdbc:mysql://localhost:3306/web_study?serverTimezone=UTC
+    username: root
+    password: 1130
     hikari:
       pool-name: hikari-cp
       maximum-pool-size: 5
@@ -28,7 +27,7 @@ spring:
 
   mvc:
     pathmatch:
-      matching-strategy: ant_path_matcher #swagger2 오류처리
+      matching-strategy: ANT_PATH_MATCHER #swagger2 오류처리
 
   #error config
   error:
@@ -58,7 +57,7 @@ mybatis:
     call-setters-on-nulls: true
     jdbc-type-for-null: varchar
     default-fetch-size: 500
-  type-aliases-package: com.wemade.board
+  type-aliases-package: com.board
   mapper-locations: classpath:mapper/*.xml
 
 #httpConnPool config
@@ -69,19 +68,6 @@ httpConnPool:
   connectionRequestTimeout: 5000
   connectionTimeout: 3000
   socketTimeout: 3000
-
-#admin config
-admin:
-  default:
-    page:
-      size: 20
-    pvalue: new1234!
-  aes:
-    key: wemade!@!34123456781101234567890
-  extWhiteList: jpg,jpeg,gif,png,bmp,tiff,raw,zip,doc,docx,xls,xlsx,pdf,ppt,pptx,csv,txt,html,apk
-  env: alpha
-  mainLimit: 20
-  similarLimit: 5
 
 # swagger api-docs
 springdoc:
