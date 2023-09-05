@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <Appenders>
+        <!-- 콘솔 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <JsonLayout compact="true" eventEol="true" stacktraceAsString="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+            </JsonLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->
+        <Root level="WARN">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</configuration>

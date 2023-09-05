@@ -1,0 +1,38 @@
+-- wrapped token 정보
+CREATE TABLE `ifc_wrapped_token_info` (
+  `id` varchar(32) NOT NULL COMMENT '아이디',
+  `name` varchar(64) DEFAULT NULL COMMENT '이름',
+  `symbol` varchar(64) NOT NULL COMMENT '심볼',
+  `chain` varchar(64) NOT NULL COMMENT '체인',
+  `icon_url` varchar(255) DEFAULT NULL COMMENT 'icon url',
+  `desc` varchar(700) DEFAULT NULL COMMENT '설명',
+  `type` varchar(32) DEFAULT NULL COMMENT '토큰 타입 (erc20, erc721)',
+  `address` varchar(64) DEFAULT NULL COMMENT 'address',
+  `disabled` tinyint(1) DEFAULT NULL COMMENT 'disabled',
+  `order` int DEFAULT NULL COMMENT 'order',
+  `transferable` tinyint(1) DEFAULT NULL COMMENT 'transferable',
+  `dex` tinyint(1) DEFAULT NULL COMMENT 'dex',
+  `decimal` int DEFAULT NULL COMMENT 'decimal',
+  `release_date` bigint DEFAULT NULL COMMENT 'releaseDate',
+  `ticker` varchar(32) DEFAULT NULL COMMENT 'ticker',
+  `badge_close_date` bigint DEFAULT NULL COMMENT 'badgeCloseDate',
+  `contract_decimals` int DEFAULT NULL COMMENT 'contractDecimals',
+  `category` varchar(32) DEFAULT NULL COMMENT 'category',
+  `wrapped_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `wrapped_symbol` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `wrapped_display_symbol` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `wrapped_icon_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `wrapped_address` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'category',
+  `wrapped_chain` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'category',
+  `cret_id` varchar(32) DEFAULT NULL COMMENT '생성자 아이디',
+  `cret_dt` bigint DEFAULT NULL COMMENT '생성 시간',
+  `cret_pgm_id` varchar(32) DEFAULT NULL COMMENT '생성 클래스 아이디',
+  `amd_dt` bigint DEFAULT NULL COMMENT '수정 시간',
+  `amd_pgm_id` varchar(32) DEFAULT NULL COMMENT '수정 클래스 아이디',
+  `amd_id` varchar(32) DEFAULT NULL COMMENT '수정자 아이디',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ifc_wrapped_token_info` (`chain`,`symbol`),
+  KEY `ifc_wrapped_token_info_symbol_IDX` (`symbol`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+

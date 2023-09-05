@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+        <!-- 해당 설정파일에서 사용하는 프로퍼티-->
+    <Properties>
+        <property name="LOGS_PATH">./logs</property>
+    </Properties>
+
+    <Appenders>
+        <!-- 콘솔 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %highlight{[%-5p]}{FATAL=bg_red, ERROR=red, INFO=green, DEBUG=blue} [%C.%M][%L] %style{[%t]}{yellow} - %m%n" />
+        </Console>
+
+        <!-- 파일 -->
+        <RollingFile name ="RollingFile">
+            <FileName>${LOGS_PATH}/pconsole.log</FileName>
+            <FilePattern>${LOGS_PATH}/pconsole.%d{yyyy-MM-dd}.%i.log.gz</FilePattern>
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %highlight{[%-5p]}{FATAL=bg_red, ERROR=red, INFO=green, DEBUG=blue} [%C.%M][%L] %style{[%t]}{yellow} - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <TimeBasedTriggeringPolicy interval = "1" modulate = "true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Application Loggers -->
+        <logger name="com.test.api.controller" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="RollingFile" />
+        </logger>
+
+        <logger name="com.test.api.service" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="RollingFile" />
+        </logger>
+
+        <!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="RollingFile" />
+        </Root>
+    </Loggers>
+</configuration>

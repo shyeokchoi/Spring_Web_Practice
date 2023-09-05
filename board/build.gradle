@@ -1,0 +1,93 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.12'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.wemade'
+version = ''
+sourceCompatibility = '11'
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+bootRun {
+    // 이클립스에서 gradle debug모드로 실행하기 위한 옵션 (이클립스 debug configration설정이 같이 되어야 한다)
+   // jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+}
+
+dependencies {
+    // spring boot dev tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // spring boot web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // spring boot aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // mybatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+
+    // mysql connector
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    
+    // 다국어 지원
+    implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
+
+    // log4j2
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2' 
+
+    // jdbc log
+    // implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+    implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+
+    // file upload
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Swagger3
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+
+    // JSONParser, JSONObject설정
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.9.1'
+
+    //object mapper
+    //implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+    // apache commons collections
+    implementation 'org.apache.commons:commons-collections4:4.4'
+
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
