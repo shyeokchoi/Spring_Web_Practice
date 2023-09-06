@@ -1,4 +1,5 @@
-./board/bin/*
+board/bin/*
+board/log/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,java
