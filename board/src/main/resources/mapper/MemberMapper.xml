@@ -19,4 +19,36 @@
             );
     </insert>
 
+    <select id = "selectById" parameterType="String" resultType = "com.board.dto.member.MemberDTO">
+        SELECT 
+            no
+            , phone
+            , withdrawn_at
+            , pw
+            , id
+            , name
+            , email
+        FROM 
+            member
+        WHERE 
+            id = #{id};
+
+    </select>
+
+    <select id = "selectByEmail" parameterType="String" resultType = "com.board.dto.member.MemberDTO">
+        SELECT 
+            no
+            , phone
+            , withdrawn_at
+            , pw
+            , id
+            , name
+            , email
+        FROM 
+            member
+        WHERE 
+            email = #{email};
+    </select>
+
+
 </mapper>

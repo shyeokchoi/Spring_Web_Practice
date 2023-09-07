@@ -12,11 +12,11 @@ public class BaseController {
         return ok(null);
     }
 
-    protected <T> ResponseEntity<T> nok(T body) {
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    protected <T> ResponseEntity<T> nok(T body, HttpStatus httpStatus) {
+        return new ResponseEntity<>(body, httpStatus);
     }
 
-    protected <T> ResponseEntity<T> nok() {
-        return nok(null);
+    protected <T> ResponseEntity<T> nok(HttpStatus httpStatus) {
+        return nok(null, httpStatus);
     }
 }
