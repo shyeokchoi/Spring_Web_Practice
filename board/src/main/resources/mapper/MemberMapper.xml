@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.member.MemberMapper">
+    <sql id = "member_cols">
+        no
+        , phone
+        , withdrawn_at
+        , pw
+        , id
+        , name
+        , email 
+    </sql>
+
     <insert id = "insMember" parameterType="com.board.dto.member.InsMemberDTO" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO 
             member (
@@ -19,36 +29,20 @@
             );
     </insert>
 
-    <select id = "selectById" parameterType="String" resultType = "com.board.dto.member.MemberDTO">
+    <select id = "selectOne" parameterType="com.board.dto.member.SelectMemberDTO" resultType = "com.board.dto.member.MemberDTO">
         SELECT 
-            no
-            , phone
-            , withdrawn_at
-            , pw
-            , id
-            , name
-            , email
+        <include refid = "member_cols" />
         FROM 
             member
-        WHERE 
-            id = #{id};
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="email != null">
+                AND email = #{email}
+            </if>
+        </where>
 
     </select>
-
-    <select id = "selectByEmail" parameterType="String" resultType = "com.board.dto.member.MemberDTO">
-        SELECT 
-            no
-            , phone
-            , withdrawn_at
-            , pw
-            , id
-            , name
-            , email
-        FROM 
-            member
-        WHERE 
-            email = #{email};
-    </select>
-
 
 </mapper>
