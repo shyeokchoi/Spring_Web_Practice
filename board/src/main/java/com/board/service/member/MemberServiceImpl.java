@@ -13,8 +13,13 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
 
     @Override
-    public Integer insMember(InsMemberDTO insMemberDTO) {
+    public Integer insMember(InsMemberDTO insMemberDTO) throws Exception {
+        // id conflict check
+
+        // email conflict check
+
         memberMapper.insMember(insMemberDTO);
+
         return insMemberDTO.getNo();
     }
 }

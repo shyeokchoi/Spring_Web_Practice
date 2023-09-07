@@ -10,9 +10,5 @@ public class MemberDTO {
     private String pw;
     private String email;
     private String phone;
-    private Long lastLogin;
-    private Long lastLogout;
-    private String accessToken;
-    private String refreshToken;
     private Long withdrawnAt;
 }

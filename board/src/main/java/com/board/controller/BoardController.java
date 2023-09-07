@@ -1,11 +1,12 @@
 package com.board.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.board.dto.ResponseDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
@@ -29,8 +30,12 @@ public class BoardController extends BaseController {
      * @return 회원 no
      */
     @PostMapping("/members")
-    public ResponseEntity<ResponseDTO<Integer>> insMember(@RequestBody InsMemberDTO insMemberDTO) {
-        return ok(memberService.insMember(insMemberDTO));
+    public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
+        try {
+            return ok(memberService.insMember(insMemberDTO));
+        } catch (Exception e) {
+            return nok();
+        }
     }
 
     // Post
