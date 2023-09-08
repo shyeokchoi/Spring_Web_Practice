@@ -5,6 +5,9 @@ import com.board.enums.HistoryEnum;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 멤버 히스토리를 받아오기 위한 DTO
+ */
 @Getter
 @Builder
 public class MemberHistoryDTO {

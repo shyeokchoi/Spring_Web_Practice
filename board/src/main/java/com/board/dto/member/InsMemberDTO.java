@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * 회원가입을 위한 DTO
+ */
 @Data
 @Schema(description = "회원가입용 DTO")
 public class InsMemberDTO {

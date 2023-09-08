@@ -5,6 +5,9 @@ import com.board.enums.MemberAuthStatusEnum;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * member_auth 테이블의 정보를 받아오기 위한 DTO
+ */
 @Builder
 @Getter
 public class MemberAuthDTO {

@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * 로그인 요청을 위한 DTO
+ */
 @Data
 @Schema(description = "로그인 요청 DTO")
 public class SigninRequestDTO {
