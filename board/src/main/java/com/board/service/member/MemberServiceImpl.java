@@ -1,7 +1,5 @@
 package com.board.service.member;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
+import com.board.util.PwEncryptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +22,7 @@ import lombok.RequiredArgsConstructor;
  */
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
+    private final PwEncryptor pwEncryptor;
 
     @Override
     @Transactional
@@ -31,11 +31,10 @@ public class MemberServiceImpl implements MemberService {
         checkDuplicateId(insMemberDTO);
         checkDuplicateEmail(insMemberDTO);
 
-        String orgPw = insMemberDTO.getPw();
-        String saltedPw = saltPw(orgPw);
-        String encryptedPw = computeSha256(saltedPw);
-        insMemberDTO.setPw(encryptedPw);
+        // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
+        insMemberDTO.setPw(pwEncryptor.encryptPw(insMemberDTO.getPw()));
 
+        // DB에 저장
         memberMapper.insMember(insMemberDTO);
 
         return insMemberDTO.getNo();
@@ -69,48 +68,6 @@ public class MemberServiceImpl implements MemberService {
                 .ifPresent(member -> {
                     throw new ConflictException("email");
                 });
-    }
-
-    /**
-     * sha-256 알고리즘으로 비밀번호 암호화
-     * 
-     * @param pw
-     * @return 암호화된 비밀번호
-     */
-    private String computeSha256(String pw) {
-        try {
-            // MessageDigest 객체 생성 (SHA-256 알고리즘 사용)
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
-            // 문자열을 바이트 배열로 변환
-            byte[] encodedHash = digest.digest(pw.getBytes());
-
-            // 바이트 배열을 16진수 문자열로 변환
-            StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
-            for (byte b : encodedHash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-
-            // 해시된 비밀번호를 문자열로 반환
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Internal error: password 암호화 실패");
-        }
-
-    }
-
-    /**
-     * pw salting
-     * 
-     * @param pw
-     * @return salting 완료된 pw
-     */
-    private String saltPw(String pw) {
-        return "wemade" + pw + "12345";
     }
 
     @Override
