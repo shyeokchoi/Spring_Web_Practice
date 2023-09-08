@@ -14,21 +14,19 @@
 
     <!-- 새로운 멤버 등록 (회원가입) -->
     <insert id = "insMember" parameterType="com.board.dto.member.InsMemberDTO" useGeneratedKeys="true" keyProperty="no">
-        INSERT INTO 
-            member (
-                name
-                , id
-                , pw
-                , email
-                , phone
-            )
-        VALUES (
+        INSERT INTO member (
+            name
+            , id
+            , pw
+            , email
+            , phone
+        ) VALUES (
             #{name}
             , #{id} 
             , #{pw} 
             , #{email} 
             , #{phone} 
-            );
+        );
     </insert>
 
     <!-- 멤버 선택 -->
@@ -62,16 +60,14 @@
 
     <!-- 멤버 인증 정보 저장 -->
     <insert id="insMemberAuth" parameterType="com.board.dto.member.MemberAuthDTO">
-        INSERT INTO
-            member_auth (
-                member_no
-                , access_token
-                , ip_addr
-                , user_agent
-                , status
-                , created_at
-            )
-        VALUES (
+        INSERT INTO member_auth (
+            member_no
+            , access_token
+            , ip_addr
+            , user_agent
+            , status
+            , created_at
+        ) VALUES (
             #{memberNo}
             , #{accessToken}
             , #{ipAddr}
@@ -94,13 +90,11 @@
 
     <!-- 멤버 로그인 히스토리 저장 -->
     <insert id="insMemberHistory" parameterType="com.board.dto.member.MemberHistoryDTO">
-       INSERT INTO
-            member_history (
-                type 
-                , timestamp
-                , member_no
-            )
-        VALUES (
+       INSERT INTO member_history (
+            type 
+            , timestamp
+            , member_no
+        ) VALUES (
             #{type}
             , #{timestamp}
             , #{memberNo}

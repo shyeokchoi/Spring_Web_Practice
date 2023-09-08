@@ -33,9 +33,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Integer insMember(InsMemberDTO insMemberDTO) {
         // 아이디, 이메일 중복 여부를 확인하고 중복이면 예외 발생
-        checkDuplicateId(insMemberDTO);
-        checkDuplicateEmail(insMemberDTO);
-
+        checkDuplicateById(insMemberDTO.getId());
+        checkDuplicateByEmail(insMemberDTO.getEmail());
         // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
         insMemberDTO.setPw(pwEncryptor.encryptPw(insMemberDTO.getPw()));
 
@@ -45,33 +44,36 @@ public class MemberServiceImpl implements MemberService {
         return insMemberDTO.getNo();
     }
 
-    /**
-     * id 중복 여부 확인
-     * 
-     * @param insMemberDTO
-     */
-    private void checkDuplicateId(InsMemberDTO insMemberDTO) {
+    private void checkDuplicateById(String id) {
         SelectMemberDTO selectMemberDTO = new SelectMemberDTO();
 
-        selectMemberDTO.setId(insMemberDTO.getId());
-        Optional.ofNullable(memberMapper.selectOne(selectMemberDTO))
-                .ifPresent(member -> {
-                    throw new ConflictException("id");
-                });
+        selectMemberDTO.setId(id);
+
+        checkDuplicateField(selectMemberDTO);
     }
 
-    /**
-     * email 중복 여부 확인
-     * 
-     * @param insMemberDTO
-     */
-    private void checkDuplicateEmail(InsMemberDTO insMemberDTO) {
+    private void checkDuplicateByEmail(String email) {
         SelectMemberDTO selectMemberDTO = new SelectMemberDTO();
 
-        selectMemberDTO.setEmail(insMemberDTO.getEmail());
+        selectMemberDTO.setEmail(email);
+
+        checkDuplicateField(selectMemberDTO);
+    }
+
+    private void checkDuplicateField(SelectMemberDTO selectMemberDTO) {
+        String fieldToCheck;
+
+        if (selectMemberDTO.getId() != null) {
+            fieldToCheck = "id";
+        } else if (selectMemberDTO.getEmail() != null) {
+            fieldToCheck = "email";
+        } else {
+            throw new IllegalArgumentException("Wrong argument: SelectMemberDTO의 필드가 모두 null 입니다");
+        }
+
         Optional.ofNullable(memberMapper.selectOne(selectMemberDTO))
                 .ifPresent(member -> {
-                    throw new ConflictException("email");
+                    throw new ConflictException(fieldToCheck);
                 });
     }
 

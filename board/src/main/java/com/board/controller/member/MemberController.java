@@ -27,52 +27,53 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
-    private final MemberService memberService;
+        private final MemberService memberService;
 
-    /**
-     * 회원가입
-     * 
-     * @param insMemberDTO 회원가입에 필요한 정보
-     * @return 회원 no가 body에 들어간 ResponseEntity
-     */
-    @Operation(summary = "signup", description = "회원가입")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "409", description = "CONFLICT")
-    })
-    @Parameters({
-            @Parameter(name = "name", description = "이름", example = "홍길동"),
-            @Parameter(name = "id", description = "아이디", example = "hongildong"),
-            @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
-            @Parameter(name = "email", description = "이메일", example = "hongildong@gmail.com"),
-            @Parameter(name = "phone", description = "휴대폰 번호", example = "010-0000-0000")
-    })
-    @PostMapping("/signup")
-    public ResponseEntity<String> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
+        /**
+         * 회원가입
+         * 
+         * @param insMemberDTO 회원가입에 필요한 정보
+         * @return 회원 no가 body에 들어간 ResponseEntity
+         */
+        @Operation(summary = "signup", description = "회원가입")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "OK"),
+                        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+                        @ApiResponse(responseCode = "409", description = "CONFLICT")
+        })
+        // @Parameters({
+        // @Parameter(name = "name", description = "이름", example = "홍길동"),
+        // @Parameter(name = "id", description = "아이디", example = "hongildong"),
+        // @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
+        // @Parameter(name = "email", description = "이메일", example =
+        // "hongildong@gmail.com"),
+        // @Parameter(name = "phone", description = "휴대폰 번호", example = "010-0000-0000")
+        // })
+        @PostMapping("/signup")
+        public ResponseEntity<String> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
 
-        return ok(memberService.insMember(insMemberDTO).toString());
-    }
+                return ok(memberService.insMember(insMemberDTO).toString());
+        }
 
-    /**
-     * 로그인
-     * 
-     * @param signinRequestDTO
-     * @return accessToken이 body로 들어간 ResponseEntity
-     */
-    @Operation(summary = "signin", description = "로그인")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED")
-    })
-    @Parameters({
-            @Parameter(name = "id", description = "아이디", example = "hongildong"),
-            @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
-    })
-    @PostMapping("/signin")
-    public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
-        return ok(memberService.signin(signinRequestDTO));
-    }
+        /**
+         * 로그인
+         * 
+         * @param signinRequestDTO
+         * @return accessToken이 body로 들어간 ResponseEntity
+         */
+        @Operation(summary = "signin", description = "로그인")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "OK"),
+                        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+                        @ApiResponse(responseCode = "401", description = "UNAUTHORIZED")
+        })
+        @Parameters({
+                        @Parameter(name = "id", description = "아이디", example = "hongildong"),
+                        @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
+        })
+        @PostMapping("/signin")
+        public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
+                return ok(memberService.signin(signinRequestDTO));
+        }
 
 }

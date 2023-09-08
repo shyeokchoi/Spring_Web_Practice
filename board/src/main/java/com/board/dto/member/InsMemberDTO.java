@@ -28,7 +28,7 @@ public class InsMemberDTO {
     @Schema(description = "회원 아이디")
     private String id;
 
-    @Size(max = 20, message = "비밀번호는 100자 이하여야 합니다.")
+    @Size(max = 20, message = "비밀번호는 20자 이하여야 합니다.")
     @NotBlank
     @Schema(description = "비밀번호")
     private String pw;
