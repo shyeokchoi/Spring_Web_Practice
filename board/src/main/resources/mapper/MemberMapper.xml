@@ -48,4 +48,47 @@
 
     </select>
 
+    <!-- signin -->
+    <select id="signin" parameterType="com.board.dto.member.SigninRequestDTO" resultType="java.lang.Integer">
+        SELECT 
+            m.no
+        FROM
+            member m
+        WHERE
+            id = #{id}
+            AND pw = #{pw}
+            
+    </select>
+
+    <!-- 멤버 인증 정보 저장 -->
+    <insert id="insMemberAuth" parameterType="com.board.dto.member.MemberAuthDTO">
+        INSERT INTO
+            member_auth (
+                member_no
+                , access_token
+                , ip_addr
+                , user_agent
+                , status
+                , created_at
+            )
+        VALUES (
+            #{memberNo}
+            , #{accessToken}
+            , #{ipAddr}
+            , #{userAgent}
+            , #{status}
+            , #{createdAt}
+        )
+    </insert>
+
+    <!-- 이미 로그인되어 있는지 여부 확인 -->
+    <select id="isAlreadySignedIn" parameterType="java.lang.Integer" resultType="java.lang.Boolean">
+        SELECT 
+            CASE WHEN COUNT(*) > 0 THEN true ELSE false END
+        FROM 
+            member_auth
+        WHERE 
+            member_no = #{memberNo}
+            AND status = 'VALID'
+    </select>
 </mapper>
