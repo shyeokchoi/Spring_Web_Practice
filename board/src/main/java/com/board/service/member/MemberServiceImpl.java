@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SelectMemberDTO;
+import com.board.dto.member.SigninRequestDTO;
+import com.board.dto.member.SigninResponseDTO;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
 
@@ -109,5 +111,11 @@ public class MemberServiceImpl implements MemberService {
      */
     private String saltPw(String pw) {
         return "wemade" + pw + "12345";
+    }
+
+    @Override
+    public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'signin'");
     }
 }
