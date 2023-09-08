@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberService {
         selectMemberDTO.setEmail(insMemberDTO.getEmail());
         Optional.ofNullable(memberMapper.selectOne(selectMemberDTO))
                 .ifPresent(member -> {
-                    throw new ConflictException("id");
+                    throw new ConflictException("email");
                 });
     }
 
