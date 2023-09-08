@@ -32,7 +32,6 @@ public class MemberServiceImpl implements MemberService {
         String orgPw = insMemberDTO.getPw();
         String saltedPw = saltPw(orgPw);
         String encryptedPw = computeSha256(saltedPw);
-
         insMemberDTO.setPw(encryptedPw);
 
         memberMapper.insMember(insMemberDTO);

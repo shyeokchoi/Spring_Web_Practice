@@ -1,12 +1,3 @@
-/***************************************************
- * Copyright(c) 2023-2024 WEMADE right reserved.
- *
- * Revision History
- * Author : hubert
- * Date : Fri Aug 11 2023
- * Description :
- *
- ****************************************************/
 package com.board.framework.interceptor;
 
 import java.util.Enumeration;
