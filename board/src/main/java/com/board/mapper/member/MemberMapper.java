@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
+import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 
@@ -47,4 +48,11 @@ public interface MemberMapper {
      * @return 로그인 여부
      */
     public Boolean isAlreadySignedIn(Integer memberNo);
+
+    /**
+     * 멤버 로그인/로그아웃 히스토리 저장
+     * 
+     * @param memberHistoryDTO
+     */
+    public void insMemberHistory(MemberHistoryDTO memberHistoryDTO);
 }

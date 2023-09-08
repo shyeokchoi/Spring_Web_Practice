@@ -6,12 +6,14 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.board.constant.enums.MemberAuthStatus;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
+import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.enums.HistoryEnum;
+import com.board.enums.MemberAuthStatusEnum;
 import com.board.exception.AuthenticationException;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
@@ -94,12 +96,23 @@ public class MemberServiceImpl implements MemberService {
         // 토큰 생성 후 DB 저장
         String accessToken = UUID.randomUUID().toString();
 
-        MemberAuthDTO memberAuthDTO = new MemberAuthDTO();
-        memberAuthDTO.setMemberNo(memberNo);
-        memberAuthDTO.setAccessToken(accessToken);
-        memberAuthDTO.setStatus(MemberAuthStatus.VALID);
-        memberAuthDTO.setCreatedAt(Instant.now().getEpochSecond());
+        MemberAuthDTO memberAuthDTO = MemberAuthDTO.builder()
+                .memberNo(memberNo)
+                .accessToken(accessToken)
+                .status(MemberAuthStatusEnum.VALID)
+                .createdAt(Instant.now().getEpochSecond())
+                .build();
+
         memberMapper.insMemberAuth(memberAuthDTO);
+
+        // 유저 히스토리 생성 후 DB 저장
+        MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
+                .type(HistoryEnum.LOGIN)
+                .timestamp(Instant.now().getEpochSecond())
+                .memberNo(memberNo)
+                .build();
+
+        memberMapper.insMemberHistory(memberHistoryDTO);
 
         // 토큰 내려주기
         return new SigninResponseDTO(accessToken);

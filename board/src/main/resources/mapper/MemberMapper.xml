@@ -91,4 +91,19 @@
             member_no = #{memberNo}
             AND status = 'VALID'
     </select>
+
+    <!-- 멤버 로그인 히스토리 저장 -->
+    <insert id="insMemberHistory" parameterType="com.board.dto.member.MemberHistoryDTO">
+       INSERT INTO
+            member_history (
+                type 
+                , timestamp
+                , member_no
+            )
+        VALUES (
+            #{type}
+            , #{timestamp}
+            , #{memberNo}
+        ) 
+    </insert>
 </mapper>
