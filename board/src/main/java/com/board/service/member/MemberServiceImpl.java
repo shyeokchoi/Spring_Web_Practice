@@ -3,7 +3,11 @@ package com.board.service.member;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
@@ -114,6 +118,34 @@ public class MemberServiceImpl implements MemberService {
         return memberNoOptional.get();
     }
 
+    private MemberAuthDTO buildMemberAuth(Integer memberNo, String accessToken,
+            MemberAuthStatusEnum memberAuthStatusEnum) {
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+
+        String userAgent = servletRequest.getHeader("User-Agent");
+        String ipAddr = servletRequest.getHeader("X-FORWARDED-FOR");
+        if (ipAddr == null) {
+            ipAddr = servletRequest.getRemoteAddr();
+        }
+
+        return MemberAuthDTO.builder()
+                .memberNo(memberNo)
+                .accessToken(accessToken)
+                .status(memberAuthStatusEnum)
+                .ipAddr(ipAddr)
+                .userAgent(userAgent)
+                .build();
+    }
+
+    private MemberHistoryDTO buildMemberHistory(Integer memberNo, HistoryEnum historyEnum) {
+
+        return MemberHistoryDTO.builder()
+                .type(historyEnum)
+                .memberNo(memberNo)
+                .build();
+    }
+
     @Override
     public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
         Integer memberNo = checkIdPw(signinRequestDTO);
@@ -126,19 +158,12 @@ public class MemberServiceImpl implements MemberService {
         // 토큰 생성 후 DB 저장
         String accessToken = UUID.randomUUID().toString();
 
-        MemberAuthDTO memberAuthDTO = MemberAuthDTO.builder()
-                .memberNo(memberNo)
-                .accessToken(accessToken)
-                .status(MemberAuthStatusEnum.VALID)
-                .build();
+        MemberAuthDTO memberAuthDTO = buildMemberAuth(memberNo, accessToken, MemberAuthStatusEnum.VALID);
 
         memberMapper.insMemberAuth(memberAuthDTO);
 
         // 유저 히스토리 생성 후 DB 저장
-        MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
-                .type(HistoryEnum.LOGIN)
-                .memberNo(memberNo)
-                .build();
+        MemberHistoryDTO memberHistoryDTO = buildMemberHistory(memberNo, HistoryEnum.SIGNIN);
 
         memberMapper.insMemberHistory(memberHistoryDTO);
 
@@ -163,10 +188,7 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.expireMemberAuth(signoutRequestDTO.getAccessToken());
 
         // 유저 히스토리 생성 후 DB 저장
-        MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
-                .type(HistoryEnum.LOGOUT)
-                .memberNo(memberNo)
-                .build();
+        MemberHistoryDTO memberHistoryDTO = buildMemberHistory(memberNo, HistoryEnum.SIGNOUT);
 
         memberMapper.insMemberHistory(memberHistoryDTO);
     }

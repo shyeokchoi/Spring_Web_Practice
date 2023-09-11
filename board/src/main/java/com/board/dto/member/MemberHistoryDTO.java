@@ -20,7 +20,7 @@ public class MemberHistoryDTO {
      */
     private final Integer memberNo;
     /**
-     * 로그인인지 로그아웃인지
+     * Signin or Signout
      */
     private final HistoryEnum type;
 }
