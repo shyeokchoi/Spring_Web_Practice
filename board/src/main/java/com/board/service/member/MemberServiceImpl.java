@@ -154,13 +154,13 @@ public class MemberServiceImpl implements MemberService {
 
         // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
         if (!memberNoOptional.isPresent()) {
-            throw new AlreadySignedOutException("이미 로그아웃된 계정입니다.");
+            throw new AlreadySignedOutException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
         }
 
         Integer memberNo = memberNoOptional.get();
 
         // access token으로 member_auth의 status를 expire
-        memberMapper.expireMemberAuth(signoutRequestDTO);
+        memberMapper.expireMemberAuth(signoutRequestDTO.getAccessToken());
 
         // 유저 히스토리 생성 후 DB 저장
         MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
@@ -173,8 +173,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void withdraw(WithdrawRequestDTO withdrawRequestDTO) {
-        // 아이디, 비밀번호 확인
-        Integer memberNo = checkIdPw(withdrawRequestDTO);
+        // 로그아웃하려고 하는 멤버의 member_no 얻기
+        Optional<Integer> memberNoOptional = Optional
+                .ofNullable(memberMapper.selectMemberNoByAccessToken(withdrawRequestDTO.getAccessToken()));
+
+        // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
+        if (!memberNoOptional.isPresent()) {
+            throw new AlreadySignedOutException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
+        }
+
+        Integer memberNo = memberNoOptional.get();
+
+        // access token으로 member_auth의 status를 expire
+        memberMapper.expireMemberAuth(withdrawRequestDTO.getAccessToken());
 
         // 회원 탈퇴
         memberMapper.withdraw(memberNo);
