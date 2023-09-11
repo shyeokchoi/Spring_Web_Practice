@@ -50,9 +50,9 @@ public class MemberController extends BaseController {
         // @Parameter(name = "phone", description = "휴대폰 번호", example = "010-0000-0000")
         // })
         @PostMapping("/signup")
-        public ResponseEntity<String> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
+        public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
 
-                return ok(memberService.insMember(insMemberDTO).toString());
+                return ok(memberService.insMember(insMemberDTO));
         }
 
         /**
