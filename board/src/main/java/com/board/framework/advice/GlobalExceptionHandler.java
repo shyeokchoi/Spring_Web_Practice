@@ -1,10 +1,13 @@
 package com.board.framework.advice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,21 +18,34 @@ import com.board.exception.ConflictException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
-     * 에러 메시지를 포함해 HTTP body를 만드는 함수
+     * 에러 메시지를 받아서 HTTP body로 만드는 함수
      * 
      * @param errMsg
-     * @return 만들어진 body
+     * @return 만들어진 HTTP body
      */
     private Map<String, String> buildErrBody(String errMsg) {
         Map<String, String> body = new HashMap<>();
-        body.put("error message", errMsg);
+
+        body.put("error", errMsg);
         return body;
+    }
+
+    /**
+     * 에러 메시지의 리스트를 받아서 HTTP body로 만드는 함수
+     * 
+     * @param errMsgList
+     * @return 만들어진 HTTP body
+     */
+    private Map<String, String> buildErrBody(List<String> errMsgList) {
+        String errMsg = errMsgList.stream().reduce("", (acc, msg) -> acc + msg);
+        return buildErrBody(errMsg);
     }
 
     /**
      * 이미 존재하는 회원 정보로 가입하려고 하면 발생하는 예외
      * 
      * @param e
+     * 
      * @return status code 409
      */
     @ExceptionHandler(ConflictException.class)
@@ -45,7 +61,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
+        List<String> errMsgList = e.getBindingResult().getAllErrors()
+                .stream()
+                .map(ObjectError::getDefaultMessage)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(errMsgList));
     }
 
     /**

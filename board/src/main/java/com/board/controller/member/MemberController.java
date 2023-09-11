@@ -15,8 +15,6 @@ import com.board.framework.base.BaseController;
 import com.board.service.member.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,14 +39,6 @@ public class MemberController extends BaseController {
                         @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
                         @ApiResponse(responseCode = "409", description = "CONFLICT")
         })
-        // @Parameters({
-        // @Parameter(name = "name", description = "이름", example = "홍길동"),
-        // @Parameter(name = "id", description = "아이디", example = "hongildong"),
-        // @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
-        // @Parameter(name = "email", description = "이메일", example =
-        // "hongildong@gmail.com"),
-        // @Parameter(name = "phone", description = "휴대폰 번호", example = "010-0000-0000")
-        // })
         @PostMapping("/signup")
         public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
 
@@ -66,10 +56,6 @@ public class MemberController extends BaseController {
                         @ApiResponse(responseCode = "200", description = "OK"),
                         @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
                         @ApiResponse(responseCode = "401", description = "UNAUTHORIZED")
-        })
-        @Parameters({
-                        @Parameter(name = "id", description = "아이디", example = "hongildong"),
-                        @Parameter(name = "pw", description = "비밀번호", example = "password123!"),
         })
         @PostMapping("/signin")
         public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
