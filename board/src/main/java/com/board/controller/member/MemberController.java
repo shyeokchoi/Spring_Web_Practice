@@ -12,6 +12,7 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.SignoutRequestDTO;
+import com.board.dto.member.WithdrawRequestDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.member.MemberService;
 
@@ -78,4 +79,10 @@ public class MemberController extends BaseController {
         return ok();
     }
 
+    @Operation(summary = "withdraw", description = "회원탈퇴")
+    @PostMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(@RequestBody WithdrawRequestDTO withdrawRequestDTO) {
+        memberService.withdraw(withdrawRequestDTO);
+        return ok();
+    }
 }

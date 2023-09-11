@@ -42,12 +42,13 @@
             <if test="email != null">
                 AND email = #{email}
             </if>
+            AND withdrawn_at IS NULL
         </where>
 
     </select>
 
     <!-- signin -->
-    <select id="signin" parameterType="com.board.dto.member.SigninRequestDTO" resultType="java.lang.Integer">
+    <select id="signin" parameterType="com.board.dto.member.IdPwDTO" resultType="java.lang.Integer">
         SELECT 
             m.no
         FROM
@@ -55,7 +56,7 @@
         WHERE
             id = #{id}
             AND pw = #{pw}
-            
+            AND withdrawn_at IS NULL
     </select>
 
     <!-- 멤버 인증 정보 저장 -->
@@ -105,14 +106,14 @@
     <update id="expireMemberAuth" parameterType="com.board.dto.member.SignoutRequestDTO">
         UPDATE 
             member_auth
-        SET 
+        SET
             status = 'EXPIRED'
         WHERE
             access_token = #{accessToken}
     </update>
 
     <!-- access token으로 그 소유자의 member_no 반환 -->
-    <select id="selectMemberNoByAccessToken" parameterType="com.board.dto.member.SignoutRequestDTO">
+    <select id="selectMemberNoByAccessToken">
         SELECT
             member_no
         FROM 
@@ -121,4 +122,14 @@
             access_token = #{accessToken}
             AND status = 'VALID'
     </select>
+
+    <!-- 회원탈퇴 -->
+    <update id="withdraw">
+        UPDATE
+            member
+        SET
+            withdrawn_at = UNIX_TIMESTAMP()
+        WHERE
+            no = #{memberNo}
+    </update>
 </mapper>

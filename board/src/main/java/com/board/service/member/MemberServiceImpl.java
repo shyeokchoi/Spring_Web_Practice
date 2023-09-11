@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberHistoryDTO;
@@ -12,6 +13,7 @@ import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.SignoutRequestDTO;
+import com.board.dto.member.WithdrawRequestDTO;
 import com.board.enums.HistoryEnum;
 import com.board.enums.MemberAuthStatusEnum;
 import com.board.exception.AlreadySignedOutException;
@@ -45,6 +47,11 @@ public class MemberServiceImpl implements MemberService {
         return insMemberDTO.getNo();
     }
 
+    /**
+     * 아이디 중복여부 확인
+     * 
+     * @param id
+     */
     private void checkDuplicateById(String id) {
         SelectMemberDTO selectMemberDTO = new SelectMemberDTO();
 
@@ -53,6 +60,11 @@ public class MemberServiceImpl implements MemberService {
         checkDuplicateField(selectMemberDTO);
     }
 
+    /**
+     * 이메일 중복여부 확인
+     * 
+     * @param email
+     */
     private void checkDuplicateByEmail(String email) {
         SelectMemberDTO selectMemberDTO = new SelectMemberDTO();
 
@@ -61,6 +73,11 @@ public class MemberServiceImpl implements MemberService {
         checkDuplicateField(selectMemberDTO);
     }
 
+    /**
+     * SelectMemberDTO로
+     * 
+     * @param selectMemberDTO
+     */
     private void checkDuplicateField(SelectMemberDTO selectMemberDTO) {
         String fieldToCheck;
 
@@ -78,18 +95,28 @@ public class MemberServiceImpl implements MemberService {
                 });
     }
 
-    @Override
-    public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
+    /**
+     * 주어진 아이디, 패스워드 일치여부 확인
+     * 
+     * @param idPwDto
+     * @return 일치하였다면 해당 멤버의 member no.
+     */
+    private Integer checkIdPw(IdPwDTO idPwDto) {
         // 비밀번호 암호화
-        signinRequestDTO.setPw(pwEncryptor.encryptPw(signinRequestDTO.getPw()));
+        idPwDto.setPw(pwEncryptor.encryptPw(idPwDto.getPw()));
 
-        // 아이디-패스워드 매칭여부 확인
-        Optional<Integer> memberNoOptional = Optional.ofNullable(memberMapper.signin(signinRequestDTO));
+        // 아이디-패스워드 일치여부 확인
+        Optional<Integer> memberNoOptional = Optional.ofNullable(memberMapper.signin(idPwDto));
         if (!memberNoOptional.isPresent()) {
             throw new AuthenticationException("아이디와 비밀번호를 확인해주세요.");
         }
 
-        Integer memberNo = memberNoOptional.get();
+        return memberNoOptional.get();
+    }
+
+    @Override
+    public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
+        Integer memberNo = checkIdPw(signinRequestDTO);
 
         // 이미 로그인되어 있는지 확인
         if (memberMapper.isAlreadySignedIn(memberNo)) {
@@ -123,7 +150,7 @@ public class MemberServiceImpl implements MemberService {
     public void signout(SignoutRequestDTO signoutRequestDTO) {
         // 로그아웃하려고 하는 멤버의 member_no 얻기
         Optional<Integer> memberNoOptional = Optional
-                .ofNullable(memberMapper.selectMemberNoByAccessToken(signoutRequestDTO));
+                .ofNullable(memberMapper.selectMemberNoByAccessToken(signoutRequestDTO.getAccessToken()));
 
         // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
         if (!memberNoOptional.isPresent()) {
@@ -142,5 +169,14 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberMapper.insMemberHistory(memberHistoryDTO);
+    }
+
+    @Override
+    public void withdraw(WithdrawRequestDTO withdrawRequestDTO) {
+        // 아이디, 비밀번호 확인
+        Integer memberNo = checkIdPw(withdrawRequestDTO);
+
+        // 회원 탈퇴
+        memberMapper.withdraw(memberNo);
     }
 }

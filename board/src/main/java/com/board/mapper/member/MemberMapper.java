@@ -2,12 +2,12 @@ package com.board.mapper.member;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
 import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
-import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SignoutRequestDTO;
 
 @Mapper
@@ -33,7 +33,7 @@ public interface MemberMapper {
      * @param signinRequestDTO
      * @return 로그인 성공여부
      */
-    public Integer signin(SigninRequestDTO signinRequestDTO);
+    public Integer signin(IdPwDTO IdPwDTO);
 
     /**
      * 멤버 인증 정보 DB 저장
@@ -68,5 +68,10 @@ public interface MemberMapper {
      * 
      * @return 해당 멤버의 no.
      */
-    public Integer selectMemberNoByAccessToken(SignoutRequestDTO signoutRequestDTO);
+    public Integer selectMemberNoByAccessToken(String accessToken);
+
+    /**
+     * 회원 탈퇴
+     */
+    public void withdraw(Integer memberNo);
 }

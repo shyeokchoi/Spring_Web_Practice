@@ -6,6 +6,7 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.SignoutRequestDTO;
+import com.board.dto.member.WithdrawRequestDTO;
 
 public interface MemberService {
     /**
@@ -33,4 +34,11 @@ public interface MemberService {
      */
     @Transactional
     public void signout(SignoutRequestDTO signoutRequestDTO);
+
+    /**
+     * 회원 탈퇴
+     * 
+     * @param withdrawRequestDTO
+     */
+    public void withdraw(WithdrawRequestDTO withdrawRequestDTO);
 }
