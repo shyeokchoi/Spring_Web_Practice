@@ -3,6 +3,7 @@ package com.board.controller.member;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +81,7 @@ public class MemberController extends BaseController {
     }
 
     @Operation(summary = "withdraw", description = "회원탈퇴")
-    @PostMapping("/withdraw")
+    @DeleteMapping("")
     public ResponseEntity<Void> withdraw(@RequestBody WithdrawRequestDTO withdrawRequestDTO) {
         memberService.withdraw(withdrawRequestDTO);
         return ok();
