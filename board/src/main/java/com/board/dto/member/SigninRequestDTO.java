@@ -13,12 +13,12 @@ import lombok.Data;
 @Schema(description = "로그인 요청 DTO")
 public class SigninRequestDTO {
     @Size(max = 20, message = "아이디는 20자 이하여야 합니다.")
-    @NotBlank
+    @NotBlank(message = "아이디는 공백일 수 없습니다.")
     @Schema(description = "회원 아이디")
     private String id;
 
     @Size(max = 20, message = "비밀번호는 100자 이하여야 합니다.")
-    @NotBlank
+    @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
     @Schema(description = "비밀번호")
     private String pw;
 }
