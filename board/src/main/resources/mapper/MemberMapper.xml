@@ -42,7 +42,6 @@
             <if test="email != null">
                 AND email = #{email}
             </if>
-            AND withdrawn_at IS NULL
         </where>
 
     </select>
