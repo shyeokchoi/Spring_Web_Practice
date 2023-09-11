@@ -5,25 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.board.framework.interceptor.HttpInterceptor;
-import com.board.framework.interceptor.LoginInterceptor;
+import com.board.framework.interceptor.SigninInterceptor;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
   @Autowired
-  LoginInterceptor loginInterceptor;
-
-  @Autowired
-  HttpInterceptor httpInterceptor;
+  SigninInterceptor signinInterceptor;
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
 
-    registry.addInterceptor(loginInterceptor)
-        .addPathPatterns();
-
-    registry.addInterceptor(httpInterceptor)
-        .addPathPatterns("/**");
+    registry.addInterceptor(signinInterceptor)
+        .addPathPatterns("/members/me", "/posts/**", "/my_posts/**", "/my_comments/**");
   }
 
 }

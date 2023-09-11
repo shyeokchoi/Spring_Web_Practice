@@ -6,12 +6,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.board.service.auth.AuthService;
+
+import lombok.RequiredArgsConstructor;
+
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+@RequiredArgsConstructor
+public class SigninInterceptor implements HandlerInterceptor {
+    private final AuthService authService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
+        String accessToken = authService.retvAccessTokenFromRequest(request);
+        Integer memberNo = authService.retvMemberNoFromAccessToken(accessToken);
 
-        System.out.println("MyInterCeptor - preHandle");
         return true;
     }
 }

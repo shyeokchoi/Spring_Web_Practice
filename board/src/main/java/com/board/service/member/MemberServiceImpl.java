@@ -16,14 +16,12 @@ import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
-import com.board.dto.member.SignoutRequestDTO;
-import com.board.dto.member.WithdrawRequestDTO;
 import com.board.enums.HistoryEnum;
 import com.board.enums.MemberAuthStatusEnum;
-import com.board.exception.AlreadySignedOutException;
 import com.board.exception.AuthenticationException;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
+import com.board.service.auth.AuthService;
 import com.board.util.PwEncryptor;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +33,7 @@ import lombok.RequiredArgsConstructor;
  */
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
+    private final AuthService authService;
     private final PwEncryptor pwEncryptor;
 
     @Override
@@ -172,20 +171,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signout(SignoutRequestDTO signoutRequestDTO) {
-        // 로그아웃하려고 하는 멤버의 member_no 얻기
-        Optional<Integer> memberNoOptional = Optional
-                .ofNullable(memberMapper.selectMemberNoByAccessToken(signoutRequestDTO.getAccessToken()));
+    public void signout() {
+        // 로그아웃하려고 하는 멤버의 access token 얻기
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
 
-        // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
-        if (!memberNoOptional.isPresent()) {
-            throw new AlreadySignedOutException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
-        }
+        String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
 
-        Integer memberNo = memberNoOptional.get();
+        // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
+        Integer memberNo = authService.retvMemberNoFromAccessToken(accessToken);
 
         // access token으로 member_auth의 status를 expire
-        memberMapper.expireMemberAuth(signoutRequestDTO.getAccessToken());
+        memberMapper.expireMemberAuth(accessToken);
 
         // 유저 히스토리 생성 후 DB 저장
         MemberHistoryDTO memberHistoryDTO = buildMemberHistory(memberNo, HistoryEnum.SIGNOUT);
@@ -194,20 +191,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void withdraw(WithdrawRequestDTO withdrawRequestDTO) {
-        // 로그아웃하려고 하는 멤버의 member_no 얻기
-        Optional<Integer> memberNoOptional = Optional
-                .ofNullable(memberMapper.selectMemberNoByAccessToken(withdrawRequestDTO.getAccessToken()));
+    public void withdraw() {
+        // 탈퇴하려는 멤버의 access token 얻기
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
 
-        // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
-        if (!memberNoOptional.isPresent()) {
-            throw new AlreadySignedOutException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
-        }
+        String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
 
-        Integer memberNo = memberNoOptional.get();
+        // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
+        Integer memberNo = authService.retvMemberNoFromAccessToken(accessToken);
 
         // access token으로 member_auth의 status를 expire
-        memberMapper.expireMemberAuth(withdrawRequestDTO.getAccessToken());
+        memberMapper.expireMemberAuth(accessToken);
 
         // 회원 탈퇴
         memberMapper.withdraw(memberNo);

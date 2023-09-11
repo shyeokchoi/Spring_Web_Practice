@@ -63,13 +63,6 @@ public interface MemberMapper {
     public void expireMemberAuth(String accessToken);
 
     /**
-     * 멤버 로그아웃 시 해당 Access Token에 해당하는 member no 반환
-     * 
-     * @return 해당 멤버의 no.
-     */
-    public Integer selectMemberNoByAccessToken(String accessToken);
-
-    /**
      * 회원 탈퇴
      */
     public void withdraw(Integer memberNo);

@@ -111,17 +111,6 @@
             access_token = #{accessToken}
     </update>
 
-    <!-- access token으로 그 소유자의 member_no 반환 -->
-    <select id="selectMemberNoByAccessToken">
-        SELECT
-            member_no
-        FROM 
-            member_auth
-        WHERE
-            access_token = #{accessToken}
-            AND status = 'VALID'
-    </select>
-
     <!-- 회원탈퇴 -->
     <update id="withdraw">
         UPDATE

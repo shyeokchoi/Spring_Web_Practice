@@ -5,8 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
-import com.board.dto.member.SignoutRequestDTO;
-import com.board.dto.member.WithdrawRequestDTO;
 
 public interface MemberService {
     /**
@@ -30,15 +28,14 @@ public interface MemberService {
     /**
      * 로그아웃
      * 
-     * @param signoutRequestDTO
      */
     @Transactional
-    public void signout(SignoutRequestDTO signoutRequestDTO);
+    public void signout();
 
     /**
      * 회원 탈퇴
      * 
-     * @param withdrawRequestDTO
      */
-    public void withdraw(WithdrawRequestDTO withdrawRequestDTO);
+    @Transactional
+    public void withdraw();
 }

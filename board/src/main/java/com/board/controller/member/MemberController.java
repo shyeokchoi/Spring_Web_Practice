@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
-import com.board.dto.member.SignoutRequestDTO;
-import com.board.dto.member.WithdrawRequestDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.member.MemberService;
 
@@ -75,15 +73,15 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "signout", description = "로그아웃")
     @PostMapping("/signout")
-    public ResponseEntity<Void> signout(@RequestBody SignoutRequestDTO signoutRequestDTO) {
-        memberService.signout(signoutRequestDTO);
+    public ResponseEntity<Void> signout() {
+        memberService.signout();
         return ok();
     }
 
     @Operation(summary = "withdraw", description = "회원탈퇴")
-    @DeleteMapping("")
-    public ResponseEntity<Void> withdraw(@RequestBody WithdrawRequestDTO withdrawRequestDTO) {
-        memberService.withdraw(withdrawRequestDTO);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> withdraw() {
+        memberService.withdraw();
         return ok();
     }
 }
