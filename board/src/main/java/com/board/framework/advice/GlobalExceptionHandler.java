@@ -1,5 +1,7 @@
 package com.board.framework.advice;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,27 +20,29 @@ import com.board.exception.ConflictException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
-     * 에러 메시지를 받아서 HTTP body로 만드는 함수
-     * 
-     * @param errMsg
-     * @return 만들어진 HTTP body
-     */
-    private Map<String, String> buildErrBody(String errMsg) {
-        Map<String, String> body = new HashMap<>();
-
-        body.put("error", errMsg);
-        return body;
-    }
-
-    /**
      * 에러 메시지의 리스트를 받아서 HTTP body로 만드는 함수
      * 
      * @param errMsgList
      * @return 만들어진 HTTP body
      */
-    private Map<String, String> buildErrBody(List<String> errMsgList) {
-        String errMsg = errMsgList.stream().reduce("", (acc, msg) -> acc + msg);
-        return buildErrBody(errMsg);
+    private Map<String, List<String>> buildErrBody(List<String> errMsgList) {
+        Map<String, List<String>> body = new HashMap<>();
+
+        body.put("error", errMsgList);
+        return body;
+    }
+
+    /**
+     * 에러 메시지가 하나일 때,
+     * 해당 에러 메시지를 받아서 HTTP body로 만드는 함수
+     * 
+     * @param errMsg
+     * @return 만들어진 HTTP body
+     */
+    private Map<String, List<String>> buildErrBody(String errMsg) {
+        List<String> errorList = new ArrayList<>(Collections.singletonList(errMsg));
+
+        return buildErrBody(errorList);
     }
 
     /**
@@ -49,7 +53,7 @@ public class GlobalExceptionHandler {
      * @return status code 409
      */
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<Map<String, String>> handleConflictException(ConflictException e) {
+    public ResponseEntity<Map<String, List<String>>> handleConflictException(ConflictException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(buildErrBody(e.getMessage()));
     }
 
@@ -60,7 +64,7 @@ public class GlobalExceptionHandler {
      * @return status code 400
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<Map<String, List<String>>> handleValidationException(MethodArgumentNotValidException e) {
         List<String> errMsgList = e.getBindingResult().getAllErrors()
                 .stream()
                 .map(ObjectError::getDefaultMessage)
@@ -76,7 +80,7 @@ public class GlobalExceptionHandler {
      * @return status code 401
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException e) {
+    public ResponseEntity<Map<String, List<String>>> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(buildErrBody(e.getMessage()));
     }
 }
