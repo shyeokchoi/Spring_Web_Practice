@@ -1,6 +1,5 @@
 package com.board.service.member;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,8 +11,10 @@ import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.member.SignoutRequestDTO;
 import com.board.enums.HistoryEnum;
 import com.board.enums.MemberAuthStatusEnum;
+import com.board.exception.AlreadySignedOutException;
 import com.board.exception.AuthenticationException;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
@@ -102,7 +103,6 @@ public class MemberServiceImpl implements MemberService {
                 .memberNo(memberNo)
                 .accessToken(accessToken)
                 .status(MemberAuthStatusEnum.VALID)
-                .createdAt(Instant.now().getEpochSecond())
                 .build();
 
         memberMapper.insMemberAuth(memberAuthDTO);
@@ -110,7 +110,6 @@ public class MemberServiceImpl implements MemberService {
         // 유저 히스토리 생성 후 DB 저장
         MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
                 .type(HistoryEnum.LOGIN)
-                .timestamp(Instant.now().getEpochSecond())
                 .memberNo(memberNo)
                 .build();
 
@@ -118,5 +117,30 @@ public class MemberServiceImpl implements MemberService {
 
         // 토큰 내려주기
         return new SigninResponseDTO(accessToken);
+    }
+
+    @Override
+    public void signout(SignoutRequestDTO signoutRequestDTO) {
+        // 로그아웃하려고 하는 멤버의 member_no 얻기
+        Optional<Integer> memberNoOptional = Optional
+                .ofNullable(memberMapper.selectMemberNoByAccessToken(signoutRequestDTO));
+
+        // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
+        if (!memberNoOptional.isPresent()) {
+            throw new AlreadySignedOutException("이미 로그아웃된 계정입니다.");
+        }
+
+        Integer memberNo = memberNoOptional.get();
+
+        // access token으로 member_auth의 status를 expire
+        memberMapper.expireMemberAuth(signoutRequestDTO);
+
+        // 유저 히스토리 생성 후 DB 저장
+        MemberHistoryDTO memberHistoryDTO = MemberHistoryDTO.builder()
+                .type(HistoryEnum.LOGOUT)
+                .memberNo(memberNo)
+                .build();
+
+        memberMapper.insMemberHistory(memberHistoryDTO);
     }
 }

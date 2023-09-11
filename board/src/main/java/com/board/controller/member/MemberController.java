@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.member.SignoutRequestDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.member.MemberService;
 
@@ -62,6 +63,19 @@ public class MemberController extends BaseController {
     @PostMapping("/signin")
     public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
         return ok(memberService.signin(signinRequestDTO));
+    }
+
+    /**
+     * 로그아웃
+     * 
+     * @param signoutRequestDTO
+     * @return 로그아웃 성공 여부
+     */
+    @Operation(summary = "signout", description = "로그아웃")
+    @PostMapping("/signout")
+    public ResponseEntity<Void> signout(@RequestBody SignoutRequestDTO signoutRequestDTO) {
+        memberService.signout(signoutRequestDTO);
+        return ok();
     }
 
 }

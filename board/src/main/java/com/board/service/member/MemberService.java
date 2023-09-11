@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.member.SignoutRequestDTO;
 
 public interface MemberService {
     /**
@@ -24,4 +25,12 @@ public interface MemberService {
      */
     @Transactional
     public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO);
+
+    /**
+     * 로그아웃
+     * 
+     * @param signoutRequestDTO
+     */
+    @Transactional
+    public void signout(SignoutRequestDTO signoutRequestDTO);
 }

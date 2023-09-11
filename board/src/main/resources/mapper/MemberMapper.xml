@@ -73,7 +73,7 @@
             , #{ipAddr}
             , #{userAgent}
             , #{status}
-            , #{createdAt}
+            , UNIX_TIMESTAMP()
         )
     </insert>
 
@@ -96,8 +96,29 @@
             , member_no
         ) VALUES (
             #{type}
-            , #{timestamp}
+            , UNIX_TIMESTAMP()
             , #{memberNo}
         ) 
     </insert>
+
+    <!-- 로그아웃하며 access token 만료 -->
+    <update id="expireMemberAuth" parameterType="com.board.dto.member.SignoutRequestDTO">
+        UPDATE 
+            member_auth
+        SET 
+            status = 'EXPIRED'
+        WHERE
+            access_token = #{accessToken}
+    </update>
+
+    <!-- access token으로 그 소유자의 member_no 반환 -->
+    <select id="selectMemberNoByAccessToken" parameterType="com.board.dto.member.SignoutRequestDTO">
+        SELECT
+            member_no
+        FROM 
+            member_auth
+        WHERE
+            access_token = #{accessToken}
+            AND status = 'VALID'
+    </select>
 </mapper>

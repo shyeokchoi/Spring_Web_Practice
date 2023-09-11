@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.board.exception.AlreadySignedOutException;
 import com.board.exception.AuthenticationException;
 import com.board.exception.ConflictException;
 
@@ -82,5 +83,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, List<String>>> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(buildErrBody(e.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadySignedOutException.class)
+    public ResponseEntity<Map<String, List<String>>> handleAlreadySignedOutException(AlreadySignedOutException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));
     }
 }

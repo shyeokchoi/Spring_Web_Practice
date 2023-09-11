@@ -8,6 +8,7 @@ import com.board.dto.member.MemberDTO;
 import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
+import com.board.dto.member.SignoutRequestDTO;
 
 @Mapper
 public interface MemberMapper {
@@ -55,4 +56,17 @@ public interface MemberMapper {
      * @param memberHistoryDTO
      */
     public void insMemberHistory(MemberHistoryDTO memberHistoryDTO);
+
+    /**
+     * 멤버 로그아웃
+     * 
+     */
+    public void expireMemberAuth(SignoutRequestDTO signoutRequestDTO);
+
+    /**
+     * 멤버 로그아웃 시 해당 Access Token에 해당하는 member no 반환
+     * 
+     * @return 해당 멤버의 no.
+     */
+    public Integer selectMemberNoByAccessToken(SignoutRequestDTO signoutRequestDTO);
 }

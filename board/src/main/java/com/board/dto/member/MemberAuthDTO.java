@@ -35,8 +35,4 @@ public class MemberAuthDTO {
      * 이 토큰의 현재 상태. Valid or Expired
      */
     private final MemberAuthStatusEnum status;
-    /**
-     * 이 토큰 생성 시점
-     */
-    private final Long createdAt;
 }
