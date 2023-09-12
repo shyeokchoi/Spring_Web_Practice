@@ -96,7 +96,7 @@
         SET
             status = 'EXPIRED'
         WHERE
-            access_token = #{accessToken}
+            member_no = #{memberNo}
     </update>
 
     <!-- selectMemberDetail -->

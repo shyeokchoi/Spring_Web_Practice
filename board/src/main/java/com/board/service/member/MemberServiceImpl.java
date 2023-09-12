@@ -148,16 +148,18 @@ public class MemberServiceImpl implements MemberService {
         return new SigninResponseDTO(accessToken);
     }
 
+    private Integer fetchCurrentMemberNo() {
+        String accessToken = authService.retvAccessTokenFromHeader();
+        return authService.checkAccessTokenValidity(accessToken);
+    }
+
     @Override
     public void signout() {
-        // 로그아웃하려고 하는 멤버의 access token 얻기
-        String accessToken = authService.retvAccessTokenFromHeader();
+        // access token 에서 memberNo 얻어내기
+        Integer memberNo = fetchCurrentMemberNo();
 
-        // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
-        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
-
-        // access token으로 member_auth의 status를 expire
-        memberMapper.expireMemberAuth(accessToken);
+        // 모든 access token expire 하기
+        memberMapper.expireMemberAuth(memberNo);
 
         // 유저 히스토리 생성 후 DB 저장
         MemberHistoryDTO memberHistoryDTO = buildMemberHistory(memberNo, HistoryEnum.SIGNOUT);
@@ -167,11 +169,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public SelectMemberDetailDTO selectMemberDetailOfSelf() {
-        // access token 얻기
-        String accessToken = authService.retvAccessTokenFromHeader();
-
-        // 토큰을 활용해 자기 자신의 member no 얻기
-        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
+        // access token 에서 memberNo 얻어내기
+        Integer memberNo = fetchCurrentMemberNo();
 
         // 자기 자신의 정보 return
         return memberMapper.selectMemberDetail(memberNo);
@@ -179,12 +178,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void updateMemberDetailOfSelf(PutMemberDetailDTO putMemberDetailDTO) {
-        // access token 얻기
-        String accessToken = authService.retvAccessTokenFromHeader();
+        // 중복 이메일 체크
+        checkDuplicateByEmail(putMemberDetailDTO.getEmail());
 
-        // 토큰을 활용해 자기 자신의 member no 얻기
-        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
+        // access token 에서 memberNo 얻어내기
+        Integer memberNo = fetchCurrentMemberNo();
+
+        // 멤버정보 수정을 위해 putMemberDetailDTO에 member no, pw 세팅
         putMemberDetailDTO.setNo(memberNo);
+        putMemberDetailDTO.setPw(pwEncryptor.encryptPw(putMemberDetailDTO.getPw()));
 
         // 자기 자신의 정보 update
         memberMapper.updateMemberDetail(putMemberDetailDTO);
@@ -192,14 +194,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void withdraw() {
-        // 탈퇴하려는 멤버의 access token 얻기
-        String accessToken = authService.retvAccessTokenFromHeader();
-
-        // 토큰을 활용해 탈퇴하려고 하는 멤버의 member no 얻기
-        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
+        // access token 에서 memberNo 얻기
+        Integer memberNo = fetchCurrentMemberNo();
 
         // access token으로 member_auth의 status를 expire
-        memberMapper.expireMemberAuth(accessToken);
+        memberMapper.expireMemberAuth(memberNo);
 
         // 회원 탈퇴
         memberMapper.withdraw(memberNo);

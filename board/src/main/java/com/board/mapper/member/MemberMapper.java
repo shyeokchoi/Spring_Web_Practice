@@ -53,7 +53,7 @@ public interface MemberMapper {
      * 멤버 로그아웃
      * 
      */
-    public void expireMemberAuth(String accessToken);
+    public void expireMemberAuth(Integer memberNo);
 
     /**
      * 자기 자신의 정보
