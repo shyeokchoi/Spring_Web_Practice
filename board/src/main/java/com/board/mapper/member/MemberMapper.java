@@ -34,14 +34,6 @@ public interface MemberMapper {
     public void insMemberAuth(MemberAuthDTO memberAuthDTO);
 
     /**
-     * 이미 로그인되어 있는지 확인하기
-     * 
-     * @param memberNo
-     * @return 로그인 여부
-     */
-    public Boolean isAlreadySignedIn(Integer memberNo);
-
-    /**
      * 멤버 로그아웃
      * 
      */

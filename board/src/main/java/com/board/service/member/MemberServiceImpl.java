@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -72,10 +71,8 @@ public class MemberServiceImpl implements MemberService {
     public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
         Integer memberNo = authService.checkIdPw(signinRequestDTO);
 
-        // 이미 로그인되어 있는지 확인
-        if (memberMapper.isAlreadySignedIn(memberNo)) {
-            throw new DuplicateKeyException("이미 로그인되어 있는 계정입니다.");
-        }
+        // 기존에 로그인이 되어 있었다면, 기존 토큰들 expire.
+        memberMapper.expireMemberAuth(memberNo);
 
         // 토큰 생성 후 DB 저장
         String accessToken = UUID.randomUUID().toString();
