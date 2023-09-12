@@ -67,9 +67,6 @@ public class MemberController extends BaseController {
 
     /**
      * 로그아웃
-     * 
-     * @param signoutRequestDTO
-     * @return 로그아웃 성공 여부
      */
     @Operation(summary = "signout", description = "로그아웃")
     @PostMapping("/signout")
@@ -78,6 +75,9 @@ public class MemberController extends BaseController {
         return ok();
     }
 
+    /**
+     * 회원탈퇴
+     */
     @Operation(summary = "withdraw", description = "회원탈퇴")
     @DeleteMapping("/me")
     public ResponseEntity<Void> withdraw() {
