@@ -95,6 +95,7 @@
             member_auth
         SET
             status = 'EXPIRED'
+            , expired_at = UNIX_TIMESTAMP()
         WHERE
             member_no = #{memberNo}
     </update>

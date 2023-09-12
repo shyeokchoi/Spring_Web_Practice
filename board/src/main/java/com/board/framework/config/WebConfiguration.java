@@ -16,7 +16,7 @@ public class WebConfiguration implements WebMvcConfigurer {
   public void addInterceptors(InterceptorRegistry registry) {
 
     registry.addInterceptor(signinInterceptor)
-        .addPathPatterns("/members/self", "/posts/**", "/my_posts/**", "/my_comments/**");
+        .addPathPatterns("/members/signout", "/members/self", "/posts/**", "/my_posts/**", "/my_comments/**");
   }
 
 }

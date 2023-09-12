@@ -2,11 +2,7 @@ package com.board.service.auth;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.board.dto.member.IdPwDTO;
 import com.board.exception.AuthenticationException;
@@ -21,14 +17,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService {
     private final AuthMapper authMapper;
     private final PwEncryptor pwEncryptor;
-
-    @Override
-    public String retvAccessTokenFromHeader() {
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-
-        return servletRequest.getHeader("Access-Token");
-    }
 
     @Override
     public Integer checkAccessTokenValidity(String accessToken) {

@@ -8,13 +8,6 @@ import com.board.dto.member.IdPwDTO;
  */
 public interface AuthService {
     /**
-     * HTTP servlet request 에서 access token을 반환합니다.
-     * 
-     * @return access token
-     */
-    public String retvAccessTokenFromHeader();
-
-    /**
      * Access token의 validity를 확인하고 valid하다면 member no.를 반환합니다.
      * 
      * @param accessToken

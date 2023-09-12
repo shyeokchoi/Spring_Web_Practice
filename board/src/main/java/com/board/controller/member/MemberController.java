@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.board.constant.RequestAttributeKeys;
+import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
@@ -74,8 +77,9 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "signout", description = "로그아웃")
     @PostMapping("/signout")
-    public ResponseEntity<Void> signout() {
-        memberService.signout();
+    public ResponseEntity<Void> signout(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
+        memberService.signout(memberInfoDTO);
         return ok();
     }
 
@@ -86,8 +90,9 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
     @GetMapping("/self")
-    public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf() {
-        return ok(memberService.selectMemberDetailOfSelf());
+    public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
+        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO));
     }
 
     /**
@@ -98,10 +103,11 @@ public class MemberController extends BaseController {
     @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
     @PutMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> putMemberDetailOfSelf(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody PutMemberDetailDTO putMemberDetailDTO) {
 
-        memberService.updateMemberDetailOfSelf(putMemberDetailDTO);
-        return ok(memberService.selectMemberDetailOfSelf());
+        memberService.updateMemberDetailOfSelf(memberInfoDTO, putMemberDetailDTO);
+        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO));
     }
 
     /**
@@ -109,8 +115,9 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "withdraw", description = "회원탈퇴")
     @DeleteMapping("/self")
-    public ResponseEntity<Void> withdraw() {
-        memberService.withdraw();
+    public ResponseEntity<Void> withdraw(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
+        memberService.withdraw(memberInfoDTO);
         return ok();
     }
 }
