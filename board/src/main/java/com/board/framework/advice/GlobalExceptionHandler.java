@@ -55,7 +55,18 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<Map<String, List<String>>> handleConflictException(DuplicateKeyException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(buildErrBody(e.getMessage()));
+        String msg = e.getMessage();
+        String finalMsg;
+
+        if (msg.contains("member_unique_id")) {
+            finalMsg = "아이디가 중복됩니다.";
+        } else if (msg.contains("member_unique_email")) {
+            finalMsg = "이메일이 중복됩니다.";
+        } else {
+            finalMsg = "DuplicateKeyException 발생 : Unknown Field";
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(buildErrBody(finalMsg));
     }
 
     /**
