@@ -121,7 +121,6 @@
         SET
             name = #{name}
             , pw = #{pw}
-            , email = #{email}
             , phone = #{phone}
         WHERE
             no = #{no}

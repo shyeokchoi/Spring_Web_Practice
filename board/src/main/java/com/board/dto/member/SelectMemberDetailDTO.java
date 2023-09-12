@@ -10,18 +10,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SelectMemberDetailDTO {
-    @Schema(description = "회원 번호")
+    @Schema(description = "회원 번호", example = "2")
     private Integer no;
 
-    @Schema(description = "회원 이름")
+    @Schema(description = "회원 이름", example = "홍길동")
     private String name;
 
-    @Schema(description = "회원 아이디")
+    @Schema(description = "회원 아이디", example = "hongildong")
     private String id;
 
-    @Schema(description = "이메일")
+    @Schema(description = "이메일", example = "hongildong@gmail.com")
     private String email;
 
-    @Schema(description = "전화번호")
+    @Schema(description = "전화번호", example = "01012341234")
     private String phone;
 }

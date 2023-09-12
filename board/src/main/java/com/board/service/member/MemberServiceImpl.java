@@ -178,9 +178,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void updateMemberDetailOfSelf(PutMemberDetailDTO putMemberDetailDTO) {
-        // 중복 이메일 체크
-        checkDuplicateByEmail(putMemberDetailDTO.getEmail());
-
         // access token 에서 memberNo 얻어내기
         Integer memberNo = fetchCurrentMemberNo();
 

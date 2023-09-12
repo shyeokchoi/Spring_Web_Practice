@@ -1,6 +1,5 @@
 package com.board.dto.member;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -32,12 +31,6 @@ public class PutMemberDetailDTO {
     @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
     @Schema(description = "비밀번호", example = "examplepw1234!")
     private String pw;
-
-    @Email(message = "이메일 형식이 틀렸습니다.")
-    @Size(max = 100, message = "이메일은 100자 이하여야 합니다.")
-    @NotBlank(message = "이메일은 공백일 수 없습니다.")
-    @Schema(description = "이메일", example = "hongildong@gmail.com")
-    private String email;
 
     @Pattern(regexp = "^010\\d{8}$", message = "전화번호 형식이 틀렸습니다.")
     @NotBlank(message = "전화번호는 공백일 수 없습니다.")
