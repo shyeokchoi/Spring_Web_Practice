@@ -149,10 +149,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void signout() {
         // 로그아웃하려고 하는 멤버의 access token 얻기
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-
-        String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
+        String accessToken = authService.retvAccessTokenFromHeader();
 
         // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
         Integer memberNo = authService.checkAccessTokenValidity(accessToken);
@@ -169,10 +166,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void withdraw() {
         // 탈퇴하려는 멤버의 access token 얻기
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-
-        String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
+        String accessToken = authService.retvAccessTokenFromHeader();
 
         // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
         Integer memberNo = authService.checkAccessTokenValidity(accessToken);

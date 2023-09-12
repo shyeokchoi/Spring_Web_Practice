@@ -17,7 +17,7 @@ public class SigninInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
-        String accessToken = authService.retvAccessTokenFromRequest(request);
+        String accessToken = request.getHeader("Access-Token");
         authService.checkAccessTokenValidity(accessToken);
 
         return true;

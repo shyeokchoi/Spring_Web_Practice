@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.board.dto.member.IdPwDTO;
 import com.board.exception.AuthenticationException;
@@ -21,9 +23,11 @@ public class AuthServiceImpl implements AuthService {
     private final PwEncryptor pwEncryptor;
 
     @Override
-    public String retvAccessTokenFromRequest(HttpServletRequest request) {
+    public String retvAccessTokenFromHeader() {
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
 
-        return request.getHeader("Access-Token");
+        return servletRequest.getHeader("Access-Token");
     }
 
     @Override

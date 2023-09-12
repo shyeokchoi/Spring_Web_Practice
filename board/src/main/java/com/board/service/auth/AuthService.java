@@ -1,7 +1,5 @@
 package com.board.service.auth;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.board.dto.member.IdPwDTO;
 
 /**
@@ -10,15 +8,14 @@ import com.board.dto.member.IdPwDTO;
  */
 public interface AuthService {
     /**
-     * HTTP servlet request 에서 access token을 얻습니다.
+     * HTTP servlet request 에서 access token을 반환합니다.
      * 
-     * @param request
-     * @return
+     * @return access token
      */
-    public String retvAccessTokenFromRequest(HttpServletRequest request);
+    public String retvAccessTokenFromHeader();
 
     /**
-     * Access token을 이용해 member no.를 얻습니다.
+     * Access token의 validity를 확인하고 valid하다면 member no.를 반환합니다.
      * 
      * @param accessToken
      * @return
