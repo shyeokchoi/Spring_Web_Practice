@@ -7,6 +7,7 @@ import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
 import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
+import com.board.dto.member.SelectMemberDetailDTO;
 
 @Mapper
 public interface MemberMapper {
@@ -52,6 +53,11 @@ public interface MemberMapper {
      * 
      */
     public void expireMemberAuth(String accessToken);
+
+    /**
+     * 자기 자신의 정보
+     */
+    public SelectMemberDetailDTO selectMemberDetail(Integer memberNo);
 
     /**
      * 회원 탈퇴

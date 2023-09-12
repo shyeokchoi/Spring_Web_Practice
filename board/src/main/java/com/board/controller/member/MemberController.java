@@ -4,12 +4,14 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.board.dto.member.InsMemberDTO;
+import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.framework.base.BaseController;
@@ -76,10 +78,21 @@ public class MemberController extends BaseController {
     }
 
     /**
+     * 자기 자신의 정보 조회
+     * 
+     * @return 회원정보
+     */
+    @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
+    @GetMapping("/self")
+    public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf() {
+        return ok(memberService.selectMemberDetailOfSelf());
+    }
+
+    /**
      * 회원탈퇴
      */
     @Operation(summary = "withdraw", description = "회원탈퇴")
-    @DeleteMapping("/me")
+    @DeleteMapping("/self")
     public ResponseEntity<Void> withdraw() {
         memberService.withdraw();
         return ok();

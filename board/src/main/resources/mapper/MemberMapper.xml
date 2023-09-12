@@ -99,6 +99,21 @@
             access_token = #{accessToken}
     </update>
 
+    <!-- selectMemberDetail -->
+
+    <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
+        SELECT
+            no
+            , name
+            , id
+            , email
+            , phone
+        FROM
+            member
+        WHERE
+            no = #{memberNo}
+    </select>
+
     <!-- 회원탈퇴 -->
     <update id="withdraw">
         UPDATE

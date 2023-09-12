@@ -3,6 +3,7 @@ package com.board.service.member;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.member.InsMemberDTO;
+import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 
@@ -34,6 +35,12 @@ public interface MemberService {
      */
     @Transactional
     public void signout();
+
+    /**
+     * 자기 자신의 정보 가져오기
+     * 
+     */
+    public SelectMemberDetailDTO selectMemberDetailOfSelf();
 
     /**
      * 회원 탈퇴

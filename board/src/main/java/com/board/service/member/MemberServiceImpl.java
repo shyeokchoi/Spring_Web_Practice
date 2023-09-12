@@ -13,6 +13,7 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberHistoryDTO;
 import com.board.dto.member.SelectMemberDTO;
+import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.enums.HistoryEnum;
@@ -164,11 +165,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public SelectMemberDetailDTO selectMemberDetailOfSelf() {
+        // access token 얻기
+        String accessToken = authService.retvAccessTokenFromHeader();
+
+        // 토큰을 활용해 자기 자신의 member no 얻기
+        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
+
+        // 자기 자신의 정보 return
+        return memberMapper.selectMemberDetail(memberNo);
+    }
+
+    @Override
     public void withdraw() {
         // 탈퇴하려는 멤버의 access token 얻기
         String accessToken = authService.retvAccessTokenFromHeader();
 
-        // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
+        // 토큰을 활용해 탈퇴하려고 하는 멤버의 member no 얻기
         Integer memberNo = authService.checkAccessTokenValidity(accessToken);
 
         // access token으로 member_auth의 status를 expire
