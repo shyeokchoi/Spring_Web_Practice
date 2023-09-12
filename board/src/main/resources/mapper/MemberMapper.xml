@@ -100,7 +100,6 @@
     </update>
 
     <!-- selectMemberDetail -->
-
     <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
         SELECT
             no
@@ -113,6 +112,21 @@
         WHERE
             no = #{memberNo}
     </select>
+
+    <!-- updateMemberDetail -->
+
+    <update id="updateMemberDetail" parameterType="com.board.dto.member.PutMemberDetailDTO">
+        UPDATE
+            member
+        SET
+            name = #{name}
+            , pw = #{pw}
+            , email = #{email}
+            , phone = #{phone}
+        WHERE
+            no = #{no}
+
+    </update>
 
     <!-- 회원탈퇴 -->
     <update id="withdraw">

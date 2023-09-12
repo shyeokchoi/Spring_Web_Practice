@@ -6,6 +6,7 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
 import com.board.dto.member.MemberHistoryDTO;
+import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 
@@ -63,4 +64,11 @@ public interface MemberMapper {
      * 회원 탈퇴
      */
     public void withdraw(Integer memberNo);
+
+    /**
+     * 회원정보 수정
+     * 
+     * @param putMemberDetailDTO
+     */
+    public void updateMemberDetail(PutMemberDetailDTO putMemberDetailDTO);
 }

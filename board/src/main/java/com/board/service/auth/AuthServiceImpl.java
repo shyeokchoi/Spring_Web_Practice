@@ -47,12 +47,6 @@ public class AuthServiceImpl implements AuthService {
         return memberNoOptional.get();
     }
 
-    /**
-     * 주어진 아이디, 패스워드 일치여부 확인
-     * 
-     * @param idPwDto
-     * @return 일치하였다면 해당 멤버의 member no.
-     */
     @Override
     public Integer checkIdPw(IdPwDTO idPwDto) {
         // 비밀번호 암호화

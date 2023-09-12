@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberHistoryDTO;
+import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
@@ -177,6 +178,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void updateMemberDetailOfSelf(PutMemberDetailDTO putMemberDetailDTO) {
+        // access token 얻기
+        String accessToken = authService.retvAccessTokenFromHeader();
+
+        // 토큰을 활용해 자기 자신의 member no 얻기
+        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
+        putMemberDetailDTO.setNo(memberNo);
+
+        // 자기 자신의 정보 update
+        memberMapper.updateMemberDetail(putMemberDetailDTO);
+    }
+
+    @Override
     public void withdraw() {
         // 탈퇴하려는 멤버의 access token 얻기
         String accessToken = authService.retvAccessTokenFromHeader();
@@ -190,4 +204,5 @@ public class MemberServiceImpl implements MemberService {
         // 회원 탈퇴
         memberMapper.withdraw(memberNo);
     }
+
 }

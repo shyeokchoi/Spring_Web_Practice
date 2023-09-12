@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.board.dto.member.InsMemberDTO;
+import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
@@ -85,6 +87,20 @@ public class MemberController extends BaseController {
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
     @GetMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf() {
+        return ok(memberService.selectMemberDetailOfSelf());
+    }
+
+    /**
+     * 자기 자신의 정보 수정
+     * 
+     * @return 수정된 정보
+     */
+    @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
+    @PutMapping("/self")
+    public ResponseEntity<SelectMemberDetailDTO> putMemberDetailOfSelf(
+            @RequestBody PutMemberDetailDTO putMemberDetailDTO) {
+
+        memberService.updateMemberDetailOfSelf(putMemberDetailDTO);
         return ok(memberService.selectMemberDetailOfSelf());
     }
 

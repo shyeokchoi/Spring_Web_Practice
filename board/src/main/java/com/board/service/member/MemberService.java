@@ -3,6 +3,7 @@ package com.board.service.member;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.member.InsMemberDTO;
+import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
@@ -40,7 +41,16 @@ public interface MemberService {
      * 자기 자신의 정보 가져오기
      * 
      */
+    @Transactional
     public SelectMemberDetailDTO selectMemberDetailOfSelf();
+
+    /**
+     * 자기 자신의 정보 수정하기
+     * 
+     * @param putMemberDetailDTO
+     */
+    @Transactional
+    public void updateMemberDetailOfSelf(PutMemberDetailDTO putMemberDetailDTO);
 
     /**
      * 회원 탈퇴
