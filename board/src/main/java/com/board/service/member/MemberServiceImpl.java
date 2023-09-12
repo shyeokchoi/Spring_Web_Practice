@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberHistoryDTO;
@@ -18,7 +17,6 @@ import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.enums.HistoryEnum;
 import com.board.enums.MemberAuthStatusEnum;
-import com.board.exception.AuthenticationException;
 import com.board.exception.ConflictException;
 import com.board.mapper.member.MemberMapper;
 import com.board.service.auth.AuthService;
@@ -28,9 +26,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-/**
- * 로그인, 로그아웃, 멤버 가입, 조회, 수정, 삭제 등을 담당하는 Service
- */
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final AuthService authService;
@@ -98,25 +93,6 @@ public class MemberServiceImpl implements MemberService {
                 });
     }
 
-    /**
-     * 주어진 아이디, 패스워드 일치여부 확인
-     * 
-     * @param idPwDto
-     * @return 일치하였다면 해당 멤버의 member no.
-     */
-    private Integer checkIdPw(IdPwDTO idPwDto) {
-        // 비밀번호 암호화
-        idPwDto.setPw(pwEncryptor.encryptPw(idPwDto.getPw()));
-
-        // 아이디-패스워드 일치여부 확인
-        Optional<Integer> memberNoOptional = Optional.ofNullable(memberMapper.signin(idPwDto));
-        if (!memberNoOptional.isPresent()) {
-            throw new AuthenticationException("아이디와 비밀번호를 확인해주세요.");
-        }
-
-        return memberNoOptional.get();
-    }
-
     private MemberAuthDTO buildMemberAuth(Integer memberNo, String accessToken,
             MemberAuthStatusEnum memberAuthStatusEnum) {
         HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
@@ -147,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
-        Integer memberNo = checkIdPw(signinRequestDTO);
+        Integer memberNo = authService.checkIdPw(signinRequestDTO);
 
         // 이미 로그인되어 있는지 확인
         if (memberMapper.isAlreadySignedIn(memberNo)) {

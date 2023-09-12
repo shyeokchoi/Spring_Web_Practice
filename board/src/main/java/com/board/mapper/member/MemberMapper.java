@@ -2,7 +2,6 @@ package com.board.mapper.member;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
@@ -25,14 +24,6 @@ public interface MemberMapper {
      * @return 검색된 회원
      */
     public MemberDTO selectOne(SelectMemberDTO selectMemberDTO);
-
-    /**
-     * 로그인
-     * 
-     * @param signinRequestDTO
-     * @return 로그인 성공여부
-     */
-    public Integer signin(IdPwDTO IdPwDTO);
 
     /**
      * 멤버 인증 정보 DB 저장

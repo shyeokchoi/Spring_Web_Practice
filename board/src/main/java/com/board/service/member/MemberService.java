@@ -6,6 +6,9 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 
+/**
+ * 로그인, 로그아웃, 멤버 가입, 조회, 수정, 삭제 등을 담당하는 Service
+ */
 public interface MemberService {
     /**
      * 회원가입

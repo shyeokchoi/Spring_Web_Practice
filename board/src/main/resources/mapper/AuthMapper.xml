@@ -11,4 +11,16 @@
             access_token = #{accessToken}
             AND status = 'VALID'
     </select>
+
+    <!-- id, pw 매칭 여부 확인 -->
+    <select id="checkIdPw" parameterType="com.board.dto.member.IdPwDTO" resultType="java.lang.Integer">
+        SELECT 
+            m.no
+        FROM
+            member m
+        WHERE
+            id = #{id}
+            AND pw = #{pw}
+            AND withdrawn_at IS NULL
+    </select>
 </mapper>

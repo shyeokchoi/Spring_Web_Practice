@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
+import com.board.dto.member.IdPwDTO;
 import com.board.exception.AlreadySignedOutException;
 import com.board.exception.AuthenticationException;
 import com.board.mapper.auth.AuthMapper;
+import com.board.util.PwEncryptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthMapper authMapper;
+    private final PwEncryptor pwEncryptor;
 
     @Override
     public String retvAccessTokenFromRequest(HttpServletRequest request) {
@@ -40,4 +43,23 @@ public class AuthServiceImpl implements AuthService {
         return memberNoOptional.get();
     }
 
+    /**
+     * 주어진 아이디, 패스워드 일치여부 확인
+     * 
+     * @param idPwDto
+     * @return 일치하였다면 해당 멤버의 member no.
+     */
+    public Integer checkIdPw(IdPwDTO idPwDto) {
+        // 비밀번호 암호화
+        idPwDto.setPw(pwEncryptor.encryptPw(idPwDto.getPw()));
+
+        // 아이디-패스워드 일치여부 확인
+        Optional<Integer> memberNoOptional = Optional.ofNullable(authMapper.checkIdPw(idPwDto));
+
+        if (!memberNoOptional.isPresent()) {
+            throw new AuthenticationException("아이디와 비밀번호를 확인해주세요.");
+        }
+
+        return memberNoOptional.get();
+    }
 }

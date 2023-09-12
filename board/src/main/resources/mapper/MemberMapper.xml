@@ -46,18 +46,6 @@
 
     </select>
 
-    <!-- signin -->
-    <select id="signin" parameterType="com.board.dto.member.IdPwDTO" resultType="java.lang.Integer">
-        SELECT 
-            m.no
-        FROM
-            member m
-        WHERE
-            id = #{id}
-            AND pw = #{pw}
-            AND withdrawn_at IS NULL
-    </select>
-
     <!-- 멤버 인증 정보 저장 -->
     <insert id="insMemberAuth" parameterType="com.board.dto.member.MemberAuthDTO">
         INSERT INTO member_auth (
