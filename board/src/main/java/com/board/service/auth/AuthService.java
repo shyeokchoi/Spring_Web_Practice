@@ -23,7 +23,7 @@ public interface AuthService {
      * @param accessToken
      * @return
      */
-    public Integer retvMemberNoFromAccessToken(String accessToken);
+    public Integer checkAccessTokenValidity(String accessToken);
 
     /**
      * 아이디, 패스워드 매칭여부 확인

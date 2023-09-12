@@ -155,7 +155,7 @@ public class MemberServiceImpl implements MemberService {
         String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
 
         // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
-        Integer memberNo = authService.retvMemberNoFromAccessToken(accessToken);
+        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
 
         // access token으로 member_auth의 status를 expire
         memberMapper.expireMemberAuth(accessToken);
@@ -175,7 +175,7 @@ public class MemberServiceImpl implements MemberService {
         String accessToken = authService.retvAccessTokenFromRequest(servletRequest);
 
         // 토큰을 활용해 로그아웃하려고 하는 멤버의 member no 얻기
-        Integer memberNo = authService.retvMemberNoFromAccessToken(accessToken);
+        Integer memberNo = authService.checkAccessTokenValidity(accessToken);
 
         // access token으로 member_auth의 status를 expire
         memberMapper.expireMemberAuth(accessToken);

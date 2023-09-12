@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import com.board.dto.member.IdPwDTO;
-import com.board.exception.AlreadySignedOutException;
 import com.board.exception.AuthenticationException;
+import com.board.exception.NotSignedInException;
 import com.board.mapper.auth.AuthMapper;
 import com.board.util.PwEncryptor;
 
@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Integer retvMemberNoFromAccessToken(String accessToken) {
+    public Integer checkAccessTokenValidity(String accessToken) {
         if (accessToken == null) {
             throw new AuthenticationException("Access-Token 값이 null 입니다.");
         }
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
         if (!memberNoOptional.isPresent()) {
-            throw new AlreadySignedOutException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
+            throw new NotSignedInException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
         }
 
         return memberNoOptional.get();
@@ -49,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
      * @param idPwDto
      * @return 일치하였다면 해당 멤버의 member no.
      */
+    @Override
     public Integer checkIdPw(IdPwDTO idPwDto) {
         // 비밀번호 암호화
         idPwDto.setPw(pwEncryptor.encryptPw(idPwDto.getPw()));
