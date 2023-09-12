@@ -104,7 +104,7 @@ public class MemberController extends BaseController {
     @PutMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> putMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody PutMemberDetailDTO putMemberDetailDTO) {
+            @RequestBody @Valid PutMemberDetailDTO putMemberDetailDTO) {
 
         memberService.updateMemberDetailOfSelf(memberInfoDTO, putMemberDetailDTO);
         return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO));
