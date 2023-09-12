@@ -41,6 +41,14 @@ public class MemberServiceImpl implements MemberService {
         return insMemberDTO.getNo();
     }
 
+    /**
+     * member_auth 테이블에 저장될 행 하나를 만듭니다.
+     * 현재의 servletRequest로부터 User-Agent와 ip address를 뽑아와 추가해줍니다.
+     * 
+     * @param memberNo
+     * @param accessToken
+     * @return 만들어진 MemberAuthDTO
+     */
     private MemberAuthDTO buildNewMemberAuth(Integer memberNo, String accessToken) {
         HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();

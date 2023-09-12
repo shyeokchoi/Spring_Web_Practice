@@ -96,6 +96,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(buildErrBody(e.getMessage()));
     }
 
+    /**
+     * 로그인하지 않았거나 로그아웃 된 상태인 토큰으로 접속을 시도했을 때 발생하는 예외
+     * 
+     * @param e
+     * @return
+     */
     @ExceptionHandler(NotSignedInException.class)
     public ResponseEntity<Map<String, List<String>>> handleAlreadySignedOutException(NotSignedInException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));

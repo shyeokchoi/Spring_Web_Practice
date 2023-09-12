@@ -76,19 +76,6 @@
             AND status = 'VALID'
     </select>
 
-    <!-- 멤버 로그인 히스토리 저장 -->
-    <insert id="insMemberHistory" parameterType="com.board.dto.member.MemberHistoryDTO">
-       INSERT INTO member_history (
-            type 
-            , timestamp
-            , member_no
-        ) VALUES (
-            #{type}
-            , UNIX_TIMESTAMP()
-            , #{memberNo}
-        ) 
-    </insert>
-
     <!-- 로그아웃하며 access token 만료 -->
     <update id="expireMemberAuth" parameterType="com.board.dto.member.SignoutRequestDTO">
         UPDATE 
@@ -103,13 +90,13 @@
     <!-- selectMemberDetail -->
     <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
         SELECT
-            no
-            , name
-            , id
-            , email
-            , phone
+            mem.no
+            , mem.name
+            , mem.id
+            , mem.email
+            , mem.phone
         FROM
-            member
+            member mem
         WHERE
             no = #{memberNo}
     </select>
