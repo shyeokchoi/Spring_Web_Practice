@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class PutPostDTO {
+public class UpdatePostDTO {
     @JsonIgnore
     private Integer postNo;
 

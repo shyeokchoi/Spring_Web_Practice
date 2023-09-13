@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.UpdatePostDTO;
 
 public interface PostService {
     /**
@@ -32,10 +32,10 @@ public interface PostService {
     /**
      * 글 수정
      * 
-     * @param putPostDTO
+     * @param updatePostDTO
      */
     @Transactional
-    public void updatePost(PutPostDTO putPostDTO);
+    public void updatePost(UpdatePostDTO updatePostDTO);
 
     /**
      * 글 삭제

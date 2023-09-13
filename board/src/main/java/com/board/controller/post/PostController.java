@@ -20,9 +20,9 @@ import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.PostStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.post.PostService;
@@ -81,7 +81,7 @@ public class PostController extends BaseController {
      * 게시글 수정
      * 
      * @param memberInfoDTO Interceptor가 제공해주는 현재 로그인 멤버 관련 정보
-     * @param putPostDTO
+     * @param updatePostDTO
      * @param postNo        Path Variable로 주어진 post no.
      * @return 수정된 게시물 상세정보
      */
@@ -90,15 +90,15 @@ public class PostController extends BaseController {
     @PutMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody PutPostDTO putPostDTO,
+            @RequestBody UpdatePostDTO updatePostDTO,
             @PathVariable Integer postNo) {
 
         // 수정할 post no 설정
-        putPostDTO.setPostNo(postNo);
+        updatePostDTO.setPostNo(postNo);
         // modifier no 설정
-        putPostDTO.setModifierNo(memberInfoDTO.getMemberNo());
+        updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
 
-        postService.updatePost(putPostDTO);
+        postService.updatePost(updatePostDTO);
         return ok(postService.selectPost(postNo));
     }
 

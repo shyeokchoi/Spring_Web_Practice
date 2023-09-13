@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.UpdatePostDTO;
 import com.board.mapper.post.PostMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(PutPostDTO putPostDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePost'");
+    public void updatePost(UpdatePostDTO updatePostDTO) {
+        postMapper.updatePost(updatePostDTO);
     }
 
     @Override

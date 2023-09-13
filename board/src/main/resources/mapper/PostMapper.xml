@@ -34,4 +34,16 @@
         WHERE
             p.no = #{postNo}
     </select>
+
+    <update id="updatePost" parameterType="com.board.dto.post.UpdatePostDTO">
+        UPDATE
+            post p
+        SET
+            p.title = #{title}
+            , p.content = #{content}
+            , p.modified_at = UNIX_TIMESTAMP()
+            , p.modifier_no = #{modifierNo}
+        WHERE
+            p.no = #{postNo}
+    </update>
 </mapper>
