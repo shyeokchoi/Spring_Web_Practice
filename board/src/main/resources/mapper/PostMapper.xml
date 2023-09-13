@@ -22,15 +22,18 @@
     <!-- select post -->
     <select id="selectPost" resultType = "com.board.dto.post.SelectPostDetailDTO">
         SELECT
-            p.title
-            , p.content
-            , m.name AS author_name
-            , p.created_at
-            , p.modified_at
+            p.title,
+            p.content,
+            m1.name AS author_name,
+            m2.name AS modifier_name,
+            p.created_at,
+            p.modified_at
         FROM
-            member m
+            post p
         INNER JOIN
-            post p ON m.no = p.author_no
+            member m1 ON p.author_no = m1.no
+        LEFT JOIN
+            member m2 ON p.modifier_no = m2.no
         WHERE
             p.no = #{postNo}
     </select>

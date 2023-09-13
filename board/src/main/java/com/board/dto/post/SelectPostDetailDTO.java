@@ -10,6 +10,7 @@ public class SelectPostDetailDTO {
     private String title;
     private String content;
     private String authorName;
+    private String modifierName;
     private Long createdAt;
     private Long modifiedAt;
 }
