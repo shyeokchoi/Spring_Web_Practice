@@ -23,11 +23,10 @@ spring:
       validation-timeout: 5000
       minimum-idle: 5
       idle-timeout: 600000
-      max-lifetime: 1800000
-
+      max-lifetime: 1800000 
   mvc:
     pathmatch:
-      matching-strategy: ANT_PATH_MATCHER #swagger2 오류처리
+      matching-strategy: ant-path-matcher #swagger2 오류처리
 
   #error config
   error:

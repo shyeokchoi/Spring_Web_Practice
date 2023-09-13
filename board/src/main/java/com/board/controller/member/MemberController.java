@@ -23,6 +23,8 @@ import com.board.framework.base.BaseController;
 import com.board.service.member.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -76,6 +78,7 @@ public class MemberController extends BaseController {
      * 로그아웃
      */
     @Operation(summary = "signout", description = "로그아웃")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PostMapping("/signout")
     public ResponseEntity<Void> signout(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
@@ -89,6 +92,7 @@ public class MemberController extends BaseController {
      * @return 회원정보
      */
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
@@ -101,6 +105,7 @@ public class MemberController extends BaseController {
      * @return 수정된 정보
      */
     @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PutMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> putMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -114,6 +119,7 @@ public class MemberController extends BaseController {
      * 회원탈퇴
      */
     @Operation(summary = "withdraw", description = "회원탈퇴")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @DeleteMapping("/self")
     public ResponseEntity<Void> withdraw(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
