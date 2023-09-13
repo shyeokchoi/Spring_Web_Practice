@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(Integer postNo) {
+    public void deletePost(Integer currMemberNo, Integer postNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deletePost'");
     }
@@ -46,4 +46,5 @@ public class PostServiceImpl implements PostService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'selectPostList'");
     }
+
 }

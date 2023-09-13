@@ -106,4 +106,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, List<String>>> handleAlreadySignedOutException(NotSignedInException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<Map<String, List<String>>> handleNumberFormatException(NumberFormatException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));
+    }
 }

@@ -34,9 +34,10 @@ public interface PostService {
     /**
      * 글 삭제
      * 
+     * @param currMemberNo 현재 로그인한 멤버의 no.
      * @param postNo
      */
-    public void deletePost(Integer postNo);
+    public void deletePost(Integer currMemberNo, Integer postNo);
 
     /**
      * 글 리스트
