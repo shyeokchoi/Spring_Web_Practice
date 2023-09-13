@@ -23,16 +23,15 @@
     <select id="selectPost" resultType = "com.board.dto.post.SelectPostDetailDTO">
         SELECT
             p.title
-            , p.content 
+            , p.content
             , m.name AS author_name
             , p.created_at
             , p.modified_at
-        FROM 
+        FROM
             member m
         INNER JOIN
-            post p
-        ON 
-            m.no = p.author_no;
-
+            post p ON m.no = p.author_no
+        WHERE
+            p.no = #{postNo}
     </select>
 </mapper>
