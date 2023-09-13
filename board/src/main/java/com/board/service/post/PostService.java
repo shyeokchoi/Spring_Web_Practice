@@ -2,6 +2,8 @@ package com.board.service.post;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PutPostDTO;
@@ -15,6 +17,7 @@ public interface PostService {
      * @param insPosDTO
      * @return 삽입된 글의 no.
      */
+    @Transactional
     public Integer insPost(InsPostDTO insPosDTO);
 
     /**
@@ -23,6 +26,7 @@ public interface PostService {
      * @param postNo
      * @return 해당 글의 정보
      */
+    @Transactional
     public SelectPostDetailDTO selectPost(Integer postNo);
 
     /**
@@ -30,6 +34,7 @@ public interface PostService {
      * 
      * @param putPostDTO
      */
+    @Transactional
     public void updatePost(PutPostDTO putPostDTO);
 
     /**
@@ -38,6 +43,7 @@ public interface PostService {
      * @param currMemberNo 현재 로그인한 멤버의 no.
      * @param postNo
      */
+    @Transactional
     public void deletePost(Integer currMemberNo, Integer postNo);
 
     /**
@@ -47,5 +53,6 @@ public interface PostService {
      * @param offset
      * @return
      */
+    @Transactional
     public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO);
 }
