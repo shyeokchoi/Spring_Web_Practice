@@ -109,6 +109,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Map<String, List<String>>> handleNumberFormatException(NumberFormatException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
     }
 }
