@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
+import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -128,7 +129,7 @@ public class PostController extends BaseController {
     public ResponseEntity<List<SelectPostListDTO>> selectPostList(
             @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
             @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr) {
-        return ok(postService.selectPostList(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)));
+        return ok(postService.selectPostList(new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr))));
     }
 
 }

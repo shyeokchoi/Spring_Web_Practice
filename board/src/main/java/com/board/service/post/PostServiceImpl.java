@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -42,7 +43,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<SelectPostListDTO> selectPostList(Integer limit, Integer offset) {
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'selectPostList'");
     }

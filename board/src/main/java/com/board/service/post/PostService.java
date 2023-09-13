@@ -2,6 +2,7 @@ package com.board.service.post;
 
 import java.util.List;
 
+import com.board.dto.common.PagingDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -46,5 +47,5 @@ public interface PostService {
      * @param offset
      * @return
      */
-    public List<SelectPostListDTO> selectPostList(Integer limit, Integer offset);
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO);
 }
