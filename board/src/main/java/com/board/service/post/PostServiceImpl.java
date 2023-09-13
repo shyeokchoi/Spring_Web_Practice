@@ -26,8 +26,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public SelectPostDetailDTO selectPost(Integer postNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'selectPost'");
+        return postMapper.selectPost(postNo);
     }
 
     @Override

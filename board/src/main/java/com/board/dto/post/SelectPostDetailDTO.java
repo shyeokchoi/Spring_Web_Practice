@@ -9,7 +9,7 @@ import lombok.Data;
 public class SelectPostDetailDTO {
     private String title;
     private String content;
-    private String author;
+    private String authorName;
     private Long createdAt;
     private Long modifiedAt;
 }
