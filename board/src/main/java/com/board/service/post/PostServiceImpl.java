@@ -19,9 +19,9 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     @Override
-    public Integer insPost(InsPostDTO insPosDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insPost'");
+    public Integer insPost(InsPostDTO insPostDTO) {
+        postMapper.insPost(insPostDTO);
+        return insPostDTO.getNo();
     }
 
     @Override

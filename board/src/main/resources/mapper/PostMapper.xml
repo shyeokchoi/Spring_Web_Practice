@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.post.PostMapper">
 
+    <!-- insPost -->
+    <insert id="insPost" parameterType="com.board.dto.post.InsPostDTO" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO post (
+            title
+            , content
+            , created_at
+            , author_no
+            , status
+        ) VALUES (
+            #{title}
+            , #{content}
+            , UNIX_TIMESTAMP()
+            , #{authorNo}
+            , #{status}
+        )
+    </insert>
 </mapper>

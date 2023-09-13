@@ -23,6 +23,7 @@ import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PutPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
+import com.board.enums.PostStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.post.PostService;
 
@@ -50,13 +51,15 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시물 작성")
     @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
-    @PostMapping("/posts")
+    @PostMapping()
     public ResponseEntity<Integer> insPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid InsPostDTO insPostDTO) {
 
         // author no 설정
         insPostDTO.setAuthorNo(memberInfoDTO.getMemberNo());
+        // status 설정 - 새롭게 등록되는 글이니 POSTED
+        insPostDTO.setStatus(PostStatusEnum.POSTED);
         return ok(postService.insPost(insPostDTO));
     }
 
@@ -68,7 +71,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 상세정보")
     @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
-    @GetMapping("/posts/{postNo}")
+    @GetMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> selectPost(
             @PathVariable Integer postNo) {
         return ok(postService.selectPost(postNo));
@@ -84,7 +87,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 수정")
     @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
-    @PutMapping("/posts/{postNo}")
+    @PutMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody PutPostDTO putPostDTO,
@@ -107,7 +110,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 삭제")
     @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
-    @DeleteMapping("/posts/{postNo}")
+    @DeleteMapping("/{postNo}")
     public ResponseEntity<Void> deletePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable Integer postNo) {
@@ -125,7 +128,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 리스트 불러오기")
     @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
-    @GetMapping("/posts")
+    @GetMapping()
     public ResponseEntity<List<SelectPostListDTO>> selectPostList(
             @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
             @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr) {
