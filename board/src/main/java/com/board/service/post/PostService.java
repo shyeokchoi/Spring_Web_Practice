@@ -56,4 +56,23 @@ public interface PostService {
      */
     @Transactional
     public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO);
+
+    /**
+     * 게시글 임시저장.
+     * 만약 해당 유저가 이미 임시저장한 게시글이 있다면 삭제하고 덮어씁니다.
+     * 
+     * @param insPostDTO
+     * @return 임시저장된 게시글의 no.
+     */
+    @Transactional
+    public Integer insTempPost(InsPostDTO insPostDTO);
+
+    /**
+     * 기존에 작성된 임시저장글의 post no.를 반환합니다.
+     * 
+     * @param currMemberNo
+     * @return
+     */
+    @Transactional
+    public Integer selectPrevTempPostNo(Integer currMemberNo);
 }

@@ -1,6 +1,7 @@
 package com.board.controller.post;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
@@ -59,8 +60,10 @@ public class PostController extends BaseController {
 
         // author no 설정
         insPostDTO.setAuthorNo(memberInfoDTO.getMemberNo());
+
         // status 설정 - 새롭게 등록되는 글이니 POSTED
         insPostDTO.setStatus(PostStatusEnum.POSTED);
+
         return ok(postService.insPost(insPostDTO));
     }
 
@@ -140,4 +143,56 @@ public class PostController extends BaseController {
                 new SearchDTO(titleKeyword, authorNameKeyword)));
     }
 
+    /**
+     * 게시물을 임시저장합니다.
+     * 이미 임시저장된 게시물이 있으면 덮어씁니다.
+     * 
+     * @param insPostDTO
+     * @return 임시저장된 게시물의 no.
+     */
+    @Operation(summary = "임시저장하기")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
+    @PostMapping("/temp")
+    public ResponseEntity<Integer> insTempPost(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestBody @Valid InsPostDTO insPostDTO) {
+        // author no 설정
+        insPostDTO.setAuthorNo(memberInfoDTO.getMemberNo());
+
+        // status 설정 - 임시저장이니 TEMP
+        insPostDTO.setStatus(PostStatusEnum.TEMP);
+
+        return ok(postService.insTempPost(insPostDTO));
+    }
+
+    /**
+     * 임시저장 불러오기.
+     * 불러온 임시저장 글은 삭제됩니다.
+     * 
+     * @param memberInfoDTO
+     * @return 임시저장된 글 정보.
+     */
+    @Operation(summary = "임시저장 불러오기")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
+    @GetMapping("/temp")
+    public ResponseEntity<SelectPostDetailDTO> selectTempPost(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
+
+        Integer currMemberNo = memberInfoDTO.getMemberNo();
+
+        // 임시저장된 글 no 불러오기
+        Integer prevTempPostNo = postService.selectPrevTempPostNo(currMemberNo);
+
+        if (prevTempPostNo == null) {
+            throw new NoSuchElementException("임시저장된 글이 없습니다.");
+        }
+
+        // 임시저장된 글 정보 불러오기
+        SelectPostDetailDTO tempPostDetail = postService.selectPost(prevTempPostNo);
+
+        // 기존 임시저장된 글 삭제
+        postService.deletePost(currMemberNo, prevTempPostNo);
+
+        return ok(tempPostDetail);
+    }
 }

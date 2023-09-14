@@ -75,4 +75,20 @@ public class PostServiceImpl implements PostService {
         return postMapper.selectPostList(pagingDTO, searchDTO);
     }
 
+    @Override
+    public Integer insTempPost(InsPostDTO insPostDTO) {
+        Integer currMemberNo = insPostDTO.getAuthorNo();
+
+        Integer prevTempPostNo = selectPrevTempPostNo(currMemberNo);
+        if (prevTempPostNo != null) {
+            deletePost(currMemberNo, prevTempPostNo);
+        }
+
+        return insPost(insPostDTO);
+    }
+
+    @Override
+    public Integer selectPrevTempPostNo(Integer currMemberNo) {
+        return postMapper.selectPrevTempPostNo(currMemberNo);
+    }
 }

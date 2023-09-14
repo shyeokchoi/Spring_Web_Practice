@@ -108,4 +108,18 @@
         LIMIT #{pagingDTO.limit} OFFSET #{pagingDTO.offset}
     </select>
 
+    <!-- 기존에 작성된 임시저장글 번호 찾기
+        status가 TEMP 여야 하고
+        삭제되지 않았어야 한다 -->
+    <select id="selectPrevTempPostNo">
+        SELECT
+            p.no
+        FROM
+            post p
+        WHERE
+            p.author_no = #{currMemberNo}
+            AND p.status = 'TEMP'
+            AND p.deleted_at IS NULL
+    </select>
+
 </mapper>

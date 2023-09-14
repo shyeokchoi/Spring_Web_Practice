@@ -70,4 +70,12 @@ public interface PostMapper {
             @Param("pagingDTO") PagingDTO pagingDTO,
             @Param("searchDTO") SearchDTO searchDTO);
 
+    /**
+     * 기존에 작성된 임시저장글 번호 찾기
+     * 
+     * @param currMemberNo
+     * @return 기존에 작성된 임시저장글 번호
+     */
+    public Integer selectPrevTempPostNo(Integer currMemberNo);
+
 }

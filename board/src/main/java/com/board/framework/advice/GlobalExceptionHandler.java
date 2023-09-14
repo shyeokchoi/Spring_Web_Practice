@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DuplicateKeyException;
@@ -127,6 +128,17 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AlreadyDeletedException.class)
     public ResponseEntity<Map<String, List<String>>> handleAlreadyDeletedException(AlreadyDeletedException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
+    }
+
+    /**
+     * 특정 요소/자원이 존재하지 않을때
+     * 
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, List<String>>> handleNoSuchElementException(NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
     }
 }
