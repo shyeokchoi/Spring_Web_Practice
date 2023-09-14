@@ -3,8 +3,10 @@ package com.board.mapper.post;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.board.dto.common.PagingDTO;
+import com.board.dto.common.SearchDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -24,6 +26,8 @@ public interface PostMapper {
 
     public void deletePost(Integer postNo);
 
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO);
+    public List<SelectPostListDTO> selectPostList(
+            @Param("pagingDTO") PagingDTO pagingDTO,
+            @Param("searchDTO") SearchDTO searchDTO);
 
 }

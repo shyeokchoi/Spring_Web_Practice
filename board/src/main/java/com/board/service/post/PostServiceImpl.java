@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.board.dto.common.PagingDTO;
+import com.board.dto.common.SearchDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -70,8 +71,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO) {
-        return postMapper.selectPostList(pagingDTO);
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO) {
+        return postMapper.selectPostList(pagingDTO, searchDTO);
     }
 
 }

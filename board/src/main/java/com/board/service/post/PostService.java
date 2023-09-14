@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.common.PagingDTO;
+import com.board.dto.common.SearchDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -54,5 +55,5 @@ public interface PostService {
      * @return
      */
     @Transactional
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO);
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO);
 }
