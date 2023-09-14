@@ -69,6 +69,7 @@ public interface PostService {
     public Integer insTempPost(InsPostDTO insPostDTO);
 
     /**
+     * 임시저장 게시글 불러옴
      * 
      * @param memberNo
      * @return
