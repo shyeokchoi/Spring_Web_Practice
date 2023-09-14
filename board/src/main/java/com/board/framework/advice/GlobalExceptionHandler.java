@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
+import com.board.exception.InvalidFileUploadException;
 import com.board.exception.NotSignedInException;
 
 @RestControllerAdvice
@@ -141,4 +142,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, List<String>>> handleNoSuchElementException(NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
     }
+
+    /**
+     * 파일 숫자 제한 초과
+     * 
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(InvalidFileUploadException.class)
+    public ResponseEntity<Map<String, List<String>>> handleInvalidFileUploadException(
+            InvalidFileUploadException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
+    }
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
@@ -27,6 +29,8 @@ import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.PostStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.post.PostService;
+import com.board.service.storage.StorageService;
+import com.board.util.FilesValidator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostController extends BaseController {
     private final PostService postService;
+    private final StorageService storageService;
+    private final FilesValidator filesValidator;
 
     /**
      * 게시물 작성
@@ -199,5 +205,52 @@ public class PostController extends BaseController {
                 memberInfoDTO.getMemberNo(),
                 new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)),
                 null));
+    }
+
+    /**
+     * 파일 등록
+     *
+     * @param memberInfoDTO
+     * @param files
+     * @return
+     */
+    @Operation(summary = "파일 등록")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
+    @PostMapping("/{postNo}/files")
+    public ResponseEntity<Void> insertFileList(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            MultipartFile[] files) {
+
+        // 파일 개수 체크, 확장자 체크
+        filesValidator.validateMultiparFileArr(files);
+
+        // 파일 저장 후 DB 업데이트
+        for (MultipartFile file : files) {
+            storageService.store(file);
+        }
+
+        return ok();
+
+    }
+
+    /**
+     * 파일 다운로드
+     * 
+     * @param memberInfoDTO
+     * @param fileName
+     * @return
+     */
+    @Operation(summary = "파일 다운로드")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
+    @GetMapping("/{postNo}/files")
+    public ResponseEntity<Resource> selectFile(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestParam(name = "name", required = true) String fileName) {
+
+        Resource file = storageService.loadAsResource(fileName);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "multipart/form-data")
+                .body(file);
     }
 }

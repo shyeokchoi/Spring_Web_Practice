@@ -47,6 +47,7 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 20MB
+      location: /Users/wm-id002599/web_study_files
 
 #mybatis config
 mybatis:
