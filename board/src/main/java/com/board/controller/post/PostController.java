@@ -138,7 +138,9 @@ public class PostController extends BaseController {
             @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr,
             @RequestParam(name = "title", required = false) String titleKeyword,
             @RequestParam(name = "authorName", required = false) String authorNameKeyword) {
+
         return ok(postService.selectPostList(
+                null,
                 new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)),
                 new SearchDTO(titleKeyword, authorNameKeyword)));
     }
@@ -194,5 +196,25 @@ public class PostController extends BaseController {
         postService.deletePost(currMemberNo, prevTempPostNo);
 
         return ok(tempPostDetail);
+    }
+
+    /**
+     * 내 게시물 목록을 불러옵니다.
+     * 
+     * @param memberInfoDTO
+     * @return
+     */
+    @Operation(summary = "내 게시물 목록 보기")
+    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
+    @GetMapping("/self")
+    public ResponseEntity<List<SelectPostListDTO>> selectSelfPostList(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
+            @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr) {
+
+        return ok(postService.selectPostList(
+                memberInfoDTO.getMemberNo(),
+                new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)),
+                null));
     }
 }

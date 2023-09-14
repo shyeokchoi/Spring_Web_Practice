@@ -67,6 +67,7 @@ public interface PostMapper {
      * @return
      */
     public List<SelectPostListDTO> selectPostList(
+            @Param("authorNo") Integer authorNo,
             @Param("pagingDTO") PagingDTO pagingDTO,
             @Param("searchDTO") SearchDTO searchDTO);
 
@@ -77,5 +78,4 @@ public interface PostMapper {
      * @return 기존에 작성된 임시저장글 번호
      */
     public Integer selectPrevTempPostNo(Integer currMemberNo);
-
 }

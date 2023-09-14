@@ -97,11 +97,14 @@
             member m ON p.author_no = m.no
         WHERE
             p.deleted_at IS NULL
-        <if test="searchDTO.titleKeyword != null">
+        <if test="searchDTO != null and searchDTO.titleKeyword != null">
             AND p.title LIKE CONCAT('%', #{searchDTO.titleKeyword}, '%') 
         </if>
-        <if test="searchDTO.authorNameKeyword != null">
+        <if test="searchDTO != null and searchDTO.authorNameKeyword != null">
             AND m.name LIKE CONCAT('%', #{searchDTO.authorNameKeyword}, '%')
+        </if>
+        <if test="authorNo != null">
+            AND p.author_no = #{authorNo}
         </if>
         ORDER BY
             p.no DESC

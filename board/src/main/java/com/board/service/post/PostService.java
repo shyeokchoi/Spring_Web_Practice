@@ -48,14 +48,15 @@ public interface PostService {
     public void deletePost(Integer currMemberNo, Integer postNo);
 
     /**
-     * 글 리스트
+     * 게시물 리스트 반환
      * 
-     * @param limit
-     * @param offset
+     * @param authorNo  게시글 작성자 no.
+     * @param pagingDTO
+     * @param searchDTO null일 경우 검색 기능 없음.
      * @return
      */
     @Transactional
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO);
+    public List<SelectPostListDTO> selectPostList(Integer authorNo, PagingDTO pagingDTO, SearchDTO searchDTO);
 
     /**
      * 게시글 임시저장.
