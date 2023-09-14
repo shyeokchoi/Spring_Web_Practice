@@ -50,7 +50,7 @@ public interface PostService {
     /**
      * 게시물 리스트 반환
      * 
-     * @param authorNo  게시글 작성자 no.
+     * @param authorNo  게시글 작성자 no. null일 경우 모든 게시글 리스트 반환
      * @param pagingDTO
      * @param searchDTO null일 경우 검색 기능 없음.
      * @return
@@ -69,11 +69,10 @@ public interface PostService {
     public Integer insTempPost(InsPostDTO insPostDTO);
 
     /**
-     * 기존에 작성된 임시저장글의 post no.를 반환합니다.
      * 
-     * @param currMemberNo
+     * @param memberNo
      * @return
      */
     @Transactional
-    public Integer selectPrevTempPostNo(Integer currMemberNo);
+    public SelectPostDetailDTO selectTempPost(Integer memberNo);
 }

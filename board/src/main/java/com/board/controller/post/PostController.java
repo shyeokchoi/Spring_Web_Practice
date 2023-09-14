@@ -1,7 +1,6 @@
 package com.board.controller.post;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
@@ -179,23 +178,7 @@ public class PostController extends BaseController {
     @GetMapping("/temp")
     public ResponseEntity<SelectPostDetailDTO> selectTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-
-        Integer currMemberNo = memberInfoDTO.getMemberNo();
-
-        // 임시저장된 글 no 불러오기
-        Integer prevTempPostNo = postService.selectPrevTempPostNo(currMemberNo);
-
-        if (prevTempPostNo == null) {
-            throw new NoSuchElementException("임시저장된 글이 없습니다.");
-        }
-
-        // 임시저장된 글 정보 불러오기
-        SelectPostDetailDTO tempPostDetail = postService.selectPost(prevTempPostNo);
-
-        // 기존 임시저장된 글 삭제
-        postService.deletePost(currMemberNo, prevTempPostNo);
-
-        return ok(tempPostDetail);
+        return ok(postService.selectTempPost(memberInfoDTO.getMemberNo()));
     }
 
     /**

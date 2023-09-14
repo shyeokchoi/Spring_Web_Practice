@@ -1,6 +1,7 @@
 package com.board.service.post;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
@@ -75,20 +76,44 @@ public class PostServiceImpl implements PostService {
         return postMapper.selectPostList(authorNo, pagingDTO, searchDTO);
     }
 
+    private Integer selectPrevTempPostNo(Integer currMemberNo) {
+        return postMapper.selectPrevTempPostNo(currMemberNo);
+    }
+
     @Override
     public Integer insTempPost(InsPostDTO insPostDTO) {
+        // 현재 접속한 멤버의 no.
         Integer currMemberNo = insPostDTO.getAuthorNo();
 
+        // 기존에 임시저장해둔 게시글의 no. 없으면 null
         Integer prevTempPostNo = selectPrevTempPostNo(currMemberNo);
+
+        // 기존에 임시저장해둔 게시글이 있으면 지운다. (임시저장은 한번에 하나만)
         if (prevTempPostNo != null) {
             deletePost(currMemberNo, prevTempPostNo);
         }
 
+        // 임시저장
         return insPost(insPostDTO);
     }
 
     @Override
-    public Integer selectPrevTempPostNo(Integer currMemberNo) {
-        return postMapper.selectPrevTempPostNo(currMemberNo);
+    public SelectPostDetailDTO selectTempPost(Integer memberNo) {
+        // 임시저장된 글 no 불러오기
+        Integer prevTempPostNo = selectPrevTempPostNo(memberNo);
+
+        // 임시저장된 글이 없으면 예외처리
+        if (prevTempPostNo == null) {
+            throw new NoSuchElementException("임시저장된 글이 없습니다.");
+        }
+
+        // 임시저장된 글 정보 불러오기
+        SelectPostDetailDTO tempPostDetail = selectPost(prevTempPostNo);
+
+        // 기존 임시저장된 글 삭제
+        deletePost(memberNo, prevTempPostNo);
+
+        return tempPostDetail;
     }
+
 }
