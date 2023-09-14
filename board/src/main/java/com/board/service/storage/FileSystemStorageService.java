@@ -30,7 +30,7 @@ public class FileSystemStorageService implements StorageService {
     private String uploadPath;
 
     @Override
-    public void init() {
+    public void initDirectory() {
         try {
             Files.createDirectories(Paths.get(uploadPath));
         } catch (IOException e) {
@@ -56,12 +56,14 @@ public class FileSystemStorageService implements StorageService {
             }
             Path root = Paths.get(uploadPath);
             if (!Files.exists(root)) {
-                init();
+                initDirectory();
             }
 
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, root.resolve(saveName),
                         StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception e) {
+                throw new InvalidFileUploadException("File copy failed");
             }
         } catch (Exception e) {
             throw new InvalidFileUploadException("Could not store the file. Error: " + e.getMessage());

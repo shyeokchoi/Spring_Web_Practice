@@ -9,7 +9,7 @@ public interface StorageService {
     /**
      * 파일을 저장할 디렉토리가 없는 경우 초기 디렉토리 설정
      */
-    public void init();
+    public void initDirectory();
 
     /**
      * 파일 저장
