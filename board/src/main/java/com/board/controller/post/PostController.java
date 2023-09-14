@@ -219,6 +219,7 @@ public class PostController extends BaseController {
     @PostMapping("/{postNo}/files")
     public ResponseEntity<Void> insertFileList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @PathVariable Integer postNo,
             MultipartFile[] files) {
 
         // 파일 개수 체크, 확장자 체크
@@ -226,7 +227,7 @@ public class PostController extends BaseController {
 
         // 파일 저장 후 DB 업데이트
         for (MultipartFile file : files) {
-            storageService.store(file);
+            storageService.store(postNo, memberInfoDTO.getMemberNo(), file);
         }
 
         return ok();
