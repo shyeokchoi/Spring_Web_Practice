@@ -6,6 +6,6 @@ import lombok.Data;
 public class SelectPostListDTO {
     private Integer no;
     private String title;
-    private String author;
+    private String authorName;
     private Long createdAt;
 }

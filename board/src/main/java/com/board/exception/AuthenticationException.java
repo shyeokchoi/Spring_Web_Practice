@@ -1,7 +1,7 @@
 package com.board.exception;
 
 /**
- * 로그인에 실패하는 경우
+ * 권한이 없는 행동을 한 경우
  */
 public class AuthenticationException extends RuntimeException {
     public AuthenticationException(String message) {

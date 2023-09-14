@@ -90,7 +90,7 @@ public class PostController extends BaseController {
     @PutMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody UpdatePostDTO updatePostDTO,
+            @RequestBody @Valid UpdatePostDTO updatePostDTO,
             @PathVariable Integer postNo) {
 
         // 수정할 post no 설정

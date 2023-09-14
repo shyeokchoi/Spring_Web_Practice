@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.post.PostMapper">
 
+    <!-- 주어진 postNo에 해당하는 게시물 이미 삭제되진 않았는지 확인 -->
+
+    <select id="isAlreadyDeleted">
+        SELECT
+            p.deleted_at IS NOT NULL
+        FROM
+            post p
+        WHERE
+            p.no = #{postNo}
+    </select>
+
     <!-- insert new post -->
     <insert id="insPost" parameterType="com.board.dto.post.InsPostDTO" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO post (
@@ -22,12 +33,12 @@
     <!-- select post -->
     <select id="selectPost" resultType = "com.board.dto.post.SelectPostDetailDTO">
         SELECT
-            p.title,
-            p.content,
-            m1.name AS author_name,
-            m2.name AS modifier_name,
-            p.created_at,
-            p.modified_at
+            p.title
+            , p.content
+            , m1.name AS author_name
+            , m2.name AS modifier_name
+            , p.created_at
+            , p.modified_at
         FROM
             post p
         INNER JOIN
@@ -49,4 +60,40 @@
         WHERE
             p.no = #{postNo}
     </update>
+
+    <select id="retvAuthorNo">
+        SELECT
+            p.author_no
+        FROM
+            post p
+        WHERE
+            p.no = #{postNo}
+    </select>
+
+    <update id="deletePost">
+        UPDATE
+            post p
+        SET
+            deleted_at = UNIX_TIMESTAMP()
+        WHERE
+            p.no = #{postNo}
+    </update>
+
+    <select id="selectPostList" parameterType="com.board.dto.common.PagingDTO" resultType="com.board.dto.post.SelectPostListDTO">
+        SELECT
+            p.no
+            , p.title
+            , m.name AS author_name
+            , p.created_at
+        FROM
+            post p
+        INNER JOIN
+            member m ON p.author_no = m.no
+        WHERE
+            p.deleted_at IS NULL
+        ORDER BY
+            p.no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 </mapper>

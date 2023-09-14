@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
 import com.board.exception.NotSignedInException;
 
@@ -107,8 +108,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrBody(e.getMessage()));
     }
 
+    /**
+     * Number formatting이 실패할 경우
+     * 
+     * @param e
+     * @return
+     */
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Map<String, List<String>>> handleNumberFormatException(NumberFormatException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
+    }
+
+    /**
+     * 이미 삭제된 자원에 접근할 때
+     * 
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AlreadyDeletedException.class)
+    public ResponseEntity<Map<String, List<String>>> handleAlreadyDeletedException(AlreadyDeletedException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
     }
 }
