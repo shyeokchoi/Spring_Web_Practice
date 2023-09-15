@@ -26,4 +26,18 @@
             , NULL
         );
     </insert>
+
+    <!-- file_info 상태 업데이트.
+        TEMP 파일에서 NORMAL 파일로 -->
+
+    <update id="changeFileStatus">
+        UPDATE
+            file_info f
+        SET
+            f.status = 'NORMAL'
+            , f.parent_no = #{parentNo}
+            , f.parent_type = #{fileInfoParentType}
+        WHERE
+            f.no = #{fileNo}
+    </update>
 </mapper>

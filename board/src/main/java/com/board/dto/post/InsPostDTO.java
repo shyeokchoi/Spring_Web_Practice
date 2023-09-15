@@ -1,5 +1,7 @@
 package com.board.dto.post;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -28,6 +30,9 @@ public class InsPostDTO {
     @NotBlank(message = "내용은 공백일 수 없습니다.")
     @Schema(description = "내용", example = "예시 내용")
     private String content;
+
+    @Schema(description = "업로드할 파일 no 리스트", example = "[1, 2, 3]")
+    private List<Integer> fileNoList;
 
     @JsonIgnore
     private Integer authorNo;

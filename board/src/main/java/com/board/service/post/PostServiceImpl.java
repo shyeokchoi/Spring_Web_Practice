@@ -12,8 +12,10 @@ import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
+import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
+import com.board.mapper.file.FileMapper;
 import com.board.mapper.post.PostMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
+    private final FileMapper fileMapper;
 
     /**
      * 이미 삭제된 게시물인지 확인하는 함수
@@ -39,6 +42,11 @@ public class PostServiceImpl implements PostService {
     public Integer insPost(InsPostDTO insPostDTO) {
         // 새로운 게시물 생성
         postMapper.insPost(insPostDTO);
+
+        // 게시물에서 등록한 file들 전부 상태 업데이트.
+        for (Integer fileNo : insPostDTO.getFileNoList()) {
+            fileMapper.changeFileStatus(fileNo, insPostDTO.getNo(), FileInfoParentTypeEnum.POST);
+        }
 
         return insPostDTO.getNo();
     }
