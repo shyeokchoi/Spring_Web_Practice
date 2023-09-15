@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.dto.file.InsFileInfoDTO;
@@ -39,6 +40,7 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    @Transactional
     @Override
     public void store(Integer parentNo, Integer currMemberNo, MultipartFile file) {
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성

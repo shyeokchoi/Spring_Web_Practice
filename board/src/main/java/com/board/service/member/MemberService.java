@@ -1,7 +1,5 @@
 package com.board.service.member;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.PutMemberDetailDTO;
@@ -19,7 +17,6 @@ public interface MemberService {
      * @param insMemberDTO
      * @return 회원가입된 멤버의 no
      */
-    @Transactional
     public Integer insMember(InsMemberDTO insMemberDTO);
 
     /**
@@ -28,21 +25,18 @@ public interface MemberService {
      * @param signinRequestDTO
      * @return
      */
-    @Transactional
     public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO);
 
     /**
      * 로그아웃
      * 
      */
-    @Transactional
     public void signout(MemberInfoDTO memberInfoDTO);
 
     /**
      * 자기 자신의 정보 가져오기
      * 
      */
-    @Transactional
     public SelectMemberDetailDTO selectMemberDetailOfSelf(MemberInfoDTO memberInfoDTO);
 
     /**
@@ -51,13 +45,11 @@ public interface MemberService {
      * @param memberInfoDTO
      * @param putMemberDetailDTO
      */
-    @Transactional
     public void updateMemberDetailOfSelf(MemberInfoDTO memberInfoDTO, PutMemberDetailDTO putMemberDetailDTO);
 
     /**
      * 회원 탈퇴
      * 
      */
-    @Transactional
     public void withdraw(MemberInfoDTO memberInfoDTO);
 }

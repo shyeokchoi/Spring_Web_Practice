@@ -2,7 +2,8 @@ package com.board.service.auth;
 
 import java.util.Optional;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.member.IdPwDTO;
 import com.board.exception.AuthenticationException;
@@ -12,8 +13,9 @@ import com.board.util.PwEncryptor;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final AuthMapper authMapper;
     private final PwEncryptor pwEncryptor;

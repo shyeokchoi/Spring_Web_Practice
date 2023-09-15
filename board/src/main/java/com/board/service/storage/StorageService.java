@@ -1,7 +1,6 @@
 package com.board.service.storage;
 
 import org.springframework.core.io.Resource;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
@@ -18,7 +17,6 @@ public interface StorageService {
      * @param currMemberNo 글 작성자 no.
      * @param file         파일
      */
-    @Transactional
     public void store(Integer parentNo, Integer currMemberNo, MultipartFile file);
 
     /**
@@ -27,6 +25,5 @@ public interface StorageService {
      * @param filename
      * @return
      */
-    @Transactional
     public Resource loadAsResource(String filename);
 }

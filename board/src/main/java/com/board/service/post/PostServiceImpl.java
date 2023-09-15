@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.board.dto.common.PagingDTO;
 import com.board.dto.common.SearchDTO;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
