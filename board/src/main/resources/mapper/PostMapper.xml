@@ -50,9 +50,9 @@
     </select>
 
     <!-- select file list -->
-    <select id="selectFileList">
+    <select id="selectFileNoList">
         SELECT
-            f.save_name
+            f.no
         FROM
             post p
         INNER JOIN

@@ -15,5 +15,5 @@ public class SelectPostDetailDTO {
     private String modifierName;
     private Long createdAt;
     private Long modifiedAt;
-    private List<String> fileNames;
+    private List<Integer> fileNoList;
 }

@@ -38,12 +38,12 @@ public interface PostMapper {
     public SelectPostDetailDTO selectPost(Integer postNo);
 
     /**
-     * 게시글과 연결된 파일 이름들 불러오기
+     * 게시글과 연결된 파일 no들 불러오기
      * 
      * @param postNo
      * @return 파일 이름들의 리스트
      */
-    public List<String> selectFileList(Integer postNo);
+    public List<Integer> selectFileNoList(Integer postNo);
 
     /**
      * 게시글 수정
