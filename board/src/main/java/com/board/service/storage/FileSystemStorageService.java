@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.dto.file.InsFileInfoDTO;
-import com.board.exception.InvalidFileUploadException;
+import com.board.exception.FileUploadFailureException;
 import com.board.mapper.file.FileMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(Paths.get(uploadPath));
         } catch (IOException e) {
-            throw new InvalidFileUploadException("Could not create upload folder!");
+            throw new FileUploadFailureException("Could not create upload folder!");
         }
     }
 
@@ -63,10 +63,10 @@ public class FileSystemStorageService implements StorageService {
                 Files.copy(inputStream, root.resolve(saveName),
                         StandardCopyOption.REPLACE_EXISTING);
             } catch (Exception e) {
-                throw new InvalidFileUploadException("File copy failed");
+                throw new FileUploadFailureException("File copy failed");
             }
         } catch (Exception e) {
-            throw new InvalidFileUploadException("Could not store the file. Error: " + e.getMessage());
+            throw new FileUploadFailureException("Could not store the file. Error: " + e.getMessage());
         }
 
         // DB에 file info 저장
@@ -95,10 +95,10 @@ public class FileSystemStorageService implements StorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new InvalidFileUploadException("Could not read file: " + filename);
+                throw new FileUploadFailureException("Could not read file: " + filename);
             }
         } catch (MalformedURLException e) {
-            throw new InvalidFileUploadException("Could not read file: " + filename);
+            throw new FileUploadFailureException("Could not read file: " + filename);
         }
     }
 }

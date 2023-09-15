@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
-import com.board.exception.InvalidFileUploadException;
+import com.board.exception.FileUploadFailureException;
 import com.board.exception.NotSignedInException;
 
 @RestControllerAdvice
@@ -149,9 +149,9 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(InvalidFileUploadException.class)
-    public ResponseEntity<Map<String, List<String>>> handleInvalidFileUploadException(
-            InvalidFileUploadException e) {
+    @ExceptionHandler(FileUploadFailureException.class)
+    public ResponseEntity<Map<String, List<String>>> handleFileUploadFailureException(
+            FileUploadFailureException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
     }
 
