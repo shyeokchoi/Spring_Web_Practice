@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.exception.FileUploadFailureException;
 import com.board.mapper.file.FileMapper;
+import com.board.util.FileNamer;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileSystemStorageService implements StorageService {
     private final FileMapper fileMapper;
+    private final FileNamer fileNamer;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -38,16 +39,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    private String parseExtension(String fileName) {
-        int lastIndex = fileName.lastIndexOf('.');
-        return fileName.substring(lastIndex + 1);
-    }
-
     @Override
     public void store(Integer parentNo, Integer currMemberNo, MultipartFile file) {
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
-        String extension = parseExtension(file.getOriginalFilename());
-        String saveName = UUID.randomUUID().toString() + "." + extension;
+        String extension = fileNamer.parseExtension(file.getOriginalFilename());
+        String saveName = fileNamer.nameFile(file.getOriginalFilename());
 
         // 파일 저장
         try {
@@ -73,7 +69,7 @@ public class FileSystemStorageService implements StorageService {
         InsFileInfoDTO insFileInfoDTO = InsFileInfoDTO.builder()
                 .originName(file.getOriginalFilename())
                 .saveName(saveName)
-                .savePath("/Users/wm-id002599/web_study_files")
+                .savePath(uploadPath)
                 .extension(extension)
                 .size((int) file.getSize()) // long을 int로 캐스팅해도 됨. 어차피 사이즈 5MB 제한.
                 .parentNo(parentNo)
