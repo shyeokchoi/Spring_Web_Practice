@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -247,11 +249,14 @@ public class PostController extends BaseController {
     public ResponseEntity<Resource> selectFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestParam(name = "name", required = true) String fileName) {
-
         Resource file = storageService.loadAsResource(fileName);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.setContentDispositionFormData(fileName, fileName);
+
         return ResponseEntity.ok()
-                .header("Content-Type", "multipart/form-data")
+                .headers(headers)
                 .body(file);
     }
 }
