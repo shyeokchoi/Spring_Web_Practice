@@ -1,6 +1,7 @@
 package com.board.dto.file;
 
 import com.board.enums.FileInfoParentTypeEnum;
+import com.board.enums.FileStatusEnum;
 
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class InsFileInfoDTO {
     private Integer parentNo;
     private FileInfoParentTypeEnum parentType;
     private Integer authorNo;
+    private FileStatusEnum status;
 }
