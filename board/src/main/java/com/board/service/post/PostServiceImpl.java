@@ -46,8 +46,15 @@ public class PostServiceImpl implements PostService {
         // 이미 삭제되진 않았는지 확인
         checkIfAlreadyDeleted(postNo);
 
+        // 해당 포스트와 연결된 파일 리스트 받아오기
+        List<String> fileNames = postMapper.selectFileList(postNo);
+
         // 해당 postNo에 해당하는 게시물 검색
-        return postMapper.selectPost(postNo);
+        SelectPostDetailDTO post = postMapper.selectPost(postNo);
+
+        // SelectPostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
+        post.setFileNames(fileNames);
+        return post;
     }
 
     @Override

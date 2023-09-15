@@ -38,6 +38,14 @@ public interface PostMapper {
     public SelectPostDetailDTO selectPost(Integer postNo);
 
     /**
+     * 게시글과 연결된 파일 이름들 불러오기
+     * 
+     * @param postNo
+     * @return 파일 이름들의 리스트
+     */
+    public List<String> selectFileList(Integer postNo);
+
+    /**
      * 게시글 수정
      * 
      * @param updatePostDTO
@@ -78,4 +86,5 @@ public interface PostMapper {
      * @return 기존에 작성된 임시저장글 번호
      */
     public Integer selectPrevTempPostNo(Integer currMemberNo);
+
 }

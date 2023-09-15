@@ -1,5 +1,7 @@
 package com.board.dto.post;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -13,4 +15,5 @@ public class SelectPostDetailDTO {
     private String modifierName;
     private Long createdAt;
     private Long modifiedAt;
+    private List<String> fileNames;
 }

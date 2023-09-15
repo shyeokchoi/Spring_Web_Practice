@@ -49,6 +49,18 @@
             p.no = #{postNo}
     </select>
 
+    <!-- select file list -->
+    <select id="selectFileList">
+        SELECT
+            f.save_name
+        FROM
+            post p
+        INNER JOIN
+            file_info f ON p.no = f.parent_no
+        WHERE
+            p.no = #{postNo}
+    </select>
+
     <!-- 게시물 수정 -->
     <update id="updatePost" parameterType="com.board.dto.post.UpdatePostDTO">
         UPDATE
