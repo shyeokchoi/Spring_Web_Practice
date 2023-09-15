@@ -73,7 +73,7 @@ public class FileSystemStorageService implements StorageService {
                 .saveName(saveName)
                 .savePath(uploadPath)
                 .extension(extension)
-                .size((int) file.getSize()) // long을 int로 캐스팅해도 됨. 어차피 사이즈 5MB 제한.
+                .size(file.getSize()) // long을 int로 캐스팅해도 됨. 어차피 사이즈 5MB 제한.
                 .parentNo(parentNo)
                 .authorNo(currMemberNo)
                 .build();

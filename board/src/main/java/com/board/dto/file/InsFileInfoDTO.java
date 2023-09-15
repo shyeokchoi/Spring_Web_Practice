@@ -11,7 +11,7 @@ public class InsFileInfoDTO {
     private String saveName;
     private String savePath;
     private String extension;
-    private Integer size;
+    private Long size;
     private Integer parentNo;
     private Integer authorNo;
 }
