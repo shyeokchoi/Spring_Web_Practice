@@ -35,10 +35,6 @@ import com.board.service.storage.StorageService;
 import com.board.util.FilesValidator;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +55,6 @@ public class PostController extends BaseController {
      * @return 작성된 게시물의 no
      */
     @Operation(summary = "게시물 작성")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PostMapping()
     public ResponseEntity<Integer> insPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -81,7 +76,6 @@ public class PostController extends BaseController {
      * @return 게시물 상세정보
      */
     @Operation(summary = "게시글 상세정보")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> selectPost(
             @PathVariable Integer postNo) {
@@ -97,7 +91,6 @@ public class PostController extends BaseController {
      * @return 수정된 게시물 상세정보
      */
     @Operation(summary = "게시글 수정")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PutMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -120,7 +113,6 @@ public class PostController extends BaseController {
      * @param postNo        Path Variable로 주어진 post no.
      */
     @Operation(summary = "게시글 삭제")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @DeleteMapping("/{postNo}")
     public ResponseEntity<Void> deletePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -138,7 +130,6 @@ public class PostController extends BaseController {
      * @return 게시물들의 리스트
      */
     @Operation(summary = "게시글 리스트 불러오기")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping()
     public ResponseEntity<List<SelectPostListDTO>> selectPostList(
             @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
@@ -160,7 +151,6 @@ public class PostController extends BaseController {
      * @return 임시저장된 게시물의 no.
      */
     @Operation(summary = "임시저장하기")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PostMapping("/temp")
     public ResponseEntity<Integer> insTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -182,7 +172,6 @@ public class PostController extends BaseController {
      * @return 임시저장된 글 정보.
      */
     @Operation(summary = "임시저장 불러오기")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping("/temp")
     public ResponseEntity<SelectPostDetailDTO> selectTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
@@ -196,7 +185,6 @@ public class PostController extends BaseController {
      * @return
      */
     @Operation(summary = "내 게시물 목록 보기")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping("/self")
     public ResponseEntity<List<SelectPostListDTO>> selectSelfPostList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -217,7 +205,6 @@ public class PostController extends BaseController {
      * @return
      */
     @Operation(summary = "파일 등록")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @PostMapping("/{postNo}/files")
     public ResponseEntity<Void> insertFileList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -244,7 +231,6 @@ public class PostController extends BaseController {
      * @return
      */
     @Operation(summary = "파일 다운로드")
-    @Parameter(in = ParameterIn.HEADER, required = true, description = "Access Token", name = "Access-Token", content = @Content(schema = @Schema(type = "string", defaultValue = "")))
     @GetMapping("/{postNo}/files")
     public ResponseEntity<Resource> selectFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
