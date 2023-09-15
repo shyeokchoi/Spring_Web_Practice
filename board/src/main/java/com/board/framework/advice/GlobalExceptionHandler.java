@@ -152,7 +152,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileUploadFailureException.class)
     public ResponseEntity<Map<String, List<String>>> handleFileUploadFailureException(
             FileUploadFailureException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrBody(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildErrBody(e.getMessage()));
     }
 
 }

@@ -32,7 +32,7 @@ public class InsPostDTO {
     private String content;
 
     @Schema(description = "업로드할 파일 no 리스트", example = "[1, 2, 3]")
-    private List<Integer> fileNoList;
+    private List<Integer> fileInfoNoList;
 
     @JsonIgnore
     private Integer authorNo;

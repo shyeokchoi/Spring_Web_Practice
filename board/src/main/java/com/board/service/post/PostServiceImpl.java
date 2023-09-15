@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
         postMapper.insPost(insPostDTO);
 
         // 게시물에서 등록한 file들 전부 상태 업데이트.
-        for (Integer fileNo : insPostDTO.getFileNoList()) {
+        for (Integer fileNo : insPostDTO.getFileInfoNoList()) {
             fileMapper.changeFileStatus(fileNo, insPostDTO.getNo(), FileInfoParentTypeEnum.POST);
         }
 

@@ -11,13 +11,12 @@ public interface StorageService {
     public void initDirectory();
 
     /**
-     * 파일 저장
+     * file info 새로 삽입
      * 
-     * @param parentNo     파일이 저장될 글 no.
-     * @param currMemberNo 글 작성자 no.
-     * @param file         파일
+     * @param file
+     * @param memberNo 파일 생성한 member no.
      */
-    public void store(Integer parentNo, Integer currMemberNo, MultipartFile file);
+    public Integer insFile(MultipartFile file, Integer memberNo) throws Exception;
 
     /**
      * 파일을 Resource로 반환
@@ -25,5 +24,13 @@ public interface StorageService {
      * @param filename
      * @return
      */
-    public Resource loadAsResource(String filename);
+    public Resource loadAsResource(Integer fileInfoNo) throws Exception;
+
+    /**
+     * file info 삭제
+     * 
+     * @param fileInfoNo
+     * @throws Exception
+     */
+    public void deleteFile(Integer fileInfoNo) throws Exception;
 }

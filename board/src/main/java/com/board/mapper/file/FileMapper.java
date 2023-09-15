@@ -1,6 +1,7 @@
 package com.board.mapper.file;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
@@ -12,7 +13,7 @@ public interface FileMapper {
      * 
      * @param insFileInfoDTO
      */
-    void insFileInfo(InsFileInfoDTO insFileInfoDTO);
+    public void insFileInfo(InsFileInfoDTO insFileInfoDTO);
 
     /**
      * 파일의 상태를 변경합니다. TEMP 파일에서 NORMAL 파일이 됩니다.
@@ -21,6 +22,23 @@ public interface FileMapper {
      * @param parentNo           설정해줄 parent no.
      * @param fileInfoParentType 설정해줄 parent type
      */
-    void changeFileStatus(Integer fileNo, Integer parentNo, FileInfoParentTypeEnum fileInfoParentType);
+    public void changeFileStatus(
+            @Param("fileNo") Integer fileNo,
+            @Param("parentNo") Integer parentNo,
+            @Param("fileInfoParentType") FileInfoParentTypeEnum fileInfoParentType);
 
+    /**
+     * 파일 save name (Random UUID + extension) 뽑아오기
+     * 
+     * @param fileInfoNo
+     * @return
+     */
+    public String selectFileSaveName(Integer fileInfoNo);
+
+    /**
+     * 파일 info 삭제
+     * 
+     * @param fileInfoNo
+     */
+    public void deleteFileInfo(Integer fileInfoNo);
 }

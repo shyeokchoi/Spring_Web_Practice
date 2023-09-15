@@ -8,28 +8,31 @@
             , save_path
             , extension
             , size
-            , parent_no
             , created_at
             , author_no
             , modified_at
             , modifier_no
+            , parent_no
+            , parent_type
+            , status
         ) VALUES (
             #{originName} 
             , #{saveName} 
             , #{savePath} 
             , #{extension}
             , #{size} 
-            , #{parentNo}
             , UNIX_TIMESTAMP()
             , #{authorNo}
             , NULL
             , NULL
+            , #{parentNo}
+            , #{parentType}
+            , #{status}
         );
     </insert>
 
     <!-- file_info 상태 업데이트.
         TEMP 파일에서 NORMAL 파일로 -->
-
     <update id="changeFileStatus">
         UPDATE
             file_info f
@@ -40,4 +43,21 @@
         WHERE
             f.no = #{fileNo}
     </update>
+
+    <select id="selectFileSaveName">
+        SELECT
+            f.save_name
+        FROM
+            file_info f
+        WHERE
+            f.no = #{fileNo}
+    </select>
+
+    <delete id="deleteFileInfo">
+        DELETE FROM
+            file_info f
+        WHERE
+            f.no = #{fileNo}
+
+    </delete>
 </mapper>
