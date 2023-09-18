@@ -84,7 +84,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 수정")
     @PutMapping("/{postNo}")
-    public ResponseEntity<SelectPostDetailDTO> updatePost(
+    public ResponseEntity<Void> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdatePostDTO updatePostDTO,
             @PathVariable Integer postNo) {
@@ -94,8 +94,9 @@ public class PostController extends BaseController {
         // modifier no 설정
         updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
 
-        postService.updatePost(updatePostDTO);
-        return ok(postService.selectPost(postNo));
+        postService.updatePost(updatePostDTO)
+
+        return ok();
     }
 
     /**

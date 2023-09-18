@@ -98,16 +98,15 @@ public class MemberController extends BaseController {
     /**
      * 자기 자신의 정보 수정
      * 
-     * @return 수정된 정보
      */
     @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
     @PutMapping("/self")
-    public ResponseEntity<SelectMemberDetailDTO> putMemberDetailOfSelf(
+    public ResponseEntity<Void> putMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid PutMemberDetailDTO putMemberDetailDTO) {
-
         memberService.updateMemberDetailOfSelf(memberInfoDTO, putMemberDetailDTO);
-        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO));
+
+        return ok();
     }
 
     /**
