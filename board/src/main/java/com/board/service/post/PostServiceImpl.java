@@ -71,6 +71,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO) {
+        return postMapper.selectPostList(null, pagingDTO, searchDTO);
+    }
+
+    @Override
     public List<SelectPostListDTO> selectPostList(Integer authorNo, PagingDTO pagingDTO, SearchDTO searchDTO) {
         return postMapper.selectPostList(authorNo, pagingDTO, searchDTO);
     }
@@ -114,5 +119,4 @@ public class PostServiceImpl implements PostService {
 
         return tempPostDetail;
     }
-
 }

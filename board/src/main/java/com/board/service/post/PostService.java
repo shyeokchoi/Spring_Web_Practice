@@ -42,9 +42,19 @@ public interface PostService {
     public void deletePost(Integer currMemberNo, Integer postNo);
 
     /**
-     * 게시물 리스트 반환
+     * 모든 게시물 리스트 반환
      * 
      * @param authorNo  게시글 작성자 no. null일 경우 모든 게시글 리스트 반환
+     * @param pagingDTO
+     * @param searchDTO null일 경우 검색 기능 없음.
+     * @return
+     */
+    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO);
+
+    /**
+     * 특정 유저의 게시물 리스트 반환
+     * 
+     * @param authorNo  검색하고자 하는 게시글 작성자 no.
      * @param pagingDTO
      * @param searchDTO null일 경우 검색 기능 없음.
      * @return
