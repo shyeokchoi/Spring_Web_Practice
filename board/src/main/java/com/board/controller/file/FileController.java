@@ -30,6 +30,14 @@ import lombok.RequiredArgsConstructor;
 public class FileController extends BaseController {
     private final StorageService storageService;
 
+    /**
+     * 파일 등록
+     * 
+     * @param memberInfoDTO
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @Operation(summary = "파일 등록")
     @PostMapping("")
     public ResponseEntity<Integer> insertFile(
