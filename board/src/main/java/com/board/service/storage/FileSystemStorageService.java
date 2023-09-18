@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class FileSystemStorageService implements StorageService {
     private final FileMapper fileMapper;
 
@@ -37,10 +36,11 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(Paths.get(uploadPath));
         } catch (IOException e) {
-            throw new FileUploadFailureException("Could not create upload folder!");
+            throw new FileUploadFailureException("Could not create upload folder!", e);
         }
     }
 
+    @Transactional
     @Override
     public Integer insFile(MultipartFile file, Integer memberNo) throws Exception {
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
@@ -79,15 +79,11 @@ public class FileSystemStorageService implements StorageService {
         return insFileInfoDTO.getNo();
     }
 
-    private Path load(String fileName) {
-        return Paths.get(uploadPath).resolve(fileName);
-    }
-
     @Override
     public Resource loadAsResource(Integer fileInfoNo) throws Exception {
         String fileName = fileMapper.selectFileSaveName(fileInfoNo);
 
-        Path filePath = load(fileName);
+        Path filePath = Paths.get(uploadPath).resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
         if (resource.exists() || resource.isReadable()) {
@@ -97,6 +93,7 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteFile(Integer fileInfoNo) throws Exception {
         // file name 받아오기
