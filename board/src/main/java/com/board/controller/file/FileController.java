@@ -66,6 +66,14 @@ public class FileController extends BaseController {
                 .body(file);
     }
 
+    /**
+     * 파일 삭제
+     * 
+     * @param memberInfoDTO
+     * @param fileInfoNo
+     * @return
+     * @throws Exception
+     */
     @Operation(summary = "파일 삭제")
     @DeleteMapping("/{fileInfoNo}")
     public ResponseEntity<Void> deleteFile(
