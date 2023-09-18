@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.post.PostMapper">
-
-    <!-- 주어진 postNo에 해당하는 게시물 이미 삭제되진 않았는지 확인 -->
-
-    <select id="isAlreadyDeleted">
+    <!-- 전체 게시물 수 -->
+    <select id="selectTotalRows">
         SELECT
-            p.status = 'DELETED'
-        FROM
+            COUNT(*)
+        FROM 
             post p
+        INNER JOIN
+            member m ON p.author_no = m.no
         WHERE
-            p.no = #{postNo}
+            p.status = 'POSTED'
+        <if test="authorNo != null">
+                AND p.author_no = #{authorNo}
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                p.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
+        </if>
+
     </select>
 
     <!-- insert new post -->
@@ -73,7 +84,7 @@
             , p.modifier_no = #{modifierNo}
         WHERE
             p.no = #{postNo}
-            AND p.status != 'DELETED'
+            AND p.status = 'POSTED'
     </update>
 
     <!-- 게시글 번호를 받아서 작성자의 no를 반환 -->
@@ -113,23 +124,23 @@
             member m ON p.author_no = m.no
         WHERE
             p.status = 'POSTED'
-        <if test="searchDTO != null and searchDTO.titleKeyword != null">
-            AND p.title LIKE CONCAT('%', #{searchDTO.titleKeyword}, '%') 
-        </if>
-        <if test="searchDTO != null and searchDTO.authorNameKeyword != null">
-            AND m.name LIKE CONCAT('%', #{searchDTO.authorNameKeyword}, '%')
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                p.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
         </if>
         <if test="authorNo != null">
             AND p.author_no = #{authorNo}
         </if>
         ORDER BY
             p.no DESC
-        LIMIT #{pagingDTO.limit} OFFSET #{pagingDTO.offset}
+        LIMIT #{pagingRequestDTO.pageSize} OFFSET #{pagingRequestDTO.offset}
     </select>
 
     <!-- 기존에 작성된 임시저장글 번호 찾기
-        status가 TEMP 여야 하고
-        삭제되지 않았어야 한다 -->
+        status가 TEMP 여야 한다 -->
     <select id="selectPrevTempPostNo">
         SELECT
             p.no

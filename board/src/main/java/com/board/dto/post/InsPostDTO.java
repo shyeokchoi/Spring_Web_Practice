@@ -3,6 +3,7 @@ package com.board.dto.post;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.board.enums.PostStatusEnum;
@@ -31,6 +32,7 @@ public class InsPostDTO {
     @Schema(description = "내용", example = "예시 내용")
     private String content;
 
+    @NotNull(message = "fileInfoNoList는 null일 수 없습니다.")
     @Schema(description = "업로드할 파일 no 리스트", example = "[1, 2, 3]")
     private List<Integer> fileInfoNoList;
 

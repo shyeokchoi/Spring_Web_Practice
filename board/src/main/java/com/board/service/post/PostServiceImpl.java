@@ -6,8 +6,8 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.board.dto.common.PagingDTO;
-import com.board.dto.common.SearchDTO;
+import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -71,13 +71,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO) {
-        return postMapper.selectPostList(null, pagingDTO, searchDTO);
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestDTO pagingRequestDTO) {
+        return selectPostList(null, pagingRequestDTO);
     }
 
     @Override
-    public List<SelectPostListDTO> selectPostList(Integer authorNo, PagingDTO pagingDTO, SearchDTO searchDTO) {
-        return postMapper.selectPostList(authorNo, pagingDTO, searchDTO);
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo, PagingRequestDTO pagingRequestDTO) {
+        int totalRows = postMapper.selectTotalRows(authorNo, pagingRequestDTO);
+
+        List<SelectPostListDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);
+
+        PagingResponseDTO<SelectPostListDTO> pagingResponseDTO = new PagingResponseDTO<>(postList,
+                pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
+
+        return pagingResponseDTO;
     }
 
     private Integer selectPrevTempPostNo(Integer currMemberNo) {

@@ -1,9 +1,7 @@
 package com.board.service.post;
 
-import java.util.List;
-
-import com.board.dto.common.PagingDTO;
-import com.board.dto.common.SearchDTO;
+import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -42,24 +40,21 @@ public interface PostService {
     public void deletePost(Integer currMemberNo, Integer postNo);
 
     /**
-     * 모든 게시물 리스트 반환
+     * 모든 게시물을 pagingRequestDTO의 파라미터 값들에 맞게 리스트로 만들어 반환합니다.
      * 
-     * @param authorNo  게시글 작성자 no. null일 경우 모든 게시글 리스트 반환
-     * @param pagingDTO
-     * @param searchDTO null일 경우 검색 기능 없음.
+     * @param pagingRequestDTO
      * @return
      */
-    public List<SelectPostListDTO> selectPostList(PagingDTO pagingDTO, SearchDTO searchDTO);
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestDTO pagingRequestDTO);
 
     /**
-     * 특정 유저의 게시물 리스트 반환
+     * 주어진 authorNo가 글쓴이인 글들을 pagingRequestDTO의 파라미터 값들에 맞게 리스트로 만들어 반환합니다.
      * 
-     * @param authorNo  검색하고자 하는 게시글 작성자 no.
-     * @param pagingDTO
-     * @param searchDTO null일 경우 검색 기능 없음.
+     * @param authorNo         글쓴이의 no.
+     * @param pagingRequestDTO paging을 위한 파라미터
      * @return
      */
-    public List<SelectPostListDTO> selectPostList(Integer authorNo, PagingDTO pagingDTO, SearchDTO searchDTO);
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo, PagingRequestDTO pagingRequestDTO);
 
     /**
      * 게시글 임시저장.

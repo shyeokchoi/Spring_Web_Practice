@@ -1,10 +1,11 @@
 package com.board.controller.post;
 
-import java.util.List;
-
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
-import com.board.dto.common.PagingDTO;
-import com.board.dto.common.SearchDTO;
+import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -34,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "posts", description = "게시물 관련 API")
 @RestController
+@Validated
 @RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController extends BaseController {
@@ -94,7 +96,7 @@ public class PostController extends BaseController {
         // modifier no 설정
         updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
 
-        postService.updatePost(updatePostDTO)
+        postService.updatePost(updatePostDTO);
 
         return ok();
     }
@@ -118,22 +120,21 @@ public class PostController extends BaseController {
     /**
      * 게시글 리스트 불러오기
      * 
-     * @param limitStr  query parameter limit
-     * @param offsetStr query parameter offset
+     * @param pagingDTO
      * @return 게시물들의 리스트
      */
     @Operation(summary = "게시글 리스트 불러오기")
     @GetMapping()
-    public ResponseEntity<List<SelectPostListDTO>> selectPostList(
-            @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
-            @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr,
-            @RequestParam(name = "title", required = false) String titleKeyword,
-            @RequestParam(name = "authorName", required = false) String authorNameKeyword) {
+    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectPostList(
+            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
+            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
+            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+
+        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
 
         return ok(postService.selectPostList(
                 null,
-                new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)),
-                new SearchDTO(titleKeyword, authorNameKeyword)));
+                pagingRequestDTO));
     }
 
     /**
@@ -175,18 +176,21 @@ public class PostController extends BaseController {
      * 내 게시물 목록을 불러옵니다.
      * 
      * @param memberInfoDTO
+     * @param PagingRequestDTO
      * @return
      */
     @Operation(summary = "내 게시물 목록 보기")
     @GetMapping("/self")
-    public ResponseEntity<List<SelectPostListDTO>> selectSelfPostList(
+    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectSelfPostList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestParam(name = "limit", defaultValue = "3", required = false) String limitStr,
-            @RequestParam(name = "offset", defaultValue = "0", required = false) String offsetStr) {
+            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
+            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
+            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+
+        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
 
         return ok(postService.selectPostList(
                 memberInfoDTO.getMemberNo(),
-                new PagingDTO(Integer.parseInt(limitStr), Integer.parseInt(offsetStr)),
-                null));
+                pagingRequestDTO));
     }
 }

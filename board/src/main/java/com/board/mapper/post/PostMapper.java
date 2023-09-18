@@ -5,8 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.board.dto.common.PagingDTO;
-import com.board.dto.common.SearchDTO;
+import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -15,12 +14,13 @@ import com.board.dto.post.UpdatePostDTO;
 @Mapper
 public interface PostMapper {
     /**
-     * 이미 삭제된 게시글인지 확인
+     * 전체 게시물 수
      * 
-     * @param postNo
+     * @param authorNo
      * @return
      */
-    public Boolean isAlreadyDeleted(Integer postNo);
+    public int selectTotalRows(@Param("authorNo") Integer authorNo,
+            @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
 
     /**
      * 게시글 등록
@@ -70,14 +70,13 @@ public interface PostMapper {
     /**
      * 게시글 리스트 (+ 검색)
      * 
-     * @param pagingDTO
+     * @param pagingRequestDTO
      * @param searchDTO
      * @return
      */
     public List<SelectPostListDTO> selectPostList(
             @Param("authorNo") Integer authorNo,
-            @Param("pagingDTO") PagingDTO pagingDTO,
-            @Param("searchDTO") SearchDTO searchDTO);
+            @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
 
     /**
      * 기존에 작성된 임시저장글 번호 찾기
