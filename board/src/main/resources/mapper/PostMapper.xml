@@ -102,6 +102,7 @@
             p.no
             , p.title
             , m.name AS author_name
+            , m.no as author_no
             , p.created_at
         FROM
             post p

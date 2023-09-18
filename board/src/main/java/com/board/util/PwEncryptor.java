@@ -13,7 +13,7 @@ public class PwEncryptor {
      * @param pw
      * @return
      */
-    public String encryptPw(String orgPw) {
+    public static String encryptPw(String orgPw) {
         return computeSha256(saltPw(orgPw));
     }
 
@@ -23,7 +23,7 @@ public class PwEncryptor {
      * @param pw
      * @return salting된 비밀번호
      */
-    private String saltPw(String pw) {
+    private static String saltPw(String pw) {
         return "wemade" + pw + "12345";
     }
 
@@ -33,7 +33,7 @@ public class PwEncryptor {
      * @param pw
      * @return 암호화된 비밀번호
      */
-    private String computeSha256(String pw) {
+    private static String computeSha256(String pw) {
         try {
             // MessageDigest 객체 생성 (SHA-256 알고리즘 사용)
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

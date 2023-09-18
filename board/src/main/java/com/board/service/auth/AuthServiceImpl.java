@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class AuthServiceImpl implements AuthService {
     private final AuthMapper authMapper;
-    private final PwEncryptor pwEncryptor;
 
     @Override
     public Integer checkAccessTokenValidity(String accessToken) {
@@ -40,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Integer checkIdPw(IdPwDTO idPwDto) {
         // 비밀번호 암호화
-        idPwDto.setPw(pwEncryptor.encryptPw(idPwDto.getPw()));
+        idPwDto.setPw(PwEncryptor.encryptPw(idPwDto.getPw()));
 
         // 아이디-패스워드 일치여부 확인
         Optional<Integer> memberNoOptional = Optional.ofNullable(authMapper.checkIdPw(idPwDto));

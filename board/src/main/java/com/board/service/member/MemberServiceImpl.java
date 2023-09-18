@@ -29,12 +29,11 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final AuthService authService;
-    private final PwEncryptor pwEncryptor;
 
     @Override
     public Integer insMember(InsMemberDTO insMemberDTO) {
         // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
-        insMemberDTO.setPw(pwEncryptor.encryptPw(insMemberDTO.getPw()));
+        insMemberDTO.setPw(PwEncryptor.encryptPw(insMemberDTO.getPw()));
 
         // DB에 저장
         memberMapper.insMember(insMemberDTO);
@@ -105,7 +104,7 @@ public class MemberServiceImpl implements MemberService {
     public void updateMemberDetailOfSelf(MemberInfoDTO memberInfoDTO, PutMemberDetailDTO putMemberDetailDTO) {
         // 멤버정보 수정을 위해 putMemberDetailDTO에 member no, pw 세팅
         putMemberDetailDTO.setNo(memberInfoDTO.getMemberNo());
-        putMemberDetailDTO.setPw(pwEncryptor.encryptPw(putMemberDetailDTO.getPw()));
+        putMemberDetailDTO.setPw(PwEncryptor.encryptPw(putMemberDetailDTO.getPw()));
 
         // 자기 자신의 정보 update
         memberMapper.updateMemberDetail(putMemberDetailDTO);
