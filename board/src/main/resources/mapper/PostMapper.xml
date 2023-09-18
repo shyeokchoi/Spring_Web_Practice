@@ -6,7 +6,7 @@
 
     <select id="isAlreadyDeleted">
         SELECT
-            p.deleted_at IS NOT NULL
+            p.status = 'DELETED'
         FROM
             post p
         WHERE
@@ -47,6 +47,7 @@
             member m2 ON p.modifier_no = m2.no
         WHERE
             p.no = #{postNo}
+            AND p.status != 'DELETED'
     </select>
 
     <!-- select file list -->
@@ -72,6 +73,7 @@
             , p.modifier_no = #{modifierNo}
         WHERE
             p.no = #{postNo}
+            AND p.status != 'DELETED'
     </update>
 
     <!-- 게시글 번호를 받아서 작성자의 no를 반환 -->
@@ -90,6 +92,7 @@
             post p
         SET
             deleted_at = UNIX_TIMESTAMP()
+            , status = 'DELETED'
         WHERE
             p.no = #{postNo}
     </update>
@@ -109,7 +112,7 @@
         INNER JOIN
             member m ON p.author_no = m.no
         WHERE
-            p.deleted_at IS NULL
+            p.status = 'POSTED'
         <if test="searchDTO != null and searchDTO.titleKeyword != null">
             AND p.title LIKE CONCAT('%', #{searchDTO.titleKeyword}, '%') 
         </if>
@@ -135,7 +138,6 @@
         WHERE
             p.author_no = #{currMemberNo}
             AND p.status = 'TEMP'
-            AND p.deleted_at IS NULL
     </select>
 
 </mapper>

@@ -13,7 +13,6 @@ import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
-import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
 import com.board.mapper.file.FileMapper;
 import com.board.mapper.post.PostMapper;
@@ -26,17 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final FileMapper fileMapper;
-
-    /**
-     * 이미 삭제된 게시물인지 확인하는 함수
-     * 
-     * @param postNo 확인의 대상 post no.
-     */
-    private void checkIfAlreadyDeleted(Integer postNo) {
-        if (postMapper.isAlreadyDeleted(postNo)) {
-            throw new AlreadyDeletedException("이미 삭제된 게시물입니다");
-        }
-    }
 
     @Override
     public Integer insPost(InsPostDTO insPostDTO) {
@@ -53,34 +41,28 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public SelectPostDetailDTO selectPost(Integer postNo) {
-        // 이미 삭제되진 않았는지 확인
-        checkIfAlreadyDeleted(postNo);
-
         // 해당 포스트와 연결된 파일 no 리스트 받아오기
         List<Integer> fileNoList = postMapper.selectFileNoList(postNo);
 
         // 해당 postNo에 해당하는 게시물 검색
         SelectPostDetailDTO post = postMapper.selectPost(postNo);
 
-        // SelectPostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
-        post.setFileNoList(fileNoList);
+        if (post != null) {
+            // SelectPostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
+            post.setFileNoList(fileNoList);
+        }
+
         return post;
     }
 
     @Override
     public void updatePost(UpdatePostDTO updatePostDTO) {
-        // 이미 삭제되진 않았는지 확인
-        checkIfAlreadyDeleted(updatePostDTO.getPostNo());
-
         // 게시물 내용 업데이트
         postMapper.updatePost(updatePostDTO);
     }
 
     @Override
     public void deletePost(Integer currMemberNo, Integer postNo) {
-        // 이미 삭제되진 않았는지 확인
-        checkIfAlreadyDeleted(postNo);
-
         // 자신의 글만 삭제할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != currMemberNo) {
             throw new AuthenticationException("자신의 글만 삭제할 수 있습니다");
