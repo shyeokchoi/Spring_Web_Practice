@@ -38,6 +38,7 @@
             file_info f
         SET
             f.status = 'NORMAL'
+            , f.save_path = #{newPath}
             , f.parent_no = #{parentNo}
             , f.parent_type = #{fileInfoParentType}
         WHERE

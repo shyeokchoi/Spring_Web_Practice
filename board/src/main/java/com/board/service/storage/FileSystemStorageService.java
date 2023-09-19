@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.dto.file.InsFileInfoDTO;
+import com.board.enums.FileInfoParentTypeEnum;
 import com.board.enums.FileStatusEnum;
 import com.board.exception.FileUploadFailureException;
 import com.board.mapper.file.FileMapper;
@@ -31,10 +32,9 @@ public class FileSystemStorageService implements StorageService {
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
-    @Override
-    public void initDirectory() {
+    private void initDirectory(Path dirPath) {
         try {
-            Files.createDirectories(Paths.get(uploadPath));
+            Files.createDirectories(dirPath);
         } catch (IOException e) {
             throw new FileUploadFailureException("Could not create upload folder!", e);
         }
@@ -68,7 +68,7 @@ public class FileSystemStorageService implements StorageService {
         }
         Path root = Paths.get(uploadPath);
         if (!Files.exists(root)) {
-            initDirectory();
+            initDirectory(root);
         }
 
         @Cleanup
@@ -106,6 +106,35 @@ public class FileSystemStorageService implements StorageService {
         Path root = Paths.get(uploadPath);
         Files.delete(root.resolve(fileName));
 
+    }
+
+    @Transactional
+    @Override
+    public void changeFileStatus(Integer fileNo, String fileName, Integer parentNo,
+            FileInfoParentTypeEnum fileInfoParentType) {
+
+        // {uploadPath}/{parentNo}/{fileName}
+        Path newPath = Paths.get(uploadPath).resolve(parentNo.toString()).resolve(fileName);
+        // file info의 정보 수정.
+        fileMapper.changeFileStatus(fileNo, parentNo, newPath.toString(), fileInfoParentType);
+    }
+
+    @Transactional
+    @Override
+    public String selectFileSaveName(Integer fileNo) {
+        return fileMapper.selectFileSaveName(fileNo);
+    }
+
+    @Override
+    public void moveFile(String src, String dst, String fileName) throws IOException {
+        Path srcPath = src == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(src);
+        Path dstPath = Paths.get(uploadPath).resolve(dst);
+
+        if (!Files.exists(dstPath)) {
+            initDirectory(dstPath);
+        }
+
+        Files.move(srcPath.resolve(fileName), dstPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
     }
 
 }

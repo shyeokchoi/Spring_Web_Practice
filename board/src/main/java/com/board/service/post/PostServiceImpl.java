@@ -1,5 +1,8 @@
 package com.board.service.post;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -14,8 +17,8 @@ import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AuthenticationException;
-import com.board.mapper.file.FileMapper;
 import com.board.mapper.post.PostMapper;
+import com.board.service.storage.StorageService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,19 +27,30 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
-    private final FileMapper fileMapper;
+    private final StorageService storageService;
 
     @Override
     public Integer insPost(InsPostDTO insPostDTO) {
         // 새로운 게시물 생성
         postMapper.insPost(insPostDTO);
 
-        // 게시물에서 등록한 file들 전부 상태 업데이트.
-        for (Integer fileNo : insPostDTO.getFileInfoNoList()) {
-            fileMapper.changeFileStatus(fileNo, insPostDTO.getNo(), FileInfoParentTypeEnum.POST);
+        Integer newPostNo = insPostDTO.getNo();
+        List<Integer> fileInfoNoList = insPostDTO.getFileInfoNoList();
+
+        // 게시물에서 등록한 file들 전부 상태 업데이트. save path 변경
+        for (Integer fileInfoNo : fileInfoNoList) {
+            String fileName = storageService.selectFileSaveName(fileInfoNo);
+            storageService.changeFileStatus(fileInfoNo, fileName, newPostNo, FileInfoParentTypeEnum.POST);
+
+            try {
+                Path dst = Paths.get(newPostNo.toString());
+                storageService.moveFile(null, dst.toString(), fileName);
+            } catch (IOException ioe) {
+                throw new RuntimeException("ERROR : 파일을 옮기는 데 실패했습니다.");
+            }
         }
 
-        return insPostDTO.getNo();
+        return newPostNo;
     }
 
     @Override
