@@ -28,6 +28,7 @@ public interface PostService {
      * 글 수정
      * 
      * @param updatePostDTO
+     * @param postStatusEnum
      */
     public void updatePost(UpdatePostDTO updatePostDTO);
 
@@ -71,5 +72,5 @@ public interface PostService {
      * @param memberNo
      * @return
      */
-    public SelectPostDetailDTO selectTempPost(Integer memberNo);
+    public Integer selectTempPostNo(Integer memberNo);
 }

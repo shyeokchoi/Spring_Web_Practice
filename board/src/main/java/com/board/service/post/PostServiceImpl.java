@@ -169,7 +169,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public SelectPostDetailDTO selectTempPost(Integer memberNo) {
+    public Integer selectTempPostNo(Integer memberNo) {
         // 임시저장된 글 no 불러오기
         Integer prevTempPostNo = selectPrevTempPostNo(memberNo);
 
@@ -178,12 +178,6 @@ public class PostServiceImpl implements PostService {
             throw new NoSuchElementException("임시저장된 글이 없습니다.");
         }
 
-        // 임시저장된 글 정보 불러오기
-        SelectPostDetailDTO tempPostDetail = selectPost(prevTempPostNo);
-
-        // 기존 임시저장된 글 삭제
-        deletePost(memberNo, prevTempPostNo);
-
-        return tempPostDetail;
+        return prevTempPostNo;
     }
 }

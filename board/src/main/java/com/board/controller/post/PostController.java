@@ -95,6 +95,8 @@ public class PostController extends BaseController {
         updatePostDTO.setPostNo(postNo);
         // modifier no 설정
         updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
+        // 게시글 상태 수정
+        updatePostDTO.setPostStatus(PostStatusEnum.POSTED);
 
         postService.updatePost(updatePostDTO);
 
@@ -144,7 +146,7 @@ public class PostController extends BaseController {
      * @param insPostDTO
      * @return 임시저장된 게시물의 no.
      */
-    @Operation(summary = "임시저장하기")
+    @Operation(summary = "새로운 임시저장")
     @PostMapping("/temp")
     public ResponseEntity<Integer> insTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
@@ -159,17 +161,62 @@ public class PostController extends BaseController {
     }
 
     /**
-     * 임시저장 불러오기.
-     * 불러온 임시저장 글은 삭제됩니다.
+     * 자신의 임시저장글 번호 알아오기.
      * 
      * @param memberInfoDTO
-     * @return 임시저장된 글 정보.
+     * @return 임시저장된 글 번호.
      */
     @Operation(summary = "임시저장 불러오기")
     @GetMapping("/temp")
-    public ResponseEntity<SelectPostDetailDTO> selectTempPost(
+    public ResponseEntity<Integer> selectTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-        return ok(postService.selectTempPost(memberInfoDTO.getMemberNo()));
+        return ok(postService.selectTempPostNo(memberInfoDTO.getMemberNo()));
+    }
+
+    /**
+     * 임시저장글 수정.
+     * 
+     * 
+     * @param memberInfoDTO
+     * @param postNo
+     * @return
+     */
+    @Operation(summary = "임시저장글 수정")
+    @PutMapping("/temp/{postNo}")
+    public ResponseEntity<Void> updateTempPost(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestBody @Valid UpdatePostDTO updatePostDTO,
+            @PathVariable Integer postNo) {
+
+        // 수정할 post no 설정
+        updatePostDTO.setPostNo(postNo);
+        // modifier no 설정
+        updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
+        // 게시글 상태 설정
+        updatePostDTO.setPostStatus(PostStatusEnum.TEMP);
+
+        postService.updatePost(updatePostDTO);
+
+        return ok();
+    }
+
+    @Operation(summary = "임시저장글 최종 게시글로 등록")
+    @PostMapping("/temp/{postNo}")
+    public ResponseEntity<Void> finalizeTempPost(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestBody @Valid UpdatePostDTO updatePostDTO,
+            @PathVariable Integer postNo) {
+
+        // 수정할 post no 설정
+        updatePostDTO.setPostNo(postNo);
+        // modifier no 설정
+        updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
+        // 게시글 상태 설정
+        updatePostDTO.setPostStatus(PostStatusEnum.POSTED);
+
+        postService.updatePost(updatePostDTO);
+
+        return ok();
     }
 
     /**

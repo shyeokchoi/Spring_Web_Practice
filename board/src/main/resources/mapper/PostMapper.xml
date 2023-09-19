@@ -82,9 +82,10 @@
             , p.content = #{content}
             , p.modified_at = UNIX_TIMESTAMP()
             , p.modifier_no = #{modifierNo}
+            , p.status = #{postStatus}
         WHERE
             p.no = #{postNo}
-            AND p.status = 'POSTED'
+            AND p.status != 'DELETED'
     </update>
 
     <!-- 게시글 번호를 받아서 작성자의 no를 반환 -->
