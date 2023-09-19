@@ -111,22 +111,22 @@ public class PostServiceImpl implements PostService {
         // 글 삭제
         postMapper.deletePost(postNo);
 
-        // // 연관된 file들 삭제
-        // try {
-        //     storageService.recursiveDelete(postNo.toString());
-        // } catch (IOException ioe) {
-        //     log.error("글 삭제 중 - 해당 글에 첨부된 파일 삭제 실패", ioe);
-        //     return;
-        // }
+        // 연관된 file들 삭제
+        try {
+            storageService.recursiveDelete(postNo.toString());
+        } catch (IOException ioe) {
+            log.error("글 삭제 중 - 해당 글에 첨부된 파일 삭제 실패", ioe);
+            return;
+        }
 
-        // // file_info들 삭제
-        // try {
-        //     for (Integer fileInfoNo : fileInfoNoList) {
-        //         storageService.deleteFileInfo(fileInfoNo);
-        //     }
-        // } catch (Exception e) {
-        //     log.error("글 삭제 중 - 해당 글에 첨부된 파일들의 file_info 삭제 실패");
-        // }
+        // file_info들 삭제
+        try {
+            for (Integer fileInfoNo : fileInfoNoList) {
+                storageService.deleteFileInfo(fileInfoNo);
+            }
+        } catch (Exception e) {
+            log.error("글 삭제 중 - 해당 글에 첨부된 파일들의 file_info 삭제 실패");
+        }
 
     }
 
