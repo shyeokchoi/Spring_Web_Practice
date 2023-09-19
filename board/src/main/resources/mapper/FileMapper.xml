@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.file.FileMapper">
+    <!-- file_info의 모든 column -->
+    <sql id = "file_info_cols">
+        no
+        , origin_name
+        , save_name
+        , save_path
+        , extension
+        , size
+        , parent_no
+        , parent_type
+        , author_no
+        , status 
+    </sql>
+
+    <!-- file_info 가져오기 -->
+    <select id="selectOne" resultType="com.board.dto.file.FileInfoDTO">
+        SELECT
+        <include refid="file_info_cols" />
+        FROM
+            file_info f
+        WHERE
+            f.no = #{fileInfoNo}
+    </select>
+
+    <!-- file_info 추가 -->
     <insert id="insFileInfo" parameterType="com.board.dto.file.InsFileInfoDTO" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO file_info (
             origin_name
@@ -45,24 +70,6 @@
             f.no = #{fileInfoNo}
     </update>
 
-    <select id="selectFileSaveName">
-        SELECT
-            f.save_name
-        FROM
-            file_info f
-        WHERE
-            f.no = #{fileInfoNo}
-    </select>
-
-    <select id="selectFileSavePath">
-        SELECT
-            f.save_path
-        FROM
-            file_info f
-        WHERE
-            f.no = #{fileInfoNo}
-    </select>
-
     <delete id="deleteFileInfo">
         DELETE FROM
             file_info f
@@ -70,4 +77,17 @@
             f.no = #{fileInfoNo}
 
     </delete>
+
+    <!-- file의 parent가 post일 때 해당 post가 삭제되었는지 확인 -->
+    <select id="isParentPostDeleted">
+        SELECT
+            COUNT(*)
+        FROM
+            post p
+        INNER JOIN
+            file_info f ON p.no = f.parent_no
+        WHERE
+            f.no = #{fileInfoNo}
+            AND p.status = 'DELETED'
+    </select>
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.enums.FileStatusEnum;
@@ -81,8 +82,22 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public boolean isDeleted(Integer fileInfoNo) {
+        FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
+
+        if (fileInfo == null) {
+            return true;
+        } else if (fileInfo.getParentType() == FileInfoParentTypeEnum.POST) {
+            // 부모가 삭제되었는지 확인
+            return fileMapper.isParentPostDeleted(fileInfoNo);
+        }
+
+        return false;
+    }
+
+    @Override
     public Resource loadAsResource(Integer fileInfoNo) throws Exception {
-        String fileName = fileMapper.selectFileSaveName(fileInfoNo);
+        String fileName = fileMapper.selectOne(fileInfoNo).getSaveName();
 
         Path filePath = Paths.get(uploadPath).resolve(fileName);
         Resource resource = new UrlResource(filePath.toUri());
@@ -113,7 +128,11 @@ public class FileSystemStorageService implements StorageService {
         this.deleteFileInfo(fileInfoNo);
 
         // 파일 자체 삭제
-        Files.delete(finalPath);
+        try {
+            Files.delete(finalPath);
+        } catch (IOException ioe) {
+            throw new RuntimeException("file delete failed", ioe);
+        }
     }
 
     @Transactional
@@ -130,13 +149,13 @@ public class FileSystemStorageService implements StorageService {
     @Transactional
     @Override
     public String selectFileSaveName(Integer fileInfoNo) {
-        return fileMapper.selectFileSaveName(fileInfoNo);
+        return fileMapper.selectOne(fileInfoNo).getSaveName();
     }
 
     @Transactional
     @Override
     public String selectFileSavePath(Integer fileInfoNo) {
-        return fileMapper.selectFileSavePath(fileInfoNo);
+        return fileMapper.selectOne(fileInfoNo).getSavePath();
     }
 
     @Override
@@ -150,7 +169,7 @@ public class FileSystemStorageService implements StorageService {
             initDirectory(dstPath);
         }
 
-        // 만약 옮길 파일이 존재하지 않으면 이미 옮겨진 것이다.
+        // 만약 옮길 파일이 존재하지 않으면 함수 종료
         if (!Files.exists(srcPath.resolve(fileName))) {
             return;
         }

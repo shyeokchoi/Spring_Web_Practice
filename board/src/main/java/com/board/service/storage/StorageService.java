@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.board.enums.FileInfoParentTypeEnum;
 
 public interface StorageService {
-
     /**
      * file info 새로 삽입
      * 
@@ -16,6 +15,15 @@ public interface StorageService {
      * @param memberNo 파일 생성한 member no.
      */
     public Integer insFile(MultipartFile file, Integer memberNo) throws Exception;
+
+    /**
+     * 해당 파일 또는 그 파일의 부모가 삭제되었는지 확인.
+     * 
+     * @param fileInfoNo
+     * 
+     * @return
+     */
+    public boolean isDeleted(Integer fileInfoNo);
 
     /**
      * 파일을 Resource로 반환

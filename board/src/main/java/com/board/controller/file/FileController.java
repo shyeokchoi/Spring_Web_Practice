@@ -63,12 +63,15 @@ public class FileController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
             throws Exception {
-        if (storageService.isOrgPostDeleted(fileInfoNo)) {
+        if (storageService.isDeleted(fileInfoNo)) {
             throw new NotFoundException("이미 삭제된 파일입니다.");
         }
+
+        // 파일 불러오기
         Resource file = storageService.loadAsResource(fileInfoNo);
         String fileName = file.getFilename();
 
+        // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         headers.setContentDispositionFormData(fileName, fileName);

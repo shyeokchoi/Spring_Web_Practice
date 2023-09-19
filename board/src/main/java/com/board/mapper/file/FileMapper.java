@@ -3,11 +3,20 @@ package com.board.mapper.file;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 
 @Mapper
 public interface FileMapper {
+    /**
+     * file info를 가져옵니다.
+     * 
+     * @param fileInfoNo
+     * @return
+     */
+    public FileInfoDTO selectOne(Integer fileInfoNo);
+
     /**
      * file info를 db에 저장합니다.
      * 
@@ -29,25 +38,17 @@ public interface FileMapper {
             @Param("fileInfoParentType") FileInfoParentTypeEnum fileInfoParentType);
 
     /**
-     * 파일 save name (Random UUID + extension) 뽑아오기
-     * 
-     * @param fileInfoNo
-     * @return
-     */
-    public String selectFileSaveName(Integer fileInfoNo);
-
-    /**
-     * 파일 save path 뽑아오기
-     * 
-     * @param fileInfoNo
-     * @return
-     */
-    public String selectFileSavePath(Integer fileInfoNo);
-
-    /**
      * 파일 info 삭제
      * 
      * @param fileInfoNo
      */
     public void deleteFileInfo(Integer fileInfoNo);
+
+    /**
+     * file의 parent가 post일때 해당 post가 삭제되었는지 확인
+     * 
+     * @param fileInfoNo
+     * @return
+     */
+    public boolean isParentPostDeleted(Integer fileInfoNo);
 }
