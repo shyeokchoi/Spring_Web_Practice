@@ -64,7 +64,7 @@ public class FileController extends BaseController {
             @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
             throws Exception {
         if (storageService.isDeleted(fileInfoNo)) {
-            throw new AlreadyDeletedException("이미 삭제된 파일입니다.");
+            throw new AlreadyDeletedException("존재하지 않거나 이미 삭제된 파일입니다.");
         }
 
         // 파일 불러오기
