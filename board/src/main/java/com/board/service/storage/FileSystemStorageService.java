@@ -127,13 +127,16 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void moveFile(String src, String dst, String fileName) throws IOException {
+        // src 또는 dst가 null 이면 그냥 uploadPath 값을 사용한다
         Path srcPath = src == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(src);
         Path dstPath = dst == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(dst);
 
+        // dstPath 가 존재하지 않으면 만들어준다
         if (!Files.exists(dstPath)) {
             initDirectory(dstPath);
         }
 
+        // 파일 옮기기
         Files.move(srcPath.resolve(fileName), dstPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
     }
 
