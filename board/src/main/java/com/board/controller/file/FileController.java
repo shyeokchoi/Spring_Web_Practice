@@ -1,6 +1,5 @@
 package com.board.controller.file;
 
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
+import com.board.exception.AlreadyDeletedException;
 import com.board.framework.base.BaseController;
 import com.board.service.storage.StorageService;
 
@@ -64,7 +64,7 @@ public class FileController extends BaseController {
             @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
             throws Exception {
         if (storageService.isDeleted(fileInfoNo)) {
-            throw new NotFoundException("이미 삭제된 파일입니다.");
+            throw new AlreadyDeletedException("이미 삭제된 파일입니다.");
         }
 
         // 파일 불러오기
