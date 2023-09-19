@@ -64,9 +64,7 @@ public class PostServiceImpl implements PostService {
                     try {
                         storageService.moveFile(dst.toString(), null, targetFileName);
                     } catch (IOException rollbackIoe) {
-                        throw new RuntimeException(
-                                "ERROR : 파일을 옮기는데 실패해 롤백하는 과정에서 다시 한 번 실패했습니다.",
-                                rollbackIoe);
+                        log.error("ERROR : 파일을 옮기는데 실패해 롤백하는 과정에서 다시 한 번 실패했습니다.", rollbackIoe);
                     }
                 }
 
@@ -106,7 +104,30 @@ public class PostServiceImpl implements PostService {
         if (postMapper.retvAuthorNo(postNo) != currMemberNo) {
             throw new AuthenticationException("자신의 글만 삭제할 수 있습니다");
         }
+
+        // 글에 첨부된 파일 목록 불러오기. DB에서 글 삭제 전에 해야하는 작업
+        List<Integer> fileInfoNoList = postMapper.selectFileNoList(postNo);
+
+        // 글 삭제
         postMapper.deletePost(postNo);
+
+        // 연관된 file들 삭제
+        try {
+            storageService.recursiveDelete(postNo.toString());
+        } catch (IOException ioe) {
+            log.error("글 삭제 중 - 해당 글에 첨부된 파일 삭제 실패", ioe);
+            return;
+        }
+
+        // file_info들 삭제
+        try {
+            for (Integer fileInfoNo : fileInfoNoList) {
+                storageService.deleteFileInfo(fileInfoNo);
+            }
+        } catch (Exception e) {
+            log.error("글 삭제 중 - 해당 글에 첨부된 파일들의 file_info 삭제 실패");
+        }
+
     }
 
     @Override

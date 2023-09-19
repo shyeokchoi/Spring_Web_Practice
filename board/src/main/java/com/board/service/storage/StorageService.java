@@ -31,6 +31,13 @@ public interface StorageService {
      * @param fileInfoNo
      * @throws Exception
      */
+    public void deleteFileInfo(Integer fileInfoNo);
+
+    /**
+     * 파일 삭제
+     * 
+     * @param fileInfoNo
+     */
     public void deleteFile(Integer fileInfoNo) throws Exception;
 
     /**
@@ -53,6 +60,14 @@ public interface StorageService {
     public String selectFileSaveName(Integer fileInfoNo);
 
     /**
+     * file의 저장 경로 가져오기
+     * 
+     * @param fileInfoNo
+     * @return
+     */
+    public String selectFileSavePath(Integer fileInfoNo);
+
+    /**
      * file src에서 dst로 옮기기
      * 
      * @param src
@@ -61,4 +76,12 @@ public interface StorageService {
      * @throws IOException
      */
     public void moveFile(String src, String dst, String fileName) throws IOException;
+
+    /**
+     * 디렉토리를 받아서 해당 디렉토리 아래 모든 파일을 삭제
+     * 
+     * @param string
+     */
+    public void recursiveDelete(String target) throws IOException;
+
 }

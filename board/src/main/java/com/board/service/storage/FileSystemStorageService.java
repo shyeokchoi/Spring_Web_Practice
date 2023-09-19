@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.dto.file.InsFileInfoDTO;
@@ -95,17 +96,24 @@ public class FileSystemStorageService implements StorageService {
 
     @Transactional
     @Override
-    public void deleteFile(Integer fileInfoNo) throws Exception {
-        // file name 받아오기
-        String fileName = fileMapper.selectFileSaveName(fileInfoNo);
-
+    public void deleteFileInfo(Integer fileInfoNo) {
         // file info 삭제
         fileMapper.deleteFileInfo(fileInfoNo);
+    }
 
-        // 파일 삭제
-        Path root = Paths.get(uploadPath);
-        Files.delete(root.resolve(fileName));
+    @Transactional
+    @Override
+    public void deleteFile(Integer fileInfoNo) throws Exception {
+        // 해당 file의 savePath 불러오기
+        String savePath = this.selectFileSavePath(fileInfoNo);
+        String saveName = this.selectFileSaveName(fileInfoNo);
+        Path finalPath = Paths.get(savePath).resolve(saveName);
 
+        // DB의 file info 삭제
+        this.deleteFileInfo(fileInfoNo);
+
+        // 파일 자체 삭제
+        Files.delete(finalPath);
     }
 
     @Transactional
@@ -113,16 +121,22 @@ public class FileSystemStorageService implements StorageService {
     public void changeFileStatus(Integer fileNo, String fileName, Integer parentNo,
             FileInfoParentTypeEnum fileInfoParentType) {
 
-        // {uploadPath}/{parentNo}/{fileName}
-        Path newPath = Paths.get(uploadPath).resolve(parentNo.toString()).resolve(fileName);
+        // {uploadPath}/{parentNo}
+        Path newPath = Paths.get(uploadPath).resolve(parentNo.toString());
         // file info의 정보 수정.
         fileMapper.changeFileStatus(fileNo, newPath.toString(), parentNo, fileInfoParentType);
     }
 
     @Transactional
     @Override
-    public String selectFileSaveName(Integer fileNo) {
-        return fileMapper.selectFileSaveName(fileNo);
+    public String selectFileSaveName(Integer fileInfoNo) {
+        return fileMapper.selectFileSaveName(fileInfoNo);
+    }
+
+    @Transactional
+    @Override
+    public String selectFileSavePath(Integer fileInfoNo) {
+        return fileMapper.selectFileSavePath(fileInfoNo);
     }
 
     @Override
@@ -138,6 +152,11 @@ public class FileSystemStorageService implements StorageService {
 
         // 파일 옮기기
         Files.move(srcPath.resolve(fileName), dstPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @Override
+    public void recursiveDelete(String target) throws IOException {
+        FileSystemUtils.deleteRecursively(Paths.get(uploadPath).resolve(target));
     }
 
 }

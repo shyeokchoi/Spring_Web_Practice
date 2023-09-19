@@ -90,7 +90,6 @@ public class FileController extends BaseController {
             throws Exception {
 
         storageService.deleteFile(fileInfoNo);
-
         return ok();
     }
 }

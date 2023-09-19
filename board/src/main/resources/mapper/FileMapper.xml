@@ -42,7 +42,7 @@
             , f.parent_no = #{parentNo}
             , f.parent_type = #{fileInfoParentType}
         WHERE
-            f.no = #{fileNo}
+            f.no = #{fileInfoNo}
     </update>
 
     <select id="selectFileSaveName">
@@ -51,14 +51,23 @@
         FROM
             file_info f
         WHERE
-            f.no = #{fileNo}
+            f.no = #{fileInfoNo}
+    </select>
+
+    <select id="selectFileSavePath">
+        SELECT
+            f.save_path
+        FROM
+            file_info f
+        WHERE
+            f.no = #{fileInfoNo}
     </select>
 
     <delete id="deleteFileInfo">
         DELETE FROM
             file_info f
         WHERE
-            f.no = #{fileNo}
+            f.no = #{fileInfoNo}
 
     </delete>
 </mapper>
