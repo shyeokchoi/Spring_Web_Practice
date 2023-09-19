@@ -116,7 +116,7 @@ public class FileSystemStorageService implements StorageService {
         // {uploadPath}/{parentNo}/{fileName}
         Path newPath = Paths.get(uploadPath).resolve(parentNo.toString()).resolve(fileName);
         // file info의 정보 수정.
-        fileMapper.changeFileStatus(fileNo, parentNo, newPath.toString(), fileInfoParentType);
+        fileMapper.changeFileStatus(fileNo, newPath.toString(), parentNo, fileInfoParentType);
     }
 
     @Transactional
@@ -128,7 +128,7 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void moveFile(String src, String dst, String fileName) throws IOException {
         Path srcPath = src == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(src);
-        Path dstPath = Paths.get(uploadPath).resolve(dst);
+        Path dstPath = dst == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(dst);
 
         if (!Files.exists(dstPath)) {
             initDirectory(dstPath);

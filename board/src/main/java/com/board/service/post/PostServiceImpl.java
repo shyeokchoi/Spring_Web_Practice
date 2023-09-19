@@ -3,8 +3,10 @@ package com.board.service.post;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +23,12 @@ import com.board.mapper.post.PostMapper;
 import com.board.service.storage.StorageService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final StorageService storageService;
@@ -37,16 +41,37 @@ public class PostServiceImpl implements PostService {
         Integer newPostNo = insPostDTO.getNo();
         List<Integer> fileInfoNoList = insPostDTO.getFileInfoNoList();
 
-        // 게시물에서 등록한 file들 전부 상태 업데이트. save path 변경
+        Queue<String> fileNamesForRollback = new LinkedList<>();
+
         for (Integer fileInfoNo : fileInfoNoList) {
             String fileName = storageService.selectFileSaveName(fileInfoNo);
+            Path dst = Paths.get(newPostNo.toString());
+
+            // 게시물에서 등록한 파일들 상태 업데이트
+            // TEMP에서 NORMAL로 & 저장 path 설정 & 부모 no, 부모 type 설정
             storageService.changeFileStatus(fileInfoNo, fileName, newPostNo, FileInfoParentTypeEnum.POST);
 
             try {
-                Path dst = Paths.get(newPostNo.toString());
+                // 파일 부모 no.를 이름으로 갖는 하위폴더로 옮기기
                 storageService.moveFile(null, dst.toString(), fileName);
+                fileNamesForRollback.add(fileName);
             } catch (IOException ioe) {
-                throw new RuntimeException("ERROR : 파일을 옮기는 데 실패했습니다.");
+                // 파일 옮기기 실패시, DB 롤백됨
+                // DB 롤백에 맞춰서 이미 옮긴 파일들도 롤백
+                while (!fileNamesForRollback.isEmpty()) {
+                    String targetFileName = fileNamesForRollback.poll();
+
+                    try {
+                        storageService.moveFile(dst.toString(), null, targetFileName);
+                    } catch (IOException rollbackIoe) {
+                        throw new RuntimeException(
+                                "ERROR : 파일을 옮기는데 실패해 롤백하는 과정에서 다시 한 번 실패했습니다.",
+                                rollbackIoe);
+                    }
+                }
+
+                // 파일을 옮기는 데 실패했다는 exception.
+                throw new RuntimeException("ERROR : 파일을 옮기는 데 실패했습니다.", ioe);
             }
         }
 

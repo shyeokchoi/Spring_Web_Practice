@@ -24,8 +24,8 @@ public interface FileMapper {
      */
     public void changeFileStatus(
             @Param("fileNo") Integer fileNo,
-            @Param("parentNo") Integer parentNo,
             @Param("newPath") String newPath,
+            @Param("parentNo") Integer parentNo,
             @Param("fileInfoParentType") FileInfoParentTypeEnum fileInfoParentType);
 
     /**

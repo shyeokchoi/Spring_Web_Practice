@@ -52,6 +52,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * internal server error 발생시
+     * 
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, List<String>>> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildErrBody(e.getMessage()));
+    }
+
+    /**
      * 이미 존재하는 회원 정보로 가입하려고 하면 발생하는 예외
      * 
      * @param e
