@@ -150,6 +150,11 @@ public class FileSystemStorageService implements StorageService {
             initDirectory(dstPath);
         }
 
+        // 만약 옮길 파일이 존재하지 않으면 이미 옮겨진 것이다.
+        if (!Files.exists(srcPath.resolve(fileName))) {
+            return;
+        }
+
         // 파일 옮기기
         Files.move(srcPath.resolve(fileName), dstPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
     }

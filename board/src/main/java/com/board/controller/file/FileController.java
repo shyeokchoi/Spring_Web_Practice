@@ -1,5 +1,6 @@
 package com.board.controller.file;
 
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -62,6 +63,9 @@ public class FileController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
             throws Exception {
+        if (storageService.isOrgPostDeleted(fileInfoNo)) {
+            throw new NotFoundException("이미 삭제된 파일입니다.");
+        }
         Resource file = storageService.loadAsResource(fileInfoNo);
         String fileName = file.getFilename();
 
