@@ -23,7 +23,6 @@ import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.comment.UpdateCommentDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingResponseDTO;
-import com.board.enums.CommentStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
 
@@ -47,9 +46,6 @@ public class CommentController extends BaseController {
 
         // 댓글 작성자 author no 설정
         insCommentDTO.setAuthorNo(memberInfoDTO.getMemberNo());
-
-        // status 설정
-        insCommentDTO.setStatus(CommentStatusEnum.POSTED);
 
         // 원글 번호 설정
         insCommentDTO.setPostNo(postNo);
