@@ -144,7 +144,7 @@ public class PostController extends BaseController {
      * @param insPostDTO
      * @return 임시저장된 게시물의 no.
      */
-    @Operation(summary = "새로운 임시저장" description = "기존 임시저장 게시글은 덮어씁니다.")
+    @Operation(summary = "새로운 임시저장", description = "기존 임시저장 게시글은 덮어씁니다.")
     @PostMapping("/temp")
     public ResponseEntity<Integer> insTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
