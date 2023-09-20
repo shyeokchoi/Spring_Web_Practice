@@ -38,7 +38,7 @@ public interface CommentService {
     /**
      * 댓글 삭제
      * 
-     * @param memberNo
+     * @param memberNo  현재 접속한 사용자의 no. 자신의 댓글이 맞는지 확인하기 위해 필요.
      * @param commentNo
      */
     public void deleteComment(Integer memberNo, Integer commentNo);
