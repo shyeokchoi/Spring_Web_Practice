@@ -86,4 +86,12 @@ public interface PostMapper {
      */
     public Integer selectPrevTempPostNo(Integer currMemberNo);
 
+    /**
+     * 기존에 작성된 임시저장글 최종등록
+     * 
+     * @param postNo
+     * @return
+     */
+    public Integer finalizeTempPost(Integer postNo);
+
 }

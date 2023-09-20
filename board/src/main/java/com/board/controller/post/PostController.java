@@ -191,24 +191,15 @@ public class PostController extends BaseController {
         // 게시글 상태 설정
         updatePostDTO.setPostStatus(PostStatusEnum.TEMP);
 
-        return ok(postService.updatePost(updatePostDTO));
+        return ok(postService.updateTempPost(memberInfoDTO.getMemberNo(), updatePostDTO));
     }
 
     @Operation(summary = "임시저장글 최종 게시글로 등록")
     @PostMapping("/temp/{postNo}")
     public ResponseEntity<Integer> finalizeTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody @Valid UpdatePostDTO updatePostDTO,
             @PathVariable Integer postNo) {
-
-        // 수정할 post no 설정
-        updatePostDTO.setPostNo(postNo);
-        // modifier no 설정
-        updatePostDTO.setModifierNo(memberInfoDTO.getMemberNo());
-        // 게시글 상태 설정
-        updatePostDTO.setPostStatus(PostStatusEnum.POSTED);
-
-        return ok(postService.updatePost(updatePostDTO));
+        return ok(postService.finalizeTempPost(memberInfoDTO.getMemberNo(), postNo));
     }
 
     /**

@@ -152,4 +152,14 @@
             AND p.status = 'TEMP'
     </select>
 
+    <!-- finalizeTempPost -->
+
+    <update id="finalizeTempPost">
+        UPDATE
+            post p
+        SET
+            p.status = 'POSTED'
+        WHERE
+            p.no = #{postNo}
+    </update>
 </mapper>

@@ -73,4 +73,22 @@ public interface PostService {
      * @return
      */
     public Integer selectTempPostNo(Integer memberNo);
+
+    /**
+     * 임시저장 게시물 수정
+     * 
+     * @param memberNo
+     * @param updatePostDTO
+     * @return
+     */
+    public Integer updateTempPost(Integer memberNo, UpdatePostDTO updatePostDTO);
+
+    /**
+     * 임시저장 게시물 최종 등록
+     * 
+     * @param memberNo
+     * @param postNo
+     * @return
+     */
+    public Integer finalizeTempPost(Integer memberNo, Integer postNo);
 }

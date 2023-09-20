@@ -181,4 +181,24 @@ public class PostServiceImpl implements PostService {
 
         return prevTempPostNo;
     }
+
+    @Override
+    public Integer updateTempPost(Integer memberNo, UpdatePostDTO updatePostDTO) {
+        // 자신의 임시 글만 수정할 수 있음.
+        if (postMapper.retvAuthorNo(updatePostDTO.getPostNo()) != memberNo) {
+            throw new AuthenticationException("자신의 임시글만 수정할 수 있습니다.");
+        }
+
+        return updatePost(updatePostDTO);
+    }
+
+    @Override
+    public Integer finalizeTempPost(Integer memberNo, Integer postNo) {
+        // 자신의 임시 글만 최종등록할 수 있음.
+        if (postMapper.retvAuthorNo(postNo) != memberNo) {
+            throw new AuthenticationException("자신의 임시글만 최종 등록할 수 있습니다.");
+        }
+
+        return postMapper.finalizeTempPost(postNo);
+    }
 }
