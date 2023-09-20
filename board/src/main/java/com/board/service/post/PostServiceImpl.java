@@ -21,6 +21,7 @@ import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AuthenticationException;
 import com.board.mapper.post.PostMapper;
 import com.board.service.storage.StorageService;
+import com.board.util.SetOperations;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +34,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final StorageService storageService;
 
-    @Override
-    public Integer insPost(InsPostDTO insPostDTO) {
-        // 새로운 게시물 생성
-        postMapper.insPost(insPostDTO);
-
-        Integer newPostNo = insPostDTO.getNo();
-        List<Integer> fileInfoNoList = insPostDTO.getFileInfoNoList();
-
+    private void moveTempFilesAndUpdateFileInfo(Integer newPostNo, List<Integer> fileInfoNoList) {
         Queue<String> fileNamesForRollback = new LinkedList<>();
 
         for (Integer fileInfoNo : fileInfoNoList) {
@@ -72,6 +66,17 @@ public class PostServiceImpl implements PostService {
                 throw new RuntimeException("ERROR : 파일을 옮기는 데 실패했습니다.", ioe);
             }
         }
+    }
+
+    @Override
+    public Integer insPost(InsPostDTO insPostDTO) {
+        // 새로운 게시물 생성
+        postMapper.insPost(insPostDTO);
+
+        Integer newPostNo = insPostDTO.getNo();
+        List<Integer> fileInfoNoList = insPostDTO.getFileInfoNoList();
+
+        moveTempFilesAndUpdateFileInfo(newPostNo, fileInfoNoList);
 
         return newPostNo;
     }
@@ -94,7 +99,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Integer updatePost(UpdatePostDTO updatePostDTO) {
-        // 게시물 내용 업데이트
+        Integer newPostNo = updatePostDTO.getPostNo();
+
+        // 기존 파일 리스트와 새로운 파일 리스트
+        List<Integer> newFileInfoNoList = updatePostDTO.getFileInfoNoList();
+        List<Integer> curFileInfoNoList = postMapper.selectFileNoList(updatePostDTO.getPostNo());
+
+        // 게시글이 수정되며 추가된 파일 리스트
+        List<Integer> addedFileInfoNoList = SetOperations.findDifference(newFileInfoNoList, curFileInfoNoList);
+
+        // 추가된 파일들 옮기고 file_info 업데이트
+        moveTempFilesAndUpdateFileInfo(newPostNo, addedFileInfoNoList);
+
+        // 게시글 내용 업데이트
         postMapper.updatePost(updatePostDTO);
         return updatePostDTO.getPostNo();
     }
