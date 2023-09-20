@@ -93,9 +93,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(UpdatePostDTO updatePostDTO) {
+    public Integer updatePost(UpdatePostDTO updatePostDTO) {
         // 게시물 내용 업데이트
         postMapper.updatePost(updatePostDTO);
+        return updatePostDTO.getPostNo();
     }
 
     @Override

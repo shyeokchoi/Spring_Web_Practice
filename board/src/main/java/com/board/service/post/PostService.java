@@ -28,9 +28,9 @@ public interface PostService {
      * 글 수정
      * 
      * @param updatePostDTO
-     * @param postStatusEnum
+     * @return 수정된 게시글 no.
      */
-    public void updatePost(UpdatePostDTO updatePostDTO);
+    public Integer updatePost(UpdatePostDTO updatePostDTO);
 
     /**
      * 글 삭제
