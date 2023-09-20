@@ -132,9 +132,7 @@ public class PostController extends BaseController {
 
         PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
 
-        return ok(postService.selectPostList(
-                null,
-                pagingRequestDTO));
+        return ok(postService.selectPostList(pagingRequestDTO));
     }
 
     /**

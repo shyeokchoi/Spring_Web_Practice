@@ -38,6 +38,7 @@ public class InsPostDTO {
 
     @JsonIgnore
     private Integer authorNo;
+
     @JsonIgnore
     private PostStatusEnum status;
 }
