@@ -37,12 +37,20 @@ import lombok.RequiredArgsConstructor;
 public class CommentController extends BaseController {
     private final CommentService commentService;
 
+    /**
+     * 댓글 등록
+     * 
+     * @param memberInfoDTO
+     * @param insCommentDTO
+     * @param postNo        path에 포함된 post no.
+     * @return 새롭게 등록된 댓글의 no.
+     */
     @Operation(summary = "댓글 등록")
     @PostMapping("/posts/{postNo}/comments")
     public ResponseEntity<Integer> insComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid InsCommentDTO insCommentDTO,
-            @PathVariable Integer postNo) throws Exception {
+            @PathVariable Integer postNo) {
 
         // 댓글 작성자 author no 설정
         insCommentDTO.setAuthorNo(memberInfoDTO.getMemberNo());
@@ -54,19 +62,37 @@ public class CommentController extends BaseController {
         return ok(commentService.insComment(insCommentDTO));
     }
 
+    /**
+     * 댓글 리스트 조회
+     * 
+     * @param memberInfoDTO
+     * @param currPage
+     * @param pageSize
+     * @param postNo
+     * @return
+     */
     @Operation(summary = "댓글 리스트 조회")
     @GetMapping("/posts/{postNo}/comments")
     public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
             @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
-            @PathVariable Integer postNo) throws Exception {
+            @PathVariable Integer postNo) {
 
         PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
         return ok(commentService.selectCommentList(postNo, null, pagingRequestDTO));
     }
 
+    /**
+     * 댓글 수정
+     * 
+     * @param memberInfoDTO
+     * @param updateCommentDTO
+     * @param postNo
+     * @param commentNo
+     * @return
+     */
     @Operation(summary = "댓글 수정")
     @PutMapping("/posts/{postNo}/comments/{commentNo}")
     public ResponseEntity<Integer> updateComment(
@@ -81,6 +107,14 @@ public class CommentController extends BaseController {
         return ok(commentService.updatePost(updateCommentDTO));
     }
 
+    /**
+     * 댓글 삭제
+     * 
+     * @param memberInfoDTO
+     * @param postNo
+     * @param commentNo
+     * @return
+     */
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/posts/{postNo}/comments/{commentNo}")
     public ResponseEntity<Void> deleteComment(
@@ -92,6 +126,14 @@ public class CommentController extends BaseController {
         return ok();
     }
 
+    /**
+     * 내가 작성한 댓글 목록 보기
+     * 
+     * @param memberInfoDTO
+     * @param currPage
+     * @param pageSize
+     * @return
+     */
     @Operation(summary = "내 댓글 목록 보기")
     @GetMapping("comments/self")
     public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectSelfCommentList(

@@ -28,10 +28,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, Integer memberNo,
             PagingRequestDTO pagingRequestDTO) {
+        // 검색 대상 댓글 수 반환
         int totalRows = commentMapper.selectTotalRows(postNo, memberNo, pagingRequestDTO);
 
+        // 댓글 목록 반환
         List<SelectCommentListDTO> commentList = commentMapper.selectCommentList(postNo, memberNo, pagingRequestDTO);
 
+        // 페이징을 위한 정보에 댓글 목록 더해서 Response 만들기
         PagingResponseDTO<SelectCommentListDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
                 pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
 
@@ -51,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
             throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");
         }
 
-        // 글 삭제
+        // 댓글 삭제
         commentMapper.deleteComment(commentNo);
     }
 }
