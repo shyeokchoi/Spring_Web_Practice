@@ -10,8 +10,6 @@ public interface CommentService {
 
     public Integer insComment(InsCommentDTO insCommentDTO);
 
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, PagingRequestDTO pagingRequestDTO);
-
     public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, Integer memberNo,
             PagingRequestDTO pagingRequestDTO);
 

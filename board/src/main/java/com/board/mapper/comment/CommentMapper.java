@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.board.dto.comment.InsCommentDTO;
 import com.board.dto.comment.SelectCommentListDTO;
+import com.board.dto.comment.UpdateCommentDTO;
 import com.board.dto.common.PagingRequestDTO;
 
 @Mapper
@@ -23,5 +24,11 @@ public interface CommentMapper {
             @Param("postNo") Integer postNo,
             @Param("memberNo") Integer memberNo,
             @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
+
+    void updatePost(UpdateCommentDTO updateCommentDTO);
+
+    Integer retvAuthorNo(Integer commentNo);
+
+    void deleteComment(Integer commentNo);
 
 }

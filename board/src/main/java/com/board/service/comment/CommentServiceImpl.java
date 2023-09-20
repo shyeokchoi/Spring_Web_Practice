@@ -9,6 +9,7 @@ import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.comment.UpdateCommentDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingResponseDTO;
+import com.board.exception.AuthenticationException;
 import com.board.mapper.comment.CommentMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer memberNo, Integer commentNo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteComment'");
+        // 자신의 댓글만 삭제할 수 있음.
+        if (commentMapper.retvAuthorNo(commentNo) != memberNo) {
+            throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");
+        }
+
+        // 글 삭제
+        commentMapper.deleteComment(commentNo);
     }
 }

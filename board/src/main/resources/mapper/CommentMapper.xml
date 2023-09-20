@@ -41,6 +41,35 @@
         </if>
     </select>
 
+    <select id="selectCommentList">
+        SELECT
+            c.content
+            , m.name AS author_name
+            , c.created_at
+        FROM
+            comment c
+        INNER JOIN
+            member m ON c.author_no = m.no
+        WHERE
+            c.status = 'POSTED'
+        <if test="memberNo != null">
+            AND c.author_no = #{memberNo}
+        </if>
+        <if test="postNo != null">
+            AND c.post_no = #{postNo}
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                c.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
+        </if>
+        ORDER BY
+            c.created_at ASC
+        LIMIT #{pagingRequestDTO.pageSize} OFFSET #{pagingRequestDTO.offset}
+    </select>
+
     <update id="updatePost">
         UPDATE
             comment c
@@ -52,4 +81,23 @@
             c.no = #{commentNo}
             AND c.status != 'DELETED'
     </update>
+
+    <update id="deleteComment">
+        UPDATE
+            comment c
+        SET
+            deleted_at = UNIX_TIMESTAMP()
+            , status = 'DELETED'
+        WHERE
+            c.no = #{commentNo}
+    </update>
+
+    <select id="retvAuthorNo">
+        SELECT
+            c.author_no
+        FROM
+            comment c
+        WHERE
+            c.no = #{commentNo}
+    </select>
 </mapper>
