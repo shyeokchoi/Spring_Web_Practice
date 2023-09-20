@@ -1,5 +1,7 @@
 package com.board.service.comment;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.board.dto.comment.InsCommentDTO;
@@ -23,27 +25,27 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(PagingRequestDTO pagingRequestDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'selectCommentList'");
+    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, Integer memberNo,
+            PagingRequestDTO pagingRequestDTO) {
+        int totalRows = commentMapper.selectTotalRows(postNo, memberNo, pagingRequestDTO);
+
+        List<SelectCommentListDTO> commentList = commentMapper.selectCommentList(postNo, memberNo, pagingRequestDTO);
+
+        PagingResponseDTO<SelectCommentListDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
+                pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
+
+        return pagingResponseDTO;
     }
 
     @Override
     public Integer updatePost(UpdateCommentDTO updateCommentDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePost'");
+        commentMapper.updatePost(updateCommentDTO);
+        return updateCommentDTO.getPostNo();
     }
 
     @Override
     public void deleteComment(Integer memberNo, Integer commentNo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteComment'");
-    }
-
-    @Override
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer memberNo,
-            PagingRequestDTO pagingRequestDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'selectCommentList'");
     }
 }

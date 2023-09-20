@@ -59,12 +59,12 @@ public class CommentController extends BaseController {
     public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
-            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize) throws Exception {
+            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
+            @PathVariable Integer postNo) throws Exception {
 
         PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
-        // 파일 저장 후 DB 업데이트
-        return ok(commentService.selectCommentList(pagingRequestDTO));
+        return ok(commentService.selectCommentList(postNo, null, pagingRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
@@ -74,6 +74,9 @@ public class CommentController extends BaseController {
             @RequestBody @Valid UpdateCommentDTO updateCommentDTO,
             @PathVariable Integer postNo,
             @PathVariable Integer commentNo) {
+        updateCommentDTO.setCommentNo(commentNo);
+        updateCommentDTO.setPostNo(postNo);
+        updateCommentDTO.setModifierNo(memberInfoDTO.getMemberNo());
 
         return ok(commentService.updatePost(updateCommentDTO));
     }
@@ -98,8 +101,6 @@ public class CommentController extends BaseController {
 
         PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
-        return ok(commentService.selectCommentList(
-                memberInfoDTO.getMemberNo(),
-                pagingRequestDTO));
+        return ok(commentService.selectCommentList(null, memberInfoDTO.getMemberNo(), pagingRequestDTO));
     }
 }

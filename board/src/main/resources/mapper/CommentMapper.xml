@@ -16,4 +16,40 @@
             , 'POSTED'
         )
     </insert>
+
+    <select id="selectTotalRows">
+        SELECT
+            COUNT(*)
+        FROM 
+            comment c
+        INNER JOIN
+            member m ON c.author_no = m.no
+        WHERE
+            c.status = 'POSTED'
+        <if test="memberNo != null">
+                AND c.author_no = #{memberNo}
+        </if>
+        <if test="postNo != null">
+                AND c.post_no = #{postNo}
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                c.content LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
+        </if>
+    </select>
+
+    <update id="updatePost">
+        UPDATE
+            comment c
+        SET
+            c.content = #{content}
+            , c.modified_at = UNIX_TIMESTAMP()
+            , c.modifier_no = #{modifierNo}
+        WHERE
+            c.no = #{commentNo}
+            AND c.status != 'DELETED'
+    </update>
 </mapper>

@@ -10,12 +10,12 @@ public interface CommentService {
 
     public Integer insComment(InsCommentDTO insCommentDTO);
 
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(PagingRequestDTO pagingRequestDTO);
+    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, PagingRequestDTO pagingRequestDTO);
+
+    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, Integer memberNo,
+            PagingRequestDTO pagingRequestDTO);
 
     public Integer updatePost(UpdateCommentDTO updateCommentDTO);
 
     public void deleteComment(Integer memberNo, Integer commentNo);
-
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer memberNo,
-            PagingRequestDTO pagingRequestDTO);
 }
