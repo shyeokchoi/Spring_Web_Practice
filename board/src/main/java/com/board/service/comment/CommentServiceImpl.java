@@ -18,8 +18,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer insComment(InsCommentDTO insCommentDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insComment'");
+        commentMapper.insComment(insCommentDTO);
+        return insCommentDTO.getNo();
     }
 
     @Override
