@@ -45,7 +45,7 @@ public class FileController extends BaseController {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Integer> insertFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody MultipartFile file) throws Exception {
+            @RequestBody MultipartFile file) {
 
         // 파일 저장 후 DB 업데이트
         return ok(storageService.insFile(file, memberInfoDTO.getMemberNo()));
@@ -63,8 +63,7 @@ public class FileController extends BaseController {
     @GetMapping("/{fileInfoNo}")
     public ResponseEntity<Resource> selectFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo)
-            throws Exception {
+            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo) {
         // 파일 불러오기
         ResourceAndOriginName fileAndName = storageService.loadAsResource(fileInfoNo);
 
@@ -93,8 +92,7 @@ public class FileController extends BaseController {
     @DeleteMapping("/{fileInfoNo}")
     public ResponseEntity<Void> deleteFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo)
-            throws Exception {
+            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo) {
 
         storageService.deleteFile(fileInfoNo);
         return ok();

@@ -14,7 +14,7 @@ public interface StorageService {
      * @param file
      * @param memberNo 파일 생성한 member no.
      */
-    public Integer insFile(MultipartFile file, Integer memberNo) throws Exception;
+    public Integer insFile(MultipartFile file, Integer memberNo);
 
     /**
      * 파일을 Resource로 반환
