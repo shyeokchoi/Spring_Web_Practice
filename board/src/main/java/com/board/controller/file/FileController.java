@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.board.common.ResourceAndOriginName;
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.exception.AlreadyDeletedException;
@@ -40,7 +41,7 @@ public class FileController extends BaseController {
      * @throws Exception
      */
     @Operation(summary = "파일 등록")
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Integer> insertFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody MultipartFile file) throws Exception {
@@ -68,12 +69,14 @@ public class FileController extends BaseController {
         }
 
         // 파일 불러오기
-        Resource file = storageService.loadAsResource(fileInfoNo);
-        String fileName = file.getFilename();
+        ResourceAndOriginName fileAndName = storageService.loadAsResource(fileInfoNo);
+
+        Resource file = fileAndName.getResource();
+        String fileName = fileAndName.getOriginName();
 
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData(fileName, fileName);
 
         return ResponseEntity.ok()

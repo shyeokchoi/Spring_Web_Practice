@@ -11,7 +11,12 @@ public class FileNamer {
         return fileName.substring(lastIndex + 1);
     }
 
-    public static String retvRandomFileName(String extension) {
-        return UUID.randomUUID().toString() + "." + extension;
+    public static String retvRandomFileName() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static String rmExtension(String originalFileName) {
+        int lastIndex = originalFileName.lastIndexOf('.');
+        return originalFileName.substring(0, lastIndex);
     }
 }

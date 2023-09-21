@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.board.common.ResourceAndOriginName;
 import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
@@ -47,11 +48,12 @@ public class FileSystemStorageService implements StorageService {
     public Integer insFile(MultipartFile file, Integer memberNo) throws Exception {
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
         String extension = FileNamer.parseExtension(file.getOriginalFilename());
-        String fileName = FileNamer.retvRandomFileName(extension);
+        String fileName = FileNamer.retvRandomFileName();
+        String originName = FileNamer.rmExtension(file.getOriginalFilename());
 
         // DB에 file info 임시 저장
         InsFileInfoDTO insFileInfoDTO = InsFileInfoDTO.builder()
-                .originName(file.getOriginalFilename())
+                .originName(originName)
                 .saveName(fileName)
                 .savePath(uploadPath)
                 .extension(extension)
@@ -96,14 +98,22 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Resource loadAsResource(Integer fileInfoNo) throws Exception {
-        String fileName = fileMapper.selectOne(fileInfoNo).getSaveName();
+    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) throws Exception {
+        // 필요한 정보 가져오기
+        FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
+        String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
+        String originName = fileInfo.getOriginName(); // 사용자가 업로드할 때 설정해둔 이름
+        String ext = fileInfo.getExtension(); // 확장자명
+        String originNameWithExtension = originName + "." + ext;
 
-        Path filePath = Paths.get(uploadPath).resolve(fileName);
+        // 파일 시스템에 저장된 최종 경로
+        Path filePath = Paths.get(uploadPath).resolve(saveName);
+
+        // Resource 가져와서 반환
         Resource resource = new UrlResource(filePath.toUri());
 
         if (resource.exists() || resource.isReadable()) {
-            return resource;
+            return new ResourceAndOriginName(resource, originNameWithExtension);
         } else {
             throw new Exception();
         }

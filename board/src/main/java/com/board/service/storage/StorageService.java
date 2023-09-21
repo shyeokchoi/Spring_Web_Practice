@@ -2,9 +2,9 @@ package com.board.service.storage;
 
 import java.io.IOException;
 
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.board.common.ResourceAndOriginName;
 import com.board.enums.FileInfoParentTypeEnum;
 
 public interface StorageService {
@@ -31,7 +31,7 @@ public interface StorageService {
      * @param filename
      * @return
      */
-    public Resource loadAsResource(Integer fileInfoNo) throws Exception;
+    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) throws Exception;
 
     /**
      * file info 삭제
