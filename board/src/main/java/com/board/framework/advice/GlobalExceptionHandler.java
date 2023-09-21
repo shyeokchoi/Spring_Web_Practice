@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
-import com.board.exception.FileUploadFailureException;
+import com.board.exception.FileSystemException;
 import com.board.exception.NotSignedInException;
 
 @RestControllerAdvice
@@ -162,9 +162,9 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(FileUploadFailureException.class)
-    public ResponseEntity<Map<String, List<String>>> handleFileUploadFailureException(
-            FileUploadFailureException e) {
+    @ExceptionHandler(FileSystemException.class)
+    public ResponseEntity<Map<String, List<String>>> handleFileSystemException(
+            FileSystemException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildErrBody(e.getMessage()));
     }
 

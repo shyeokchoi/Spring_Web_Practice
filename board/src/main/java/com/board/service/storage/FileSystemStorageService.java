@@ -20,7 +20,7 @@ import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.enums.FileStatusEnum;
-import com.board.exception.FileUploadFailureException;
+import com.board.exception.FileSystemException;
 import com.board.mapper.file.FileMapper;
 import com.board.util.FileNamer;
 
@@ -39,16 +39,16 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(dirPath);
         } catch (IOException e) {
-            throw new FileUploadFailureException("Could not create upload folder!", e);
+            throw new FileSystemException("Could not create upload folder!", e);
         }
     }
 
     @Transactional
     @Override
-    public Integer insFile(MultipartFile file, Integer memberNo) throws Exception {
+    public Integer insFile(MultipartFile file, Integer memberNo) {
         // 파일 저장
         if (file.isEmpty()) {
-            throw new FileUploadFailureException("ERROR : File is empty.");
+            throw new FileSystemException("ERROR : File is empty.");
         }
 
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
@@ -71,15 +71,21 @@ public class FileSystemStorageService implements StorageService {
 
         fileMapper.insFileInfo(insFileInfoDTO);
 
+        // 파일을 서버의 파일 시스템에 저장
         Path root = Paths.get(uploadPath);
         if (!Files.exists(root)) {
             initDirectory(root);
         }
 
-        @Cleanup
-        InputStream inputStream = file.getInputStream();
+        try {
+            @Cleanup
+            InputStream inputStream = file.getInputStream();
 
-        Files.copy(inputStream, root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(inputStream, root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException ioe) {
+            throw new FileSystemException("ERROR : File upload failed", ioe);
+        }
 
         return insFileInfoDTO.getNo();
     }
@@ -99,7 +105,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) throws Exception {
+    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) {
         // 필요한 정보 가져오기
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
         String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
@@ -117,12 +123,19 @@ public class FileSystemStorageService implements StorageService {
         }
 
         // Resource 가져와서 반환
-        Resource resource = new UrlResource(filePath.toUri());
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
 
-        if (resource.exists() || resource.isReadable()) {
+            if (!resource.exists()) {
+                throw new Exception("ERROR : resource does not exist");
+            } else if (!resource.isReadable()) {
+                throw new Exception("ERROR : resource is not readable");
+            }
+
             return new ResourceAndOriginName(resource, originNameWithExtension);
-        } else {
-            throw new Exception();
+
+        } catch (Exception e) {
+            throw new FileSystemException("ERROR : file load failed", e);
         }
     }
 
@@ -135,7 +148,7 @@ public class FileSystemStorageService implements StorageService {
 
     @Transactional
     @Override
-    public void deleteFile(Integer fileInfoNo) throws Exception {
+    public void deleteFile(Integer fileInfoNo) {
         // 해당 file의 savePath 불러오기
         String savePath = this.selectFileSavePath(fileInfoNo);
         String saveName = this.selectFileSaveName(fileInfoNo);
@@ -148,7 +161,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.delete(finalPath);
         } catch (IOException ioe) {
-            throw new RuntimeException("file delete failed", ioe);
+            throw new FileSystemException("file delete failed", ioe);
         }
     }
 

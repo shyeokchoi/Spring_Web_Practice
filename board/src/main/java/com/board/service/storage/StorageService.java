@@ -31,7 +31,7 @@ public interface StorageService {
      * @param filename
      * @return
      */
-    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) throws Exception;
+    public ResourceAndOriginName loadAsResource(Integer fileInfoNo);
 
     /**
      * file info 삭제
@@ -46,7 +46,7 @@ public interface StorageService {
      * 
      * @param fileInfoNo
      */
-    public void deleteFile(Integer fileInfoNo) throws Exception;
+    public void deleteFile(Integer fileInfoNo);
 
     /**
      * file info 상태 변경. TEMP에서 NORMAL로
