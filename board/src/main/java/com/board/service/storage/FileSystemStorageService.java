@@ -105,9 +105,15 @@ public class FileSystemStorageService implements StorageService {
         String originName = fileInfo.getOriginName(); // 사용자가 업로드할 때 설정해둔 이름
         String ext = fileInfo.getExtension(); // 확장자명
         String originNameWithExtension = originName + "." + ext;
+        String parentNoStr = fileInfo.getParentNo().toString();
 
         // 파일 시스템에 저장된 최종 경로
-        Path filePath = Paths.get(uploadPath).resolve(saveName);
+        Path filePath;
+        if (parentNoStr == null) {
+            filePath = Paths.get(uploadPath).resolve(saveName);
+        } else {
+            filePath = Paths.get(uploadPath).resolve(parentNoStr).resolve(saveName);
+        }
 
         // Resource 가져와서 반환
         Resource resource = new UrlResource(filePath.toUri());
