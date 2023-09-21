@@ -20,6 +20,7 @@ import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.enums.FileStatusEnum;
+import com.board.exception.AlreadyDeletedException;
 import com.board.exception.FileSystemException;
 import com.board.mapper.file.FileMapper;
 import com.board.util.FileNamer;
@@ -91,23 +92,20 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public boolean isDeleted(Integer fileInfoNo) {
-        FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
-
-        if (fileInfo == null) {
-            return true;
-        } else if (fileInfo.getParentType() == FileInfoParentTypeEnum.POST) {
-            // 부모가 삭제되었는지 확인
-            return fileMapper.isParentPostDeleted(fileInfoNo);
-        }
-
-        return false;
-    }
-
-    @Override
     public ResourceAndOriginName loadAsResource(Integer fileInfoNo) {
         // 필요한 정보 가져오기
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
+
+        // 파일의 유효성 체크
+        if (fileInfo == null) {
+            throw new AlreadyDeletedException("file info no " + fileInfoNo.toString() + " does not exist.");
+        } else if (fileInfo.getParentType() == FileInfoParentTypeEnum.POST
+                && fileMapper.isParentPostDeleted(fileInfoNo)) {
+            // 부모 게시글이 삭제된 경우 파일에 접근할 수 없음
+            throw new AlreadyDeletedException(
+                    "file info no " + fileInfoNo.toString() + " cannot be reached : the original post is deleted");
+        }
+
         String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
         String originName = fileInfo.getOriginName(); // 사용자가 업로드할 때 설정해둔 이름
         String ext = fileInfo.getExtension(); // 확장자명

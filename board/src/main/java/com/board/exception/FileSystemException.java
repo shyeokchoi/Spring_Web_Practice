@@ -1,11 +1,11 @@
 package com.board.exception;
 
-public class FileUploadFailureException extends RuntimeException {
-    public FileUploadFailureException(String message, Throwable cause) {
+public class FileSystemException extends RuntimeException {
+    public FileSystemException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public FileUploadFailureException(String message) {
+    public FileSystemException(String message) {
         super(message);
     }
 }

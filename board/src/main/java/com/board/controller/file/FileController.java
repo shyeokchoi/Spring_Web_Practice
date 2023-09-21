@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.board.common.ResourceAndOriginName;
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
-import com.board.exception.AlreadyDeletedException;
 import com.board.framework.base.BaseController;
 import com.board.service.storage.StorageService;
 
@@ -64,10 +63,6 @@ public class FileController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
             throws Exception {
-        if (storageService.isDeleted(fileInfoNo)) {
-            throw new AlreadyDeletedException("존재하지 않거나 이미 삭제된 파일입니다.");
-        }
-
         // 파일 불러오기
         ResourceAndOriginName fileAndName = storageService.loadAsResource(fileInfoNo);
 
