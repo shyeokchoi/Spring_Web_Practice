@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Integer memberNo, Integer commentNo) {
         // 자신의 댓글만 삭제할 수 있음.
         if (commentMapper.retvAuthorNo(commentNo) != memberNo) {
-            throw new AuthenticationException("ERROR : 자신의 댓글만 삭제할 수 있습니다");
+            throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");
         }
 
         // 댓글 삭제
