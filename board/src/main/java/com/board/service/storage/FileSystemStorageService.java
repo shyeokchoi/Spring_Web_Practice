@@ -46,6 +46,11 @@ public class FileSystemStorageService implements StorageService {
     @Transactional
     @Override
     public Integer insFile(MultipartFile file, Integer memberNo) throws Exception {
+        // 파일 저장
+        if (file.isEmpty()) {
+            throw new FileUploadFailureException("ERROR : File is empty.");
+        }
+
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
         String extension = FileNamer.parseExtension(file.getOriginalFilename());
         String fileName = FileNamer.retvRandomFileName();
@@ -66,10 +71,6 @@ public class FileSystemStorageService implements StorageService {
 
         fileMapper.insFileInfo(insFileInfoDTO);
 
-        // 파일 저장
-        if (file.isEmpty()) {
-            throw new Exception("ERROR : File is empty.");
-        }
         Path root = Paths.get(uploadPath);
         if (!Files.exists(root)) {
             initDirectory(root);
