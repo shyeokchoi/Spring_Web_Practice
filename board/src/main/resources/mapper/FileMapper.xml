@@ -3,16 +3,16 @@
 <mapper namespace="com.board.mapper.file.FileMapper">
     <!-- file_info의 모든 column -->
     <sql id = "file_info_cols">
-        no
-        , origin_name
-        , save_name
-        , save_path
-        , extension
-        , size
-        , parent_no
-        , parent_type
-        , author_no
-        , status 
+        f.no
+        , f.origin_name
+        , f.save_name
+        , f.save_path
+        , f.extension
+        , f.size
+        , f.parent_no
+        , f.parent_type
+        , f.author_no
+        , f.status 
     </sql>
 
     <!-- file_info 가져오기 -->
@@ -21,8 +21,15 @@
         <include refid="file_info_cols" />
         FROM
             file_info f
+        LEFT OUTER JOIN
+            post p ON f.parent_no = p.no
         WHERE
             f.no = #{fileInfoNo}
+            AND (
+                (f.parent_type = 'POST' AND p.status != 'DELETED')
+                OR
+                f.parent_type IS NULL         <!-- 임시 파일일 경우 항상 반환해줌. -->
+            )
     </select>
 
     <!-- file_info 추가 -->

@@ -43,12 +43,4 @@ public interface FileMapper {
      * @param fileInfoNo
      */
     public void deleteFileInfo(Integer fileInfoNo);
-
-    /**
-     * file의 parent가 post일때 해당 post가 삭제되었는지 확인
-     * 
-     * @param fileInfoNo
-     * @return
-     */
-    public boolean isParentPostDeleted(Integer fileInfoNo);
 }

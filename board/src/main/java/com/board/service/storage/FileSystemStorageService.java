@@ -99,11 +99,6 @@ public class FileSystemStorageService implements StorageService {
         // 파일의 유효성 체크
         if (fileInfo == null) {
             throw new AlreadyDeletedException("ERROR : file info no " + fileInfoNo.toString() + " 가 존재하지 않습니다.");
-        } else if (fileInfo.getParentType() == FileInfoParentTypeEnum.POST
-                && fileMapper.isParentPostDeleted(fileInfoNo)) {
-            // 부모 게시글이 삭제된 경우 파일에 접근할 수 없음
-            throw new AlreadyDeletedException(
-                    "file info no " + fileInfoNo.toString() + " 에 접근할 수 없습니다 - 게시글이 삭제되었습니다.");
         }
 
         String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
