@@ -151,7 +151,7 @@ public class FileSystemStorageService implements StorageService {
 
         // 이미 삭제된 파일은 아닌지 확인
         if (fileInfo == null) {
-            throw new AlreadyDeletedException("ERROR : " + fileInfoNo.toString() + "번 파일은 이미 삭제되었습니다.");
+            throw new AlreadyDeletedException("ERROR : " + fileInfoNo.toString() + " 가 존재하지 않습니다.");
         }
 
         // 해당 file의 savePath 불러오기
