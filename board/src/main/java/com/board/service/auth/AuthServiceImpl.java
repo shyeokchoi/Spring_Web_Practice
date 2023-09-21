@@ -22,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Integer checkAccessTokenValidity(String accessToken) {
         if (accessToken == null) {
-            throw new AuthenticationException("Access-Token 값이 null 입니다.");
+            throw new AuthenticationException("ERROR : Access-Token 값이 null 입니다.");
         }
         // 로그아웃하려고 하는 멤버의 member_no 얻기
         Optional<Integer> memberNoOptional = Optional
@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 만약 로그인 하지 않은 access token이거나 이미 로그아웃 되어 있다면 예외 처리
         if (!memberNoOptional.isPresent()) {
-            throw new NotSignedInException("로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
+            throw new NotSignedInException("ERROR : 로그인하지 않았거나 이미 로그아웃한 토큰입니다.");
         }
 
         return memberNoOptional.get();
@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Integer> memberNoOptional = Optional.ofNullable(authMapper.checkIdPw(idPwDto));
 
         if (!memberNoOptional.isPresent()) {
-            throw new AuthenticationException("아이디와 비밀번호를 확인해주세요.");
+            throw new AuthenticationException("ERROR : 아이디와 비밀번호를 확인해주세요.");
         }
 
         return memberNoOptional.get();

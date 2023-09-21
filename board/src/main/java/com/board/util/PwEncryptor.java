@@ -53,7 +53,7 @@ public class PwEncryptor {
 
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Internal error: password 암호화 실패");
+            throw new RuntimeException("ERROR : password 암호화 실패");
         }
     }
 }

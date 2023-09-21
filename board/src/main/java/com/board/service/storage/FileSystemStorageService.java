@@ -40,7 +40,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(dirPath);
         } catch (IOException e) {
-            throw new FileSystemException("Could not create upload folder!", e);
+            throw new FileSystemException("ERROR : 디렉토리(" + dirPath.toString() + ") 생성 실패 ", e);
         }
     }
 
@@ -49,7 +49,7 @@ public class FileSystemStorageService implements StorageService {
     public Integer insFile(MultipartFile file, Integer memberNo) {
         // 파일 저장
         if (file.isEmpty()) {
-            throw new FileSystemException("ERROR : File is empty.");
+            throw new FileSystemException("ERROR : 빈 파일입니다.");
         }
 
         // 파일 확장자 파싱 & DB 저장용 파일 이름 생성
@@ -85,7 +85,7 @@ public class FileSystemStorageService implements StorageService {
             Files.copy(inputStream, root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException ioe) {
-            throw new FileSystemException("ERROR : File upload failed", ioe);
+            throw new FileSystemException("ERROR : 파일 업로드 실패", ioe);
         }
 
         return insFileInfoDTO.getNo();
@@ -98,12 +98,12 @@ public class FileSystemStorageService implements StorageService {
 
         // 파일의 유효성 체크
         if (fileInfo == null) {
-            throw new AlreadyDeletedException("file info no " + fileInfoNo.toString() + " does not exist.");
+            throw new AlreadyDeletedException("ERROR : file info no " + fileInfoNo.toString() + " 가 존재하지 않습니다.");
         } else if (fileInfo.getParentType() == FileInfoParentTypeEnum.POST
                 && fileMapper.isParentPostDeleted(fileInfoNo)) {
             // 부모 게시글이 삭제된 경우 파일에 접근할 수 없음
             throw new AlreadyDeletedException(
-                    "file info no " + fileInfoNo.toString() + " cannot be reached : the original post is deleted");
+                    "file info no " + fileInfoNo.toString() + " 에 접근할 수 없습니다 - 게시글이 삭제되었습니다.");
         }
 
         String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
@@ -125,15 +125,15 @@ public class FileSystemStorageService implements StorageService {
             Resource resource = new UrlResource(filePath.toUri());
 
             if (!resource.exists()) {
-                throw new Exception("ERROR : resource does not exist");
+                throw new Exception("ERROR : Resource가 존재하지 않습니다.");
             } else if (!resource.isReadable()) {
-                throw new Exception("ERROR : resource is not readable");
+                throw new Exception("ERROR : Resource를 읽어올 수 없습니다.");
             }
 
             return new ResourceAndOriginName(resource, originNameWithExtension);
 
         } catch (Exception e) {
-            throw new FileSystemException("ERROR : file load failed", e);
+            throw new FileSystemException("ERROR : 파일을 불러오는 데 실패했습니다.", e);
         }
     }
 
@@ -147,9 +147,16 @@ public class FileSystemStorageService implements StorageService {
     @Transactional
     @Override
     public void deleteFile(Integer fileInfoNo) {
+        FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
+
+        // 이미 삭제된 파일은 아닌지 확인
+        if (fileInfo == null) {
+            throw new AlreadyDeletedException("ERROR : " + fileInfoNo.toString() + "번 파일은 이미 삭제되었습니다.");
+        }
+
         // 해당 file의 savePath 불러오기
-        String savePath = this.selectFileSavePath(fileInfoNo);
-        String saveName = this.selectFileSaveName(fileInfoNo);
+        String savePath = fileInfo.getSavePath();
+        String saveName = fileInfo.getSaveName();
         Path finalPath = Paths.get(savePath).resolve(saveName);
 
         // DB의 file info 삭제
@@ -172,18 +179,6 @@ public class FileSystemStorageService implements StorageService {
         Path newPath = Paths.get(uploadPath).resolve(parentNo.toString());
         // file info의 정보 수정.
         fileMapper.changeFileStatus(fileNo, newPath.toString(), parentNo, fileInfoParentType);
-    }
-
-    @Transactional
-    @Override
-    public String selectFileSaveName(Integer fileInfoNo) {
-        return fileMapper.selectOne(fileInfoNo).getSaveName();
-    }
-
-    @Transactional
-    @Override
-    public String selectFileSavePath(Integer fileInfoNo) {
-        return fileMapper.selectOne(fileInfoNo).getSavePath();
     }
 
     @Override

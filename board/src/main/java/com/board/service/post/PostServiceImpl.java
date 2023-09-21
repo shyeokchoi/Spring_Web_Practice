@@ -120,7 +120,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Integer currMemberNo, Integer postNo) {
         // 자신의 글만 삭제할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != currMemberNo) {
-            throw new AuthenticationException("자신의 글만 삭제할 수 있습니다");
+            throw new AuthenticationException("ERROR : 자신의 글만 삭제할 수 있습니다");
         }
 
         // 글에 첨부된 파일 목록 불러오기. DB에서 글 삭제 전에 해야하는 작업
@@ -193,7 +193,7 @@ public class PostServiceImpl implements PostService {
 
         // 임시저장된 글이 없으면 예외처리
         if (prevTempPostNo == null) {
-            throw new NoSuchElementException("임시저장된 글이 없습니다.");
+            throw new NoSuchElementException("ERROR : 임시저장된 글이 없습니다.");
         }
 
         return prevTempPostNo;
@@ -203,7 +203,7 @@ public class PostServiceImpl implements PostService {
     public Integer updateTempPost(Integer memberNo, UpdatePostDTO updatePostDTO) {
         // 자신의 임시 글만 수정할 수 있음.
         if (postMapper.retvAuthorNo(updatePostDTO.getPostNo()) != memberNo) {
-            throw new AuthenticationException("자신의 임시글만 수정할 수 있습니다.");
+            throw new AuthenticationException("ERROR : 자신의 임시글만 수정할 수 있습니다.");
         }
 
         return updatePost(updatePostDTO);
@@ -213,7 +213,7 @@ public class PostServiceImpl implements PostService {
     public Integer finalizeTempPost(Integer memberNo, Integer postNo) {
         // 자신의 임시 글만 최종등록할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != memberNo) {
-            throw new AuthenticationException("자신의 임시글만 최종 등록할 수 있습니다.");
+            throw new AuthenticationException("ERROR : 자신의 임시글만 최종 등록할 수 있습니다.");
         }
 
         return postMapper.finalizeTempPost(postNo);

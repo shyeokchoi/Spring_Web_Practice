@@ -51,22 +51,6 @@ public interface StorageService {
             FileInfoParentTypeEnum parentType);
 
     /**
-     * file의 이름 가져오기
-     * 
-     * @param fileInfoNo
-     * @return
-     */
-    public String selectFileSaveName(Integer fileInfoNo);
-
-    /**
-     * file의 저장 경로 가져오기
-     * 
-     * @param fileInfoNo
-     * @return
-     */
-    public String selectFileSavePath(Integer fileInfoNo);
-
-    /**
      * file src에서 dst로 옮기기
      * 
      * @param src
