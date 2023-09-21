@@ -1,5 +1,7 @@
 package com.board.controller.file;
 
+import javax.validation.constraints.Min;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -61,7 +63,7 @@ public class FileController extends BaseController {
     @GetMapping("/{fileInfoNo}")
     public ResponseEntity<Resource> selectFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
+            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo)
             throws Exception {
         // 파일 불러오기
         ResourceAndOriginName fileAndName = storageService.loadAsResource(fileInfoNo);
@@ -91,7 +93,7 @@ public class FileController extends BaseController {
     @DeleteMapping("/{fileInfoNo}")
     public ResponseEntity<Void> deleteFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable(name = "fileInfoNo", required = true) Integer fileInfoNo)
+            @PathVariable(name = "fileInfoNo", required = true) @Min(1) Integer fileInfoNo)
             throws Exception {
 
         storageService.deleteFile(fileInfoNo);

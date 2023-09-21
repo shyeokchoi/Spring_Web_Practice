@@ -72,7 +72,7 @@ public class PostController extends BaseController {
     @Operation(summary = "게시글 상세정보")
     @GetMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> selectPost(
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
         return ok(postService.selectPost(postNo));
     }
 
@@ -89,7 +89,7 @@ public class PostController extends BaseController {
     public ResponseEntity<Integer> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdatePostDTO updatePostDTO,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
 
         // 수정할 post no 설정
         updatePostDTO.setPostNo(postNo);
@@ -111,7 +111,7 @@ public class PostController extends BaseController {
     @DeleteMapping("/{postNo}")
     public ResponseEntity<Void> deletePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
 
         postService.deletePost(memberInfoDTO.getMemberNo(), postNo);
         return ok();
@@ -182,7 +182,7 @@ public class PostController extends BaseController {
     public ResponseEntity<Integer> updateTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdatePostDTO updatePostDTO,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
 
         // 수정할 post no 설정
         updatePostDTO.setPostNo(postNo);
@@ -206,7 +206,7 @@ public class PostController extends BaseController {
     @PostMapping("/temp/{postNo}")
     public ResponseEntity<Integer> finalizeTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
         return ok(postService.finalizeTempPost(memberInfoDTO.getMemberNo(), postNo));
     }
 

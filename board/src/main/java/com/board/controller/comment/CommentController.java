@@ -50,7 +50,7 @@ public class CommentController extends BaseController {
     public ResponseEntity<Integer> insComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid InsCommentDTO insCommentDTO,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
 
         // 댓글 작성자 author no 설정
         insCommentDTO.setAuthorNo(memberInfoDTO.getMemberNo());
@@ -77,7 +77,7 @@ public class CommentController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
             @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
-            @PathVariable Integer postNo) {
+            @PathVariable @Min(1) Integer postNo) {
 
         PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
@@ -98,8 +98,8 @@ public class CommentController extends BaseController {
     public ResponseEntity<Integer> updateComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateCommentDTO updateCommentDTO,
-            @PathVariable Integer postNo,
-            @PathVariable Integer commentNo) {
+            @PathVariable @Min(1) Integer postNo,
+            @PathVariable @Min(1) Integer commentNo) {
         updateCommentDTO.setCommentNo(commentNo);
         updateCommentDTO.setPostNo(postNo);
         updateCommentDTO.setModifierNo(memberInfoDTO.getMemberNo());
@@ -119,8 +119,8 @@ public class CommentController extends BaseController {
     @DeleteMapping("/posts/{postNo}/comments/{commentNo}")
     public ResponseEntity<Void> deleteComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable Integer postNo,
-            @PathVariable Integer commentNo) {
+            @PathVariable @Min(1) Integer postNo,
+            @PathVariable @Min(1) Integer commentNo) {
 
         commentService.deleteComment(memberInfoDTO.getMemberNo(), commentNo);
         return ok();
