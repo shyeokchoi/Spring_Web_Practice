@@ -19,6 +19,7 @@ import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AuthenticationException;
+import com.board.mapper.file.FileMapper;
 import com.board.mapper.post.PostMapper;
 import com.board.service.storage.StorageService;
 import com.board.util.SetOperations;
@@ -32,13 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
+    private final FileMapper fileMapper;
     private final StorageService storageService;
 
     private void moveTempFilesAndUpdateFileInfo(Integer newPostNo, List<Integer> fileInfoNoList) {
         Queue<String> fileNamesForRollback = new LinkedList<>();
 
         for (Integer fileInfoNo : fileInfoNoList) {
-            String fileName = storageService.selectFileSaveName(fileInfoNo);
+            String fileName = fileMapper.selectOne(fileInfoNo).getSaveName();
             Path dst = Paths.get(newPostNo.toString());
 
             // 게시물에서 등록한 파일들 상태 업데이트

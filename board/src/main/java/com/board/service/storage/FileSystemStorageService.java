@@ -166,7 +166,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.delete(finalPath);
         } catch (IOException ioe) {
-            throw new FileSystemException("file delete failed", ioe);
+            throw new FileSystemException("ERROR : 파일 삭제 실패", ioe);
         }
     }
 
