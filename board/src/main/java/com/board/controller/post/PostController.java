@@ -171,7 +171,7 @@ public class PostController extends BaseController {
 
     /**
      * 임시저장글 수정.
-     * 
+     * 자신의 글만 수정 가능
      * 
      * @param memberInfoDTO
      * @param postNo
@@ -194,6 +194,14 @@ public class PostController extends BaseController {
         return ok(postService.updateTempPost(memberInfoDTO.getMemberNo(), updatePostDTO));
     }
 
+    /**
+     * 임시저장글 최종 게시글로 등록
+     * 자신의 글만 최종 게시글로 확정 가능
+     * 
+     * @param memberInfoDTO
+     * @param postNo
+     * @return
+     */
     @Operation(summary = "임시저장글 최종 게시글로 등록")
     @PostMapping("/temp/{postNo}")
     public ResponseEntity<Integer> finalizeTempPost(
