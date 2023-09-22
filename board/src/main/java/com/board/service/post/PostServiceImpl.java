@@ -114,6 +114,11 @@ public class PostServiceImpl implements PostService {
         // postNo 유효성 체크
         checkIfPostFound(newPostNo);
 
+        // 자기 자신의 게시글만 수정 가능
+        if (postMapper.retvAuthorNo(updatePostDTO.getPostNo()) != updatePostDTO.getModifierNo()) {
+            throw new AuthenticationException("자신의 글만 수정할 수 있습니다");
+        }
+
         // 게시글 내용 업데이트
         postMapper.updatePost(updatePostDTO);
 

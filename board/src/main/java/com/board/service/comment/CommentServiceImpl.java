@@ -65,6 +65,11 @@ public class CommentServiceImpl implements CommentService {
         // commentNo 유효성 체크
         checkIfCommentFound(updateCommentDTO.getCommentNo());
 
+        // 자기 자신의 댓글만 수정 가능
+        if (commentMapper.retvAuthorNo(updateCommentDTO.getCommentNo()) != updateCommentDTO.getModifierNo()) {
+            throw new AuthenticationException("자신의 댓글만 수정할 수 있습니다");
+        }
+
         // 댓글 수정
         commentMapper.updatePost(updateCommentDTO);
         return updateCommentDTO.getCommentNo();
