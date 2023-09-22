@@ -1,5 +1,6 @@
 package com.board.dto.comment;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -13,6 +14,7 @@ public class InsCommentDTO {
     @JsonIgnore
     private int no;
 
+    @Min(1)
     private int postNo;
 
     @Size(min = 0, max = 300, message = "댓글은 300자 이하입니다")

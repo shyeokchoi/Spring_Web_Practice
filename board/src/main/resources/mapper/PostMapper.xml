@@ -107,15 +107,6 @@
             , status = 'DELETED'
         WHERE
             p.no = #{postNo}
-        <!-- 관련된 댓글들도 삭제 -->
-        UPDATE
-            comment c
-        SET
-            deleted_at = UNIX_TIMESTAMP()
-            , status = 'DELETED'
-        WHERE
-            c.post_no = #{postNo}
-
     </update>
 
     <!-- 게시글 리스트 반환
@@ -170,5 +161,16 @@
             p.status = 'POSTED'
         WHERE
             p.no = #{postNo}
+    </update>
+
+    <!-- 관련된 댓글들 삭제 -->
+    <update id="deleteCommentsRelatedToPost">
+        UPDATE
+            comment c
+        SET
+            c.deleted_at = UNIX_TIMESTAMP()
+            , c.status = 'DELETED'
+        WHERE
+            c.post_no = #{postNo}
     </update>
 </mapper>

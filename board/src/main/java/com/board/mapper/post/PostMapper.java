@@ -84,7 +84,7 @@ public interface PostMapper {
          * @param currMemberNo
          * @return 기존에 작성된 임시저장글 번호
          */
-        public Integer selectPrevTempPostNo(Integer currMemberNo);
+        public int selectPrevTempPostNo(int currMemberNo);
 
         /**
          * 기존에 작성된 임시저장글 최종등록
@@ -92,6 +92,13 @@ public interface PostMapper {
          * @param postNo
          * @return
          */
-        public Integer finalizeTempPost(Integer postNo);
+        public int finalizeTempPost(int postNo);
+
+        /**
+         * 주어진 postNo와 연관된 댓글들 삭제
+         * 
+         * @param postNo
+         */
+        public void deleteCommentsRelatedToPost(int postNo);
 
 }

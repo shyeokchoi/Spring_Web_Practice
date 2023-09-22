@@ -150,6 +150,7 @@ public class PostServiceImpl implements PostService {
 
         // 글 삭제 & 글에 달린 댓글도 삭제
         postMapper.deletePost(postNo);
+        postMapper.deleteCommentsRelatedToPost(postNo);
 
         // 연관된 file들 삭제
         try {
