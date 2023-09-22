@@ -28,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    @Override
     public CommentDTO selectOne(int commentNo) {
         return commentMapper.selectOne(commentNo);
     }
