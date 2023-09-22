@@ -114,7 +114,7 @@ public class CommentController extends BaseController {
      * @return
      */
     @Operation(summary = "댓글 삭제")
-    @DeleteMapping("/comments/{commentNo}")
+    @DeleteMapping("/{commentNo}")
     public ResponseEntity<Void> deleteComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable @Min(1) int commentNo) {
