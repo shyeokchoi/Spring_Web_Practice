@@ -52,13 +52,6 @@
         <if test="postNo != null">
                 AND c.post_no = #{postNo}
         </if>
-        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
-            AND (
-                c.content LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
-                OR 
-                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
-            )
-        </if>
     </select>
 
     <select id="selectCommentList">
@@ -77,13 +70,6 @@
         </if>
         <if test="postNo != null">
             AND c.post_no = #{postNo}
-        </if>
-        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
-            AND (
-                c.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
-                OR 
-                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
-            )
         </if>
         ORDER BY
             c.created_at ASC

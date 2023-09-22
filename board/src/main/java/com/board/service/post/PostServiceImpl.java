@@ -10,7 +10,7 @@ import java.util.Queue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -172,12 +172,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestDTO pagingRequestDTO) {
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
         return selectPostList(null, pagingRequestDTO);
     }
 
     @Override
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo, PagingRequestDTO pagingRequestDTO) {
+    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo,
+            PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
         int totalRows = postMapper.selectTotalRows(authorNo, pagingRequestDTO);
 
         List<SelectPostListDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);

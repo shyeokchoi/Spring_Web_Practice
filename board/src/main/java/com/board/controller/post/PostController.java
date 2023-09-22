@@ -1,26 +1,26 @@
 package com.board.controller.post;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -129,11 +129,7 @@ public class PostController extends BaseController {
     @Operation(summary = "게시글 리스트 불러오기")
     @GetMapping()
     public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectPostList(
-            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
-            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
-            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
-
-        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
+            @ModelAttribute @Valid PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
 
         return ok(postService.selectPostList(pagingRequestDTO));
     }
@@ -226,11 +222,8 @@ public class PostController extends BaseController {
     @GetMapping("/{postNo}/comments")
     public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
-            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
+            @ModelAttribute @Valid PagingRequestDTO pagingRequestDTO,
             @PathVariable @Min(1) int postNo) {
-
-        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
         return ok(commentService.selectCommentList(postNo, null, pagingRequestDTO));
     }
