@@ -36,6 +36,14 @@ public class PostServiceImpl implements PostService {
     private final FileMapper fileMapper;
     private final StorageService storageService;
 
+    private void checkIfPostFound(int postNo) {
+        SelectPostDetailDTO postDetail = postMapper.selectPost(postNo);
+
+        if (postDetail == null) {
+            throw new NoDataFoundException("게시물이 존재하지 않습니다. 게시물 번호 : " + postNo);
+        }
+    }
+
     private void moveTempFilesAndUpdateFileInfo(Integer newPostNo, List<Integer> fileInfoNoList) {
         Queue<String> fileNamesForRollback = new LinkedList<>();
 
@@ -103,6 +111,12 @@ public class PostServiceImpl implements PostService {
     public Integer updatePost(UpdatePostDTO updatePostDTO) {
         Integer newPostNo = updatePostDTO.getPostNo();
 
+        // postNo 유효성 체크
+        checkIfPostFound(newPostNo);
+
+        // 게시글 내용 업데이트
+        postMapper.updatePost(updatePostDTO);
+
         // 기존 파일 리스트와 새로운 파일 리스트
         List<Integer> newFileInfoNoList = updatePostDTO.getFileInfoNoList();
         List<Integer> curFileInfoNoList = postMapper.selectFileNoList(updatePostDTO.getPostNo());
@@ -113,14 +127,15 @@ public class PostServiceImpl implements PostService {
         // 추가된 파일들 옮기고 file_info 업데이트
         moveTempFilesAndUpdateFileInfo(newPostNo, addedFileInfoNoList);
 
-        // 게시글 내용 업데이트
-        postMapper.updatePost(updatePostDTO);
         return updatePostDTO.getPostNo();
     }
 
     @Override
     public void deletePost(int currMemberNo, int postNo) {
-        // 자신의 글만 삭제할 수 있음.
+        // postNo 유효성 체크
+        checkIfPostFound(postNo);
+
+        // 자신의 글만 삭제할 수 있음
         if (postMapper.retvAuthorNo(postNo) != currMemberNo) {
             throw new AuthenticationException("자신의 글만 삭제할 수 있습니다");
         }
@@ -203,6 +218,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Integer updateTempPost(int memberNo, UpdatePostDTO updatePostDTO) {
+        // postNo 유효성 체크
+        checkIfPostFound(updatePostDTO.getPostNo());
+
         // 자신의 임시 글만 수정할 수 있음.
         if (postMapper.retvAuthorNo(updatePostDTO.getPostNo()) != memberNo) {
             throw new AuthenticationException("자신의 임시글만 수정할 수 있습니다.");
@@ -213,6 +231,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Integer finalizeTempPost(int memberNo, int postNo) {
+        // postNo 유효성 체크
+        checkIfPostFound(postNo);
+
         // 자신의 임시 글만 최종등록할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != memberNo) {
             throw new AuthenticationException("자신의 임시글만 최종 등록할 수 있습니다.");
