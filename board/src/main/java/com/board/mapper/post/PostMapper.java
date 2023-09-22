@@ -58,14 +58,14 @@ public interface PostMapper {
          * @param postNo
          * @return
          */
-        public Integer retvAuthorNo(Integer postNo);
+        public int retvAuthorNo(int postNo);
 
         /**
          * 게시글 삭제
          * 
          * @param postNo
          */
-        public void deletePost(Integer postNo);
+        public void deletePost(int postNo);
 
         /**
          * 게시글 리스트 (+ 검색)

@@ -17,6 +17,7 @@
             comment c
         where
             c.no = #{commentNo}
+            AND c.status = 'POSTED'
 
     </select>
 

@@ -148,7 +148,7 @@ public class PostServiceImpl implements PostService {
         // 글에 첨부된 파일 목록 불러오기. DB에서 글 삭제 전에 해야하는 작업
         List<Integer> fileInfoNoList = postMapper.selectFileNoList(postNo);
 
-        // 글 삭제
+        // 글 삭제 & 글에 달린 댓글도 삭제
         postMapper.deletePost(postNo);
 
         // 연관된 file들 삭제
