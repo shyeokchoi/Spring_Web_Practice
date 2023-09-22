@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.board.dto.comment.CommentDTO;
 import com.board.dto.comment.InsCommentDTO;
 import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.comment.UpdateCommentDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.exception.AuthenticationException;
+import com.board.exception.NoDataFoundException;
 import com.board.mapper.comment.CommentMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,17 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
+
+    private void checkIfCommentFound(int commentNo) {
+        CommentDTO comment = selectOne(commentNo);
+        if (comment == null) {
+            throw new NoDataFoundException("댓글이 존재하지 않습니다 : " + commentNo);
+        }
+    }
+
+    public CommentDTO selectOne(int commentNo) {
+        return commentMapper.selectOne(commentNo);
+    }
 
     @Override
     public Integer insComment(InsCommentDTO insCommentDTO) {
@@ -48,12 +61,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public int updateComment(UpdateCommentDTO updateCommentDTO) {
+        // commentNo 유효성 체크
+        checkIfCommentFound(updateCommentDTO.getCommentNo());
+
+        // 댓글 수정
         commentMapper.updatePost(updateCommentDTO);
         return updateCommentDTO.getCommentNo();
     }
 
     @Override
     public void deleteComment(int memberNo, int commentNo) {
+        // commentNo 유효성 체크
+        checkIfCommentFound(commentNo);
+
         // 자신의 댓글만 삭제할 수 있음.
         if (commentMapper.retvAuthorNo(commentNo) != memberNo) {
             throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");
