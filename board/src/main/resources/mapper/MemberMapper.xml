@@ -3,13 +3,13 @@
 <mapper namespace="com.board.mapper.member.MemberMapper">
     <!-- 멤버의 모든 column -->
     <sql id = "member_cols">
-        no
-        , phone
-        , withdrawn_at
-        , pw
-        , id
-        , name
-        , email 
+        m.no
+        , m.phone
+        , m.withdrawn_at
+        , m.pw
+        , m.id
+        , m.name
+        , m.email 
     </sql>
 
     <!-- 새로운 멤버 등록 (회원가입) -->
@@ -34,13 +34,14 @@
         SELECT 
         <include refid = "member_cols" />
         FROM 
-            member
+            member m
         <where>
+            m.withdrawn_at IS NULL
             <if test="id != null">
-                AND id = #{id}
+                AND m.id = #{id}
             </if>
             <if test="email != null">
-                AND email = #{email}
+                AND m.email = #{email}
             </if>
         </where>
 
@@ -68,50 +69,50 @@
     <!-- 로그아웃하며 access token 만료 -->
     <update id="expireMemberAuth" parameterType="com.board.dto.member.SignoutRequestDTO">
         UPDATE 
-            member_auth
+            member_auth ma
         SET
-            status = 'EXPIRED'
-            , expired_at = UNIX_TIMESTAMP()
+            ma.status = 'EXPIRED'
+            , ma.expired_at = UNIX_TIMESTAMP()
         WHERE
-            member_no = #{memberNo}
-            AND expired_at IS NULL
+            ma.member_no = #{memberNo}
+            AND ma.expired_at IS NULL
     </update>
 
     <!-- selectMemberDetail -->
     <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
         SELECT
-            mem.no
-            , mem.name
-            , mem.id
-            , mem.email
-            , mem.phone
+            m.no
+            , m.name
+            , m.id
+            , m.email
+            , m.phone
         FROM
-            member mem
+            member m
         WHERE
             no = #{memberNo}
     </select>
 
     <!-- updateMemberDetail -->
 
-    <update id="updateMemberDetail" parameterType="com.board.dto.member.PutMemberDetailDTO">
+    <update id="updateMemberDetail" parameterType="com.board.dto.member.UpdateMemberDetailDTO">
         UPDATE
-            member
+            member m
         SET
-            name = #{name}
-            , pw = #{pw}
-            , phone = #{phone}
+            m.name = #{name}
+            , m.pw = #{pw}
+            , m.phone = #{phone}
         WHERE
-            no = #{no}
+            m.no = #{no}
 
     </update>
 
     <!-- 회원탈퇴 -->
     <update id="withdraw">
         UPDATE
-            member
+            member m
         SET
-            withdrawn_at = UNIX_TIMESTAMP()
+            m.withdrawn_at = UNIX_TIMESTAMP()
         WHERE
-            no = #{memberNo}
+            m.no = #{memberNo}
     </update>
 </mapper>

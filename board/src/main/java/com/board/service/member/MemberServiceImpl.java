@@ -12,10 +12,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
-import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.enums.MemberAuthStatusEnum;
 import com.board.mapper.member.MemberMapper;
 import com.board.service.auth.AuthService;
@@ -88,26 +88,24 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signout(MemberInfoDTO memberInfoDTO) {
-        Integer memberNo = memberInfoDTO.getMemberNo();
-
         // 모든 access token expire 하기
-        memberMapper.expireMemberAuth(memberNo);
+        memberMapper.expireMemberAuth(memberInfoDTO.getMemberNo());
     }
 
     @Override
-    public SelectMemberDetailDTO selectMemberDetailOfSelf(MemberInfoDTO memberInfoDTO) {
+    public SelectMemberDetailDTO selectMemberDetailOfSelf(int memberNo) {
         // 자기 자신의 정보 return
-        return memberMapper.selectMemberDetail(memberInfoDTO.getMemberNo());
+        return memberMapper.selectMemberDetail(memberNo);
     }
 
     @Override
-    public void updateMemberDetailOfSelf(MemberInfoDTO memberInfoDTO, PutMemberDetailDTO putMemberDetailDTO) {
-        // 멤버정보 수정을 위해 putMemberDetailDTO에 member no, pw 세팅
-        putMemberDetailDTO.setNo(memberInfoDTO.getMemberNo());
-        putMemberDetailDTO.setPw(PwEncryptor.encryptPw(putMemberDetailDTO.getPw()));
+    public void updateMemberDetailOfSelf(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO) {
+        // 멤버정보 수정을 위해 updateMemberDetailDTO에 member no, pw 세팅
+        updateMemberDetailDTO.setNo(memberNo);
+        updateMemberDetailDTO.setPw(PwEncryptor.encryptPw(updateMemberDetailDTO.getPw()));
 
         // 자기 자신의 정보 update
-        memberMapper.updateMemberDetail(putMemberDetailDTO);
+        memberMapper.updateMemberDetail(updateMemberDetailDTO);
     }
 
     @Override

@@ -168,9 +168,9 @@
         UPDATE
             comment c
         SET
-            c.deleted_at = UNIX_TIMESTAMP()
+            c.deleted_at = UNIX_TISTAMP()
             , c.status = 'DELETED'
-        WHERE
+        WHEREME
             c.post_no = #{postNo}
     </update>
 </mapper>

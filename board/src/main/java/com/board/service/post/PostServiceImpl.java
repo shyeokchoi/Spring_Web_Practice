@@ -181,12 +181,16 @@ public class PostServiceImpl implements PostService {
             PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
         int totalRows = postMapper.selectTotalRows(authorNo, pagingRequestDTO);
 
-        List<SelectPostListDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);
+        if (totalRows > 0) {
+            List<SelectPostListDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);
 
-        PagingResponseDTO<SelectPostListDTO> pagingResponseDTO = new PagingResponseDTO<>(postList,
-                pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
+            PagingResponseDTO<SelectPostListDTO> pagingResponseDTO = new PagingResponseDTO<>(postList,
+                    pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
 
-        return pagingResponseDTO;
+            return pagingResponseDTO;
+        }
+
+        return null;
     }
 
     private Integer selectPrevTempPostNo(Integer currMemberNo) {

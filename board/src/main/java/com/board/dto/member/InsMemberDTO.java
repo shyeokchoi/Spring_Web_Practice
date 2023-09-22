@@ -17,7 +17,7 @@ import lombok.Data;
 @Schema(description = "회원가입용 DTO")
 public class InsMemberDTO {
     @JsonIgnore
-    private Integer no;
+    private int no;
 
     @Pattern(regexp = "^[\uAC00-\uD7A3]*$", message = "이름은 한글만 허용합니다.")
     @Size(max = 20, message = "이름은 20자 이하여야 합니다.")

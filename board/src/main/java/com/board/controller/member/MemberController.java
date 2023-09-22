@@ -20,10 +20,10 @@ import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.member.InsMemberDTO;
-import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
@@ -31,10 +31,6 @@ import com.board.service.member.MemberService;
 import com.board.service.post.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -54,11 +50,6 @@ public class MemberController extends BaseController {
      * @return 회원 no가 body에 들어간 ResponseEntity
      */
     @Operation(summary = "signup", description = "회원가입")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema())),
-    })
     @PostMapping("/signup")
     public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
 
@@ -72,11 +63,6 @@ public class MemberController extends BaseController {
      * @return accessToken이 body로 들어간 ResponseEntity
      */
     @Operation(summary = "signin", description = "로그인")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED", content = @Content(schema = @Schema()))
-    })
     @PostMapping("/signin")
     public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
         return ok(memberService.signin(signinRequestDTO));
@@ -102,7 +88,7 @@ public class MemberController extends BaseController {
     @GetMapping("/self")
     public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO));
+        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO.getMemberNo()));
     }
 
     /**
@@ -113,8 +99,8 @@ public class MemberController extends BaseController {
     @PutMapping("/self")
     public ResponseEntity<Void> putMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @RequestBody @Valid PutMemberDetailDTO putMemberDetailDTO) {
-        memberService.updateMemberDetailOfSelf(memberInfoDTO, putMemberDetailDTO);
+            @RequestBody @Valid UpdateMemberDetailDTO updateMemberDetailDTO) {
+        memberService.updateMemberDetailOfSelf(memberInfoDTO.getMemberNo(), updateMemberDetailDTO);
 
         return ok();
     }

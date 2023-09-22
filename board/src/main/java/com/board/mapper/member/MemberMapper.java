@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.MemberDTO;
-import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
+import com.board.dto.member.UpdateMemberDetailDTO;
 
 @Mapper
 public interface MemberMapper {
@@ -52,7 +52,7 @@ public interface MemberMapper {
     /**
      * 회원정보 수정
      * 
-     * @param putMemberDetailDTO
+     * @param updateMemberDetailDTO
      */
-    public void updateMemberDetail(PutMemberDetailDTO putMemberDetailDTO);
+    public void updateMemberDetail(UpdateMemberDetailDTO updateMemberDetailDTO);
 }

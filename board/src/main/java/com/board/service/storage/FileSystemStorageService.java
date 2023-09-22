@@ -36,9 +36,7 @@ public class FileSystemStorageService implements StorageService {
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
-    private void checkIfFileFound(int fileInfoNo) {
-        FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
-
+    private void checkIfFileFound(int fileInfoNo, FileInfoDTO fileInfo) {
         // 파일의 유효성 체크
         if (fileInfo == null) {
             throw new NoDataFoundException("file info no " + fileInfoNo + " 가 존재하지 않습니다.");
@@ -106,7 +104,7 @@ public class FileSystemStorageService implements StorageService {
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
 
         // 파일 유효성 확인
-        checkIfFileFound(fileInfoNo);
+        checkIfFileFound(fileInfoNo, fileInfo);
 
         if (fileInfo.getParentCnt() != 1) {
             throw new NoDataFoundException("부모가 존재하지 않습니다. fileInfo : " + fileInfo.toString());
@@ -156,7 +154,7 @@ public class FileSystemStorageService implements StorageService {
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
 
         // 파일 유효성 확인
-        checkIfFileFound(fileInfoNo);
+        checkIfFileFound(fileInfoNo, fileInfo);
 
         // 해당 file의 savePath 불러오기
         String savePath = fileInfo.getSavePath();

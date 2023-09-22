@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -76,7 +77,7 @@ public interface PostMapper {
          */
         public List<SelectPostListDTO> selectPostList(
                         @Param("authorNo") Integer authorNo,
-                        @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
+                        @Param("pagingRequestDTO") PagingRequestWithSearchKeywordDTO pagingRequestDTO);
 
         /**
          * 기존에 작성된 임시저장글 번호 찾기

@@ -16,9 +16,9 @@ import lombok.Setter;
  * 회원정보 수정을 위한 DTO
  * 이름, 비밀번호, 이메일, 전화번호는 수정할 수 있지만, 아이디는 변경할 수 없음.
  */
-public class PutMemberDetailDTO {
+public class UpdateMemberDetailDTO {
     @JsonIgnore
-    private Integer no;
+    private int no;
 
     @Pattern(regexp = "^[\uAC00-\uD7A3]*$", message = "이름은 한글만 허용합니다.")
     @Size(max = 20, message = "이름은 20자 이하여야 합니다.")
