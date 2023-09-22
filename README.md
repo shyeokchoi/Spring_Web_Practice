@@ -12,7 +12,7 @@
 ## members
 
 - `[POST] members/signup` 회원가입  
-    비밀번호는 sha-256 알고리즘으로 암호화하여 DB에 저장합니다.  
+비밀번호는 sha-256 알고리즘으로 암호화하여 DB에 저장합니다.  
 - `[POST] members/signin` 로그인  
 아이디와 비밀번호로 로그인에 성공하면 Access Token을 발행하여 반환해줍니다.  
 이후 다른 작업들을 할 때 Header에 이 Access Token을 넣어주어야 합니다.  
@@ -37,7 +37,7 @@ DB에 있는 파일 정보들도 삭제해줍니다.
 만약 등록된 파일들, 파일 정보들을 삭제하는 과정에서 예외가 발생하더라도 로그만 남기고 진행합니다. 즉, 이 경우 게시물 삭제는 롤백되지 않습니다.  
 따라서, 파일이나 파일 정보 삭제가 실패한 경우 남게 되는 쓰레기 파일과 DB row는 추후 삭제해줄 필요가 있습니다.  
 - `[GET] posts` 게시물 목록 조회
-- `[GET] posts/self` 자신이 작성한 게시물 조회
+- `[GET] members/posts/self` 자신이 작성한 게시물 조회  
 
 ## temp
 
@@ -62,8 +62,8 @@ DB에 있는 파일 정보들도 삭제해줍니다.
 
 ## comments
 
-- `[GET] comments/self` 자신이 작성한 댓글 목록 조회
+- `[GET] members/comments/self` 자신이 작성한 댓글 목록 조회  
 - `[GET] posts/{postNo}/comments` 특정 게시물의 댓글 목록 조회
-- `[POST] posts/{postNo}/comments` 특정 게시물에 댓글 작성
-- `[PUT] posts/{postNo}/comments/{commentNo}` 댓글 수정
-- `[DELETE] posts/{postNo}/comments/{commentNo}` 댓글
+- `[POST] comments` 특정 게시물에 댓글 작성  
+- `[PUT] comments/{commentNo}` 댓글 수정  
+- `[DELETE] comments/{commentNo}` 댓글 삭제  
