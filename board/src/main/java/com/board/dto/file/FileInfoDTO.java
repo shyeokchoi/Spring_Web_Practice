@@ -36,4 +36,7 @@ public class FileInfoDTO {
 
     // 파일의 상태. 임시 파일인지 정식 파일인지
     private FileStatusEnum status;
+
+    // 부모의 수. (게시글, 댓글 등 파일이 첨부된 대상)
+    private Integer parentCnt;
 }

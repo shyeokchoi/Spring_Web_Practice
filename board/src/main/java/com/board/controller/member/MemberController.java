@@ -1,6 +1,8 @@
 package com.board.controller.member;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,17 +12,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
+import com.board.dto.comment.SelectCommentListDTO;
+import com.board.dto.common.PagingRequestDTO;
+import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.PutMemberDetailDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
+import com.board.dto.post.SelectPostListDTO;
 import com.board.framework.base.BaseController;
+import com.board.service.comment.CommentService;
 import com.board.service.member.MemberService;
+import com.board.service.post.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +45,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
     private final MemberService memberService;
+    private final PostService postService;
+    private final CommentService commentService;
 
     /**
      * 회원가입
@@ -118,5 +129,47 @@ public class MemberController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
         memberService.withdraw(memberInfoDTO);
         return ok();
+    }
+
+    /**
+     * 내 게시물 목록을 불러옵니다.
+     * 
+     * @param memberInfoDTO
+     * @param PagingRequestDTO
+     * @return
+     */
+    @Operation(summary = "내 게시물 목록 보기")
+    @GetMapping("/posts/self")
+    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectSelfPostList(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
+            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
+            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+
+        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
+
+        return ok(postService.selectPostList(
+                memberInfoDTO.getMemberNo(),
+                pagingRequestDTO));
+    }
+
+    /**
+     * 내가 작성한 댓글 목록 보기
+     * 
+     * @param memberInfoDTO
+     * @param currPage
+     * @param pageSize
+     * @return
+     */
+    @Operation(summary = "내 댓글 목록 보기")
+    @GetMapping("/comments/self")
+    public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectSelfCommentList(
+            @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
+            @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
+            @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize) {
+
+        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
+
+        return ok(commentService.selectCommentList(null, memberInfoDTO.getMemberNo(), pagingRequestDTO));
     }
 }

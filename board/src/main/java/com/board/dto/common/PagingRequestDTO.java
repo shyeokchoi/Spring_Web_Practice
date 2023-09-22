@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PagingRequestDTO {
-    private long currPage = 1;
-    private long pageSize = 3;
+    private long currPage = 1; // 기본값 1
+    private long pageSize = 10; // 기본값 10
 
     /**
      * 검색어. 작성자 이름과 제목을 동시에 검색한다

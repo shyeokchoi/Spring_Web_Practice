@@ -21,7 +21,7 @@ import lombok.Data;
 @Data
 public class InsPostDTO {
     @JsonIgnore
-    private Integer no;
+    private int no;
 
     @Size(min = 0, max = 150, message = "제목은 150글자 이하입니다.")
     @NotBlank(message = "제목은 공백일 수 없습니다.")
@@ -37,7 +37,7 @@ public class InsPostDTO {
     private List<Integer> fileInfoNoList;
 
     @JsonIgnore
-    private Integer authorNo;
+    private int authorNo;
 
     @JsonIgnore
     private PostStatusEnum status;

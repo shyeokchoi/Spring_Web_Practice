@@ -11,10 +11,9 @@ import lombok.Data;
 @Data
 public class InsCommentDTO {
     @JsonIgnore
-    private Integer no;
+    private int no;
 
-    @JsonIgnore
-    private Integer postNo;
+    private int postNo;
 
     @Size(min = 0, max = 300, message = "댓글은 300자 이하입니다")
     @NotBlank(message = "댓글은 공백일 수 없습니다")
@@ -22,5 +21,5 @@ public class InsCommentDTO {
     private String content;
 
     @JsonIgnore
-    private Integer authorNo;
+    private int authorNo;
 }

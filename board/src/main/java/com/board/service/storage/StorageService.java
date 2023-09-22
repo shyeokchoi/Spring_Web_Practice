@@ -14,7 +14,7 @@ public interface StorageService {
      * @param file
      * @param memberNo 파일 생성한 member no.
      */
-    public Integer insFile(MultipartFile file, Integer memberNo);
+    public Integer insFile(MultipartFile file, int memberNo);
 
     /**
      * 파일을 Resource로 반환
@@ -22,7 +22,7 @@ public interface StorageService {
      * @param filename
      * @return
      */
-    public ResourceAndOriginName loadAsResource(Integer fileInfoNo);
+    public ResourceAndOriginName loadAsResource(int fileInfoNo);
 
     /**
      * file info 삭제
@@ -30,14 +30,14 @@ public interface StorageService {
      * @param fileInfoNo
      * @throws Exception
      */
-    public void deleteFileInfo(Integer fileInfoNo);
+    public void deleteFileInfo(int fileInfoNo);
 
     /**
      * 파일 삭제
      * 
      * @param fileInfoNo
      */
-    public void deleteFile(Integer fileInfoNo);
+    public void deleteFile(int fileInfoNo);
 
     /**
      * file info 상태 변경. TEMP에서 NORMAL로
@@ -47,7 +47,7 @@ public interface StorageService {
      * @param parentNo   해당 파일에 설정해줄 parentNo
      * @param parentType 해당 파일에 설정해줄 parentType (게시글인지, 댓글인지 등등)
      */
-    public void changeFileStatus(Integer fileInfoNo, String fileName, Integer parentNo,
+    public void changeFileStatus(int fileInfoNo, String fileName, int parentNo,
             FileInfoParentTypeEnum parentType);
 
     /**

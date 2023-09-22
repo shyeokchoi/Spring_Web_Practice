@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
@@ -18,9 +17,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.board.exception.AlreadyDeletedException;
 import com.board.exception.AuthenticationException;
 import com.board.exception.FileSystemException;
+import com.board.exception.NoDataFoundException;
 import com.board.exception.NotSignedInException;
 
 @RestControllerAdvice
@@ -135,24 +134,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 이미 삭제된 자원에 접근할 때
+     * 찾으려는 자원이 존재하지 않을 때
      * 
      * @param e
      * @return
      */
-    @ExceptionHandler(AlreadyDeletedException.class)
-    public ResponseEntity<Map<String, List<String>>> handleAlreadyDeletedException(AlreadyDeletedException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
-    }
-
-    /**
-     * 특정 요소/자원이 존재하지 않을때
-     * 
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Map<String, List<String>>> handleNoSuchElementException(NoSuchElementException e) {
+    @ExceptionHandler(NoDataFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleNoDataFoundException(NoDataFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildErrBody(e.getMessage()));
     }
 

@@ -20,8 +20,8 @@ import com.board.dto.file.FileInfoDTO;
 import com.board.dto.file.InsFileInfoDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.enums.FileStatusEnum;
-import com.board.exception.AlreadyDeletedException;
 import com.board.exception.FileSystemException;
+import com.board.exception.NoDataFoundException;
 import com.board.mapper.file.FileMapper;
 import com.board.util.FileNamer;
 
@@ -46,9 +46,9 @@ public class FileSystemStorageService implements StorageService {
 
     @Transactional
     @Override
-    public Integer insFile(MultipartFile file, Integer memberNo) {
+    public Integer insFile(MultipartFile file, int memberNo) {
         // 파일 저장
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             throw new FileSystemException("빈 파일입니다.");
         }
 
@@ -92,13 +92,17 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public ResourceAndOriginName loadAsResource(Integer fileInfoNo) {
+    public ResourceAndOriginName loadAsResource(int fileInfoNo) {
         // 필요한 정보 가져오기
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
 
         // 파일의 유효성 체크
         if (fileInfo == null) {
-            throw new AlreadyDeletedException("file info no " + fileInfoNo.toString() + " 가 존재하지 않습니다.");
+            throw new NoDataFoundException("file info no " + fileInfoNo + " 가 존재하지 않습니다.");
+        }
+
+        if (fileInfo.getParentCnt() != 1) {
+            throw new NoDataFoundException("부모가 존재하지 않습니다. fileInfo : " + fileInfo.toString());
         }
 
         String saveName = fileInfo.getSaveName(); // 파일 시스템에 저장된 이름
@@ -134,19 +138,19 @@ public class FileSystemStorageService implements StorageService {
 
     @Transactional
     @Override
-    public void deleteFileInfo(Integer fileInfoNo) {
+    public void deleteFileInfo(int fileInfoNo) {
         // file info 삭제
         fileMapper.deleteFileInfo(fileInfoNo);
     }
 
     @Transactional
     @Override
-    public void deleteFile(Integer fileInfoNo) {
+    public void deleteFile(int fileInfoNo) {
         FileInfoDTO fileInfo = fileMapper.selectOne(fileInfoNo);
 
         // 이미 삭제된 파일은 아닌지 확인
         if (fileInfo == null) {
-            throw new AlreadyDeletedException("" + fileInfoNo.toString() + " 가 존재하지 않습니다.");
+            throw new NoDataFoundException("file info no : " + fileInfoNo + " 가 존재하지 않습니다.");
         }
 
         // 해당 file의 savePath 불러오기
@@ -167,11 +171,11 @@ public class FileSystemStorageService implements StorageService {
 
     @Transactional
     @Override
-    public void changeFileStatus(Integer fileNo, String fileName, Integer parentNo,
+    public void changeFileStatus(int fileNo, String fileName, int parentNo,
             FileInfoParentTypeEnum fileInfoParentType) {
 
         // {uploadPath}/{parentNo}
-        Path newPath = Paths.get(uploadPath).resolve(parentNo.toString());
+        Path newPath = Paths.get(uploadPath).resolve(Integer.toString(parentNo));
         // file info의 정보 수정.
         fileMapper.changeFileStatus(fileNo, newPath.toString(), parentNo, fileInfoParentType);
     }

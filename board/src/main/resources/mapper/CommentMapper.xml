@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.board.mapper.comment.CommentMapper">
+    <!-- commentNo로 하나 뽑아오기 -->
+    <select id="selectOne" resultType="com.board.dto.comment.CommentDTO">
+        SELECT
+            c.no
+            , c.post_no
+            , c.created_at
+            , c.deleted_at
+            , c.author_no
+            , c.content
+            , c.modified_at
+            , c.modifier_no
+            , c.status
+        FROM
+            comment c
+        where
+            c.no = #{commentNo}
+
+    </select>
+
     <insert id="insComment" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO comment (
             post_no

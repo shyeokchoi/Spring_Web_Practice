@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.board.dto.comment.CommentDTO;
 import com.board.dto.comment.InsCommentDTO;
 import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.comment.UpdateCommentDTO;
@@ -12,6 +13,8 @@ import com.board.dto.common.PagingRequestDTO;
 
 @Mapper
 public interface CommentMapper {
+
+    CommentDTO selectOne(int commentNo);
 
     void insComment(InsCommentDTO insCommentDTO);
 
@@ -27,8 +30,8 @@ public interface CommentMapper {
 
     void updatePost(UpdateCommentDTO updateCommentDTO);
 
-    Integer retvAuthorNo(Integer commentNo);
+    int retvAuthorNo(int commentNo);
 
-    void deleteComment(Integer commentNo);
+    void deleteComment(int commentNo);
 
 }

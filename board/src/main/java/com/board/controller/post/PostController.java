@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
+import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
@@ -27,6 +28,7 @@ import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.PostStatusEnum;
 import com.board.framework.base.BaseController;
+import com.board.service.comment.CommentService;
 import com.board.service.post.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostController extends BaseController {
     private final PostService postService;
+    private final CommentService commentService;
 
     /**
      * 게시물 작성
@@ -72,7 +75,7 @@ public class PostController extends BaseController {
     @Operation(summary = "게시글 상세정보")
     @GetMapping("/{postNo}")
     public ResponseEntity<SelectPostDetailDTO> selectPost(
-            @PathVariable @Min(1) Integer postNo) {
+            @PathVariable @Min(1) int postNo) {
         return ok(postService.selectPost(postNo));
     }
 
@@ -89,7 +92,7 @@ public class PostController extends BaseController {
     public ResponseEntity<Integer> updatePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdatePostDTO updatePostDTO,
-            @PathVariable @Min(1) Integer postNo) {
+            @PathVariable @Min(1) int postNo) {
 
         // 수정할 post no 설정
         updatePostDTO.setPostNo(postNo);
@@ -111,7 +114,7 @@ public class PostController extends BaseController {
     @DeleteMapping("/{postNo}")
     public ResponseEntity<Void> deletePost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable @Min(1) Integer postNo) {
+            @PathVariable @Min(1) int postNo) {
 
         postService.deletePost(memberInfoDTO.getMemberNo(), postNo);
         return ok();
@@ -182,7 +185,7 @@ public class PostController extends BaseController {
     public ResponseEntity<Integer> updateTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdatePostDTO updatePostDTO,
-            @PathVariable @Min(1) Integer postNo) {
+            @PathVariable @Min(1) int postNo) {
 
         // 수정할 post no 설정
         updatePostDTO.setPostNo(postNo);
@@ -206,29 +209,29 @@ public class PostController extends BaseController {
     @PostMapping("/temp/{postNo}")
     public ResponseEntity<Integer> finalizeTempPost(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
-            @PathVariable @Min(1) Integer postNo) {
+            @PathVariable @Min(1) int postNo) {
         return ok(postService.finalizeTempPost(memberInfoDTO.getMemberNo(), postNo));
     }
 
     /**
-     * 내 게시물 목록을 불러옵니다.
+     * 댓글 리스트 조회
      * 
      * @param memberInfoDTO
-     * @param PagingRequestDTO
+     * @param currPage
+     * @param pageSize
+     * @param postNo
      * @return
      */
-    @Operation(summary = "내 게시물 목록 보기")
-    @GetMapping("/self")
-    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectSelfPostList(
+    @Operation(summary = "댓글 리스트 조회")
+    @GetMapping("/{postNo}/comments")
+    public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestParam(name = "currPage", required = true) @Min(1) long currPage,
             @RequestParam(name = "pageSize", required = true) @Min(3) @Max(200) long pageSize,
-            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+            @PathVariable @Min(1) int postNo) {
 
-        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, searchKeyword);
+        PagingRequestDTO pagingRequestDTO = new PagingRequestDTO(currPage, pageSize, null);
 
-        return ok(postService.selectPostList(
-                memberInfoDTO.getMemberNo(),
-                pagingRequestDTO));
+        return ok(commentService.selectCommentList(postNo, null, pagingRequestDTO));
     }
 }

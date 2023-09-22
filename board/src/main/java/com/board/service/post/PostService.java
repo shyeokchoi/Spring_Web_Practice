@@ -22,7 +22,7 @@ public interface PostService {
      * @param postNo
      * @return 해당 글의 정보
      */
-    public SelectPostDetailDTO selectPost(Integer postNo);
+    public SelectPostDetailDTO selectPost(int postNo);
 
     /**
      * 글 수정
@@ -38,7 +38,7 @@ public interface PostService {
      * @param currMemberNo 현재 로그인한 멤버의 no.
      * @param postNo
      */
-    public void deletePost(Integer currMemberNo, Integer postNo);
+    public void deletePost(int currMemberNo, int postNo);
 
     /**
      * 모든 게시물을 pagingRequestDTO의 파라미터 값들에 맞게 리스트로 만들어 반환합니다.
@@ -72,7 +72,7 @@ public interface PostService {
      * @param memberNo
      * @return
      */
-    public Integer selectTempPostNo(Integer memberNo);
+    public Integer selectTempPostNo(int memberNo);
 
     /**
      * 임시저장 게시물 수정
@@ -81,7 +81,7 @@ public interface PostService {
      * @param updatePostDTO
      * @return
      */
-    public Integer updateTempPost(Integer memberNo, UpdatePostDTO updatePostDTO);
+    public Integer updateTempPost(int memberNo, UpdatePostDTO updatePostDTO);
 
     /**
      * 임시저장 게시물 최종 등록
@@ -90,5 +90,5 @@ public interface PostService {
      * @param postNo
      * @return
      */
-    public Integer finalizeTempPost(Integer memberNo, Integer postNo);
+    public Integer finalizeTempPost(int memberNo, int postNo);
 }

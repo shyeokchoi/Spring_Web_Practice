@@ -33,7 +33,7 @@ public interface CommentService {
      * @param updateCommentDTO
      * @return 수정된 댓글의 no.
      */
-    public Integer updatePost(UpdateCommentDTO updateCommentDTO);
+    public int updateComment(UpdateCommentDTO updateCommentDTO);
 
     /**
      * 댓글 삭제
@@ -41,5 +41,5 @@ public interface CommentService {
      * @param memberNo  현재 접속한 사용자의 no. 자신의 댓글이 맞는지 확인하기 위해 필요.
      * @param commentNo
      */
-    public void deleteComment(Integer memberNo, Integer commentNo);
+    public void deleteComment(int memberNo, int commentNo);
 }

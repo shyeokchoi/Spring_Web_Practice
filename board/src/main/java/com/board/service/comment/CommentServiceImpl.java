@@ -31,24 +31,29 @@ public class CommentServiceImpl implements CommentService {
         // 검색 대상 댓글 수 반환
         int totalRows = commentMapper.selectTotalRows(postNo, memberNo, pagingRequestDTO);
 
-        // 댓글 목록 반환
-        List<SelectCommentListDTO> commentList = commentMapper.selectCommentList(postNo, memberNo, pagingRequestDTO);
+        if (totalRows > 0) {
+            // 댓글 목록 반환
+            List<SelectCommentListDTO> commentList = commentMapper.selectCommentList(postNo, memberNo,
+                    pagingRequestDTO);
 
-        // 페이징을 위한 정보에 댓글 목록 더해서 Response 만들기
-        PagingResponseDTO<SelectCommentListDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
-                pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
+            // 페이징을 위한 정보에 댓글 목록 더해서 Response 만들기
+            PagingResponseDTO<SelectCommentListDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
+                    pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
 
-        return pagingResponseDTO;
+            return pagingResponseDTO;
+        }
+        return null;
+
     }
 
     @Override
-    public Integer updatePost(UpdateCommentDTO updateCommentDTO) {
+    public int updateComment(UpdateCommentDTO updateCommentDTO) {
         commentMapper.updatePost(updateCommentDTO);
-        return updateCommentDTO.getPostNo();
+        return updateCommentDTO.getCommentNo();
     }
 
     @Override
-    public void deleteComment(Integer memberNo, Integer commentNo) {
+    public void deleteComment(int memberNo, int commentNo) {
         // 자신의 댓글만 삭제할 수 있음.
         if (commentMapper.retvAuthorNo(commentNo) != memberNo) {
             throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");

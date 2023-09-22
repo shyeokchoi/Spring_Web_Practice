@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Queue;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AuthenticationException;
+import com.board.exception.NoDataFoundException;
 import com.board.mapper.file.FileMapper;
 import com.board.mapper.post.PostMapper;
 import com.board.service.storage.StorageService;
@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public SelectPostDetailDTO selectPost(Integer postNo) {
+    public SelectPostDetailDTO selectPost(int postNo) {
         // 해당 포스트와 연결된 파일 no 리스트 받아오기
         List<Integer> fileNoList = postMapper.selectFileNoList(postNo);
 
@@ -119,7 +119,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(Integer currMemberNo, Integer postNo) {
+    public void deletePost(int currMemberNo, int postNo) {
         // 자신의 글만 삭제할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != currMemberNo) {
             throw new AuthenticationException("자신의 글만 삭제할 수 있습니다");
@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
 
         // 연관된 file들 삭제
         try {
-            storageService.recursiveDelete(postNo.toString());
+            storageService.recursiveDelete(Integer.toString(postNo));
         } catch (IOException ioe) {
             log.error("글 삭제 중 - 해당 글에 첨부된 파일 삭제 실패", ioe);
             return;
@@ -189,20 +189,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Integer selectTempPostNo(Integer memberNo) {
+    public Integer selectTempPostNo(int memberNo) {
         // 임시저장된 글 no 불러오기
         Integer prevTempPostNo = selectPrevTempPostNo(memberNo);
 
         // 임시저장된 글이 없으면 예외처리
         if (prevTempPostNo == null) {
-            throw new NoSuchElementException("임시저장된 글이 없습니다.");
+            throw new NoDataFoundException("임시저장된 글이 없습니다.");
         }
 
         return prevTempPostNo;
     }
 
     @Override
-    public Integer updateTempPost(Integer memberNo, UpdatePostDTO updatePostDTO) {
+    public Integer updateTempPost(int memberNo, UpdatePostDTO updatePostDTO) {
         // 자신의 임시 글만 수정할 수 있음.
         if (postMapper.retvAuthorNo(updatePostDTO.getPostNo()) != memberNo) {
             throw new AuthenticationException("자신의 임시글만 수정할 수 있습니다.");
@@ -212,7 +212,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Integer finalizeTempPost(Integer memberNo, Integer postNo) {
+    public Integer finalizeTempPost(int memberNo, int postNo) {
         // 자신의 임시 글만 최종등록할 수 있음.
         if (postMapper.retvAuthorNo(postNo) != memberNo) {
             throw new AuthenticationException("자신의 임시글만 최종 등록할 수 있습니다.");
