@@ -1,5 +1,6 @@
 package com.board.controller.member;
 
+import com.board.dto.member.IdPwDTO;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,6 @@ import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
-import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -59,13 +59,13 @@ public class MemberController extends BaseController {
     /**
      * 로그인
      * 
-     * @param signinRequestDTO
+     * @param idPwDTO
      * @return accessToken이 body로 들어간 ResponseEntity
      */
     @Operation(summary = "signin", description = "로그인")
     @PostMapping("/signin")
-    public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid SigninRequestDTO signinRequestDTO) {
-        return ok(memberService.signin(signinRequestDTO));
+    public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid IdPwDTO idPwDTO) {
+        return ok(memberService.signin(idPwDTO));
     }
 
     /**

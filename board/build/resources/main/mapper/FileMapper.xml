@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.file.FileMapper">
+
+    <!-- file_info 가져오기 -->
+    <select id="selectOne" resultType="com.board.dto.file.FileInfoDTO">
+        SELECT
+            f.no
+            , f.origin_name
+            , f.save_name
+            , f.save_path
+            , f.extension
+            , f.size
+            , f.parent_type
+            , f.parent_no
+            , f.author_no
+            , f.status 
+            , count(p.no) as parent_count
+        FROM
+            file_info f
+        LEFT OUTER JOIN
+            post p ON f.parent_no = p.no
+        WHERE
+            f.no = #{fileInfoNo}
+            AND f.status = 'NORAML'
+    </select>
+
+    <!-- file_info 추가 -->
+    <insert id="insFileInfo" parameterType="com.board.dto.file.InsFileInfoDTO" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO file_info (
+            origin_name
+            , save_name
+            , save_path
+            , extension
+            , size
+            , created_at
+            , author_no
+            , modified_at
+            , modifier_no
+            , parent_no
+            , parent_type
+            , status
+        ) VALUES (
+            #{originName} 
+            , #{saveName} 
+            , #{savePath} 
+            , #{extension}
+            , #{size} 
+            , UNIX_TIMESTAMP()
+            , #{authorNo}
+            , NULL
+            , NULL
+            , #{parentNo}
+            , #{parentType}
+            , #{status}
+        );
+    </insert>
+
+    <!-- file_info 상태 업데이트.
+        TEMP 파일에서 NORMAL 파일로 -->
+    <update id="changeFileStatus">
+        UPDATE
+            file_info f
+        SET
+            f.status = 'NORMAL'
+            , f.save_path = #{newPath}
+            , f.parent_no = #{parentNo}
+            , f.parent_type = #{fileInfoParentType}
+        WHERE
+            f.no = #{fileInfoNo}
+    </update>
+
+    <delete id="deleteFileInfo">
+        DELETE FROM
+            file_info f
+        WHERE
+            f.no = #{fileInfoNo}
+
+    </delete>
+
+    <!-- file의 parent가 post일 때 해당 post가 삭제되었는지 확인 -->
+    <select id="isParentPostDeleted">
+        SELECT
+            COUNT(*)
+        FROM
+            post p
+        INNER JOIN
+            file_info f ON p.no = f.parent_no
+        WHERE
+            f.no = #{fileInfoNo}
+            AND p.status = 'DELETED'
+    </select>
+</mapper>

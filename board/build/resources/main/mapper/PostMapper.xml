@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.post.PostMapper">
+    <!-- 전체 게시물 수 -->
+    <select id="selectTotalRows">
+        SELECT
+            COUNT(*)
+        FROM 
+            post p
+        INNER JOIN
+            member m ON p.author_no = m.no
+        WHERE
+            p.status = 'POSTED'
+        <if test="authorNo != null">
+                AND p.author_no = #{authorNo}
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                p.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
+        </if>
+
+    </select>
+
+    <!-- insert new post -->
+    <insert id="insPost" parameterType="com.board.dto.post.InsPostDTO" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO post (
+            title
+            , content
+            , created_at
+            , author_no
+            , status
+        ) VALUES (
+            #{title}
+            , #{content}
+            , UNIX_TIMESTAMP()
+            , #{authorNo}
+            , #{status}
+        )
+    </insert>
+
+    <!-- select post -->
+    <select id="selectPost" resultType = "com.board.dto.post.SelectPostDetailDTO">
+        SELECT
+            p.title
+            , p.content
+            , m1.name AS author_name
+            , m2.name AS modifier_name
+            , p.created_at
+            , p.modified_at
+        FROM
+            post p
+        INNER JOIN
+            member m1 ON p.author_no = m1.no
+        LEFT JOIN
+            member m2 ON p.modifier_no = m2.no
+        WHERE
+            p.no = #{postNo}
+            AND p.status != 'DELETED'
+    </select>
+
+    <!-- select file list -->
+    <select id="selectFileNoList">
+        SELECT
+            f.no
+        FROM
+            post p
+        INNER JOIN
+            file_info f ON p.no = f.parent_no
+        WHERE
+            p.no = #{postNo}
+    </select>
+
+    <!-- 게시물 수정 -->
+    <update id="updatePost" parameterType="com.board.dto.post.UpdatePostDTO">
+        UPDATE
+            post p
+        SET
+            p.title = #{title}
+            , p.content = #{content}
+            , p.modified_at = UNIX_TIMESTAMP()
+            , p.modifier_no = #{modifierNo}
+            , p.status = #{postStatus}
+        WHERE
+            p.no = #{postNo}
+            AND p.status != 'DELETED'
+    </update>
+
+    <!-- 게시글 번호를 받아서 작성자의 no를 반환 -->
+    <select id="retvAuthorNo">
+        SELECT
+            p.author_no
+        FROM
+            post p
+        WHERE
+            p.no = #{postNo}
+    </select>
+
+    <!-- 게시글 번호를 받아서 게시물 삭제 -->
+    <update id="deletePost">
+        UPDATE
+            post p
+        SET
+            deleted_at = UNIX_TIMESTAMP()
+            , status = 'DELETED'
+        WHERE
+            p.no = #{postNo}
+    </update>
+
+    <!-- 게시글 리스트 반환
+        기본적으로 offset과 limit을 받으며,
+        만약 제목과 작성자이름이 조건으로 추가된다면 검색에 사용됨-->
+    <select id="selectPostList" resultType="com.board.dto.post.SelectPostListDTO">
+        SELECT
+            p.no
+            , p.title
+            , m.name AS author_name
+            , m.no as author_no
+            , p.created_at
+        FROM
+            post p
+        INNER JOIN
+            member m ON p.author_no = m.no
+        WHERE
+            p.status = 'POSTED'
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(pagingRequestDTO.searchKeyword)">
+            AND (
+                p.title LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%') 
+                OR 
+                m.name LIKE CONCAT('%', #{pagingRequestDTO.searchKeyword}, '%')
+            )
+        </if>
+        <if test="authorNo != null">
+            AND p.author_no = #{authorNo}
+        </if>
+        ORDER BY
+            p.no DESC
+        LIMIT #{pagingRequestDTO.pageSize} OFFSET #{pagingRequestDTO.offset}
+    </select>
+
+    <!-- 기존에 작성된 임시저장글 번호 찾기
+        status가 TEMP 여야 한다 -->
+    <select id="selectPrevTempPostNo">
+        SELECT
+            p.no
+        FROM
+            post p
+        WHERE
+            p.author_no = #{currMemberNo}
+            AND p.status = 'TEMP'
+    </select>
+
+    <!-- finalizeTempPost -->
+
+    <update id="finalizeTempPost">
+        UPDATE
+            post p
+        SET
+            p.status = 'POSTED'
+        WHERE
+            p.no = #{postNo}
+    </update>
+
+    <!-- 관련된 댓글들 삭제 -->
+    <update id="deleteCommentsRelatedToPost">
+        UPDATE
+            comment c
+        SET
+            c.deleted_at = UNIX_TISTAMP()
+            , c.status = 'DELETED'
+        WHEREME
+            c.post_no = #{postNo}
+    </update>
+</mapper>

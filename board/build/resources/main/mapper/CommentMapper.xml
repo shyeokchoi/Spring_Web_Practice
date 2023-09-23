@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.comment.CommentMapper">
+    <!-- commentNo로 하나 뽑아오기 -->
+    <select id="selectOne" resultType="com.board.dto.comment.CommentDTO">
+        SELECT
+            c.no
+            , c.post_no
+            , c.created_at
+            , c.deleted_at
+            , c.author_no
+            , c.content
+            , c.modified_at
+            , c.modifier_no
+            , c.status
+        FROM
+            comment c
+        where
+            c.no = #{commentNo}
+            AND c.status = 'POSTED'
+
+    </select>
+
+    <insert id="insComment" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO comment (
+            post_no
+            , created_at
+            , author_no
+            , content
+            , status
+        ) VALUES (
+            #{postNo}
+            , UNIX_TIMESTAMP()
+            , #{authorNo}
+            , #{content}
+            , 'POSTED'
+        )
+    </insert>
+
+    <select id="selectTotalRows">
+        SELECT
+            COUNT(*)
+        FROM 
+            comment c
+        INNER JOIN
+            member m ON c.author_no = m.no
+        WHERE
+            c.status = 'POSTED'
+        <if test="memberNo != null">
+                AND c.author_no = #{memberNo}
+        </if>
+        <if test="postNo != null">
+                AND c.post_no = #{postNo}
+        </if>
+    </select>
+
+    <select id="selectCommentList">
+        SELECT
+            c.content
+            , m.name AS author_name
+            , c.created_at
+        FROM
+            comment c
+        INNER JOIN
+            member m ON c.author_no = m.no
+        WHERE
+            c.status = 'POSTED'
+        <if test="memberNo != null">
+            AND c.author_no = #{memberNo}
+        </if>
+        <if test="postNo != null">
+            AND c.post_no = #{postNo}
+        </if>
+        ORDER BY
+            c.created_at ASC
+        LIMIT #{pagingRequestDTO.pageSize} OFFSET #{pagingRequestDTO.offset}
+    </select>
+
+    <update id="updatePost">
+        UPDATE
+            comment c
+        SET
+            c.content = #{content}
+            , c.modified_at = UNIX_TIMESTAMP()
+            , c.modifier_no = #{modifierNo}
+        WHERE
+            c.no = #{commentNo}
+            AND c.status != 'DELETED'
+    </update>
+
+    <update id="deleteComment">
+        UPDATE
+            comment c
+        SET
+            deleted_at = UNIX_TIMESTAMP()
+            , status = 'DELETED'
+        WHERE
+            c.no = #{commentNo}
+    </update>
+
+    <select id="retvAuthorNo">
+        SELECT
+            c.author_no
+        FROM
+            comment c
+        WHERE
+            c.no = #{commentNo}
+    </select>
+</mapper>

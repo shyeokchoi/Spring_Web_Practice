@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.member.MemberMapper">
+    <!-- 멤버의 모든 column -->
+    <sql id = "member_cols">
+        m.no
+        , m.phone
+        , m.withdrawn_at
+        , m.pw
+        , m.id
+        , m.name
+        , m.email 
+    </sql>
+
+    <!-- 새로운 멤버 등록 (회원가입) -->
+    <insert id = "insMember" parameterType="com.board.dto.member.InsMemberDTO" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO member (
+            name
+            , id
+            , pw
+            , email
+            , phone
+        ) VALUES (
+            #{name}
+            , #{id} 
+            , #{pw} 
+            , #{email} 
+            , #{phone} 
+        );
+    </insert>
+
+    <!-- 멤버 선택 -->
+    <select id = "selectOne" parameterType="com.board.dto.member.SelectMemberDTO" resultType = "com.board.dto.member.MemberDTO">
+        SELECT 
+        <include refid = "member_cols" />
+        FROM 
+            member m
+        <where>
+            m.withdrawn_at IS NULL
+            <if test="id != null">
+                AND m.id = #{id}
+            </if>
+            <if test="email != null">
+                AND m.email = #{email}
+            </if>
+        </where>
+
+    </select>
+
+    <!-- 멤버 인증 정보 저장 -->
+    <insert id="insMemberAuth" parameterType="com.board.dto.member.MemberAuthDTO">
+        INSERT INTO member_auth (
+            member_no
+            , access_token
+            , ip_addr
+            , user_agent
+            , status
+            , created_at
+        ) VALUES (
+            #{memberNo}
+            , #{accessToken}
+            , #{ipAddr}
+            , #{userAgent}
+            , #{status}
+            , UNIX_TIMESTAMP()
+        )
+    </insert>
+
+    <!-- 로그아웃하며 access token 만료 -->
+    <update id="expireMemberAuth" parameterType="com.board.dto.member.SignoutRequestDTO">
+        UPDATE 
+            member_auth ma
+        SET
+            ma.status = 'EXPIRED'
+            , ma.expired_at = UNIX_TIMESTAMP()
+        WHERE
+            ma.member_no = #{memberNo}
+            AND ma.expired_at IS NULL
+    </update>
+
+    <!-- selectMemberDetail -->
+    <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
+        SELECT
+            m.no
+            , m.name
+            , m.id
+            , m.email
+            , m.phone
+        FROM
+            member m
+        WHERE
+            no = #{memberNo}
+    </select>
+
+    <!-- updateMemberDetail -->
+
+    <update id="updateMemberDetail" parameterType="com.board.dto.member.UpdateMemberDetailDTO">
+        UPDATE
+            member m
+        SET
+            m.name = #{name}
+            , m.pw = #{pw}
+            , m.phone = #{phone}
+        WHERE
+            m.no = #{no}
+
+    </update>
+
+    <!-- 회원탈퇴 -->
+    <update id="withdraw">
+        UPDATE
+            member m
+        SET
+            m.withdrawn_at = UNIX_TIMESTAMP()
+        WHERE
+            m.no = #{memberNo}
+    </update>
+</mapper>

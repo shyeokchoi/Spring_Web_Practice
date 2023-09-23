@@ -1,9 +1,9 @@
 package com.board.service.member;
 
 import com.board.dto.auth.MemberInfoDTO;
+import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
-import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 
@@ -22,10 +22,10 @@ public interface MemberService {
     /**
      * 로그인
      * 
-     * @param signinRequestDTO
+     * @param idPwDTO
      * @return
      */
-    public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO);
+    public SigninResponseDTO signin(IdPwDTO idPwDTO);
 
     /**
      * 로그아웃

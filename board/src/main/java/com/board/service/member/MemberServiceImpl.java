@@ -1,5 +1,6 @@
 package com.board.service.member;
 
+import com.board.dto.member.IdPwDTO;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
-import com.board.dto.member.SigninRequestDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.enums.MemberAuthStatusEnum;
@@ -69,8 +69,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public SigninResponseDTO signin(SigninRequestDTO signinRequestDTO) {
-        Integer memberNo = authService.checkIdPw(signinRequestDTO);
+    public SigninResponseDTO signin(IdPwDTO idPwDTO) {
+        Integer memberNo = authService.checkIdPw(idPwDTO);
 
         // 기존에 로그인이 되어 있었다면, 기존 토큰들 expire.
         memberMapper.expireMemberAuth(memberNo);
