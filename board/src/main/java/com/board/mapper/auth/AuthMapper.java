@@ -16,5 +16,5 @@ public interface AuthMapper {
      * @param IdPwDTO
      * @return 로그인 성공여부
      */
-    public Integer checkIdPw(IdPwDTO idPwDTO);
+    public Integer selectMemberNoByIdPW(IdPwDTO idPwDTO);
 }

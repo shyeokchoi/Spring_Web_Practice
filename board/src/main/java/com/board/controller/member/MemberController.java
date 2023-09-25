@@ -1,6 +1,5 @@
 package com.board.controller.member;
 
-import com.board.dto.member.IdPwDTO;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
+import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
