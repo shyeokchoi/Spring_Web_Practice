@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SelectMemberDetailDTO {
+public class MemberDetailDTO {
     @Schema(description = "회원 번호", example = "2")
     private Integer no;
 

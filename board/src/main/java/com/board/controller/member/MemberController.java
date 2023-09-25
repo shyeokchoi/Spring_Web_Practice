@@ -21,7 +21,7 @@ import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
-import com.board.dto.member.SelectMemberDetailDTO;
+import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
@@ -86,7 +86,7 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
     @GetMapping("/self")
-    public ResponseEntity<SelectMemberDetailDTO> memberDetailOfSelf(
+    public ResponseEntity<MemberDetailDTO> memberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
         return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO.getMemberNo()));
     }

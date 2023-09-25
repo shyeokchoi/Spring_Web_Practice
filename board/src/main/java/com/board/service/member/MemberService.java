@@ -2,7 +2,7 @@ package com.board.service.member;
 
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
-import com.board.dto.member.SelectMemberDetailDTO;
+import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 
@@ -36,7 +36,7 @@ public interface MemberService {
      * 자기 자신의 정보 가져오기
      * 
      */
-    public SelectMemberDetailDTO selectMemberDetailOfSelf(int memberNo);
+    public MemberDetailDTO selectMemberDetailOfSelf(int memberNo);
 
     /**
      * 자기 자신의 정보 수정하기

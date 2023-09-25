@@ -12,7 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
-import com.board.dto.member.SelectMemberDetailDTO;
+import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.enums.MemberAuthStatusEnum;
@@ -92,7 +92,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public SelectMemberDetailDTO selectMemberDetailOfSelf(int memberNo) {
+    public MemberDetailDTO selectMemberDetailOfSelf(int memberNo) {
         // 자기 자신의 정보 return
         return memberMapper.selectMemberDetail(memberNo);
     }
