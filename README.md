@@ -1,4 +1,4 @@
-# spring_web_practice
+# Spring_Web_Practice
 ## 목적
 
 1. Spring Boot 프레임워크 사용법을 익힙니다.
