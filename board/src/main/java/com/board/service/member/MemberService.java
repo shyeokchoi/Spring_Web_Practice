@@ -1,6 +1,5 @@
 package com.board.service.member;
 
-import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
@@ -31,7 +30,7 @@ public interface MemberService {
      * 로그아웃
      * 
      */
-    public void signout(MemberInfoDTO memberInfoDTO);
+    public void signout(Integer memberNo);
 
     /**
      * 자기 자신의 정보 가져오기
@@ -51,5 +50,5 @@ public interface MemberService {
      * 회원 탈퇴
      * 
      */
-    public void withdraw(MemberInfoDTO memberInfoDTO);
+    public void withdraw(Integer memberNo);
 }

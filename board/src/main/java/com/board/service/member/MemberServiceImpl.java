@@ -1,6 +1,5 @@
 package com.board.service.member;
 
-import com.board.dto.member.IdPwDTO;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.board.dto.auth.MemberInfoDTO;
+import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
 import com.board.dto.member.SelectMemberDetailDTO;
@@ -87,9 +86,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signout(MemberInfoDTO memberInfoDTO) {
+    public void signout(Integer memberNo) {
         // 모든 access token expire 하기
-        memberMapper.expireMemberAuth(memberInfoDTO.getMemberNo());
+        memberMapper.expireMemberAuth(memberNo);
     }
 
     @Override
@@ -109,9 +108,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void withdraw(MemberInfoDTO memberInfoDTO) {
-        Integer memberNo = memberInfoDTO.getMemberNo();
-
+    public void withdraw(Integer memberNo) {
         // access token으로 member_auth의 status를 expire
         memberMapper.expireMemberAuth(memberNo);
 

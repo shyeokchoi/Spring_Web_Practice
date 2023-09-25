@@ -75,7 +75,7 @@ public class MemberController extends BaseController {
     @PostMapping("/signout")
     public ResponseEntity<Void> signout(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-        memberService.signout(memberInfoDTO);
+        memberService.signout(memberInfoDTO.getMemberNo());
         return ok();
     }
 
@@ -112,7 +112,7 @@ public class MemberController extends BaseController {
     @DeleteMapping("/self")
     public ResponseEntity<Void> withdraw(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-        memberService.withdraw(memberInfoDTO);
+        memberService.withdraw(memberInfoDTO.getMemberNo());
         return ok();
     }
 
