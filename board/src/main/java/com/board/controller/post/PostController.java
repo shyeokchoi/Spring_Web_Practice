@@ -23,7 +23,7 @@ import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.SelectPostDetailDTO;
+import com.board.dto.post.PostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.PostStatusEnum;
@@ -74,7 +74,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 상세정보")
     @GetMapping("/{postNo}")
-    public ResponseEntity<SelectPostDetailDTO> selectPost(
+    public ResponseEntity<PostDetailDTO> selectPost(
             @PathVariable @Min(1) int postNo) {
         return ok(postService.selectPost(postNo));
     }

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.SelectPostDetailDTO;
+import com.board.dto.post.PostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 
@@ -35,7 +35,7 @@ public interface PostMapper {
          * @param postNo
          * @return
          */
-        public SelectPostDetailDTO selectPost(int postNo);
+        public PostDetailDTO selectPost(int postNo);
 
         /**
          * 게시글과 연결된 파일 no들 불러오기

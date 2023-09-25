@@ -42,7 +42,7 @@
     </insert>
 
     <!-- select post -->
-    <select id="selectPost" resultType = "com.board.dto.post.SelectPostDetailDTO">
+    <select id="selectPost" resultType = "com.board.dto.post.PostDetailDTO">
         SELECT
             p.title
             , p.content
@@ -112,7 +112,7 @@
     <!-- 게시글 리스트 반환
         기본적으로 offset과 limit을 받으며,
         만약 제목과 작성자이름이 조건으로 추가된다면 검색에 사용됨-->
-    <select id="selectPostList" resultType="com.board.dto.post.SelectPostListDTO">
+    <select id="selectPostList" resultType="com.board.dto.post.PostSimpleDTO">
         SELECT
             p.no
             , p.title

@@ -3,7 +3,7 @@ package com.board.service.post;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.SelectPostDetailDTO;
+import com.board.dto.post.PostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 
@@ -22,7 +22,7 @@ public interface PostService {
      * @param postNo
      * @return 해당 글의 정보
      */
-    public SelectPostDetailDTO selectPost(int postNo);
+    public PostDetailDTO selectPost(int postNo);
 
     /**
      * 글 수정

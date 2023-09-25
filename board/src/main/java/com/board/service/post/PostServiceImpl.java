@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
-import com.board.dto.post.SelectPostDetailDTO;
+import com.board.dto.post.PostDetailDTO;
 import com.board.dto.post.SelectPostListDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
     private final StorageService storageService;
 
     private void checkIfPostFound(int postNo) {
-        SelectPostDetailDTO postDetail = postMapper.selectPost(postNo);
+        PostDetailDTO postDetail = postMapper.selectPost(postNo);
 
         if (postDetail == null) {
             throw new NoDataFoundException("게시물이 존재하지 않습니다. 게시물 번호 : " + postNo);
@@ -92,15 +92,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public SelectPostDetailDTO selectPost(int postNo) {
+    public PostDetailDTO selectPost(int postNo) {
         // 해당 포스트와 연결된 파일 no 리스트 받아오기
         List<Integer> fileNoList = postMapper.selectFileNoList(postNo);
 
         // 해당 postNo에 해당하는 게시물 검색
-        SelectPostDetailDTO post = postMapper.selectPost(postNo);
+        PostDetailDTO post = postMapper.selectPost(postNo);
 
         if (post != null) {
-            // SelectPostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
+            // PostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
             post.setFileNoList(fileNoList);
         }
 
