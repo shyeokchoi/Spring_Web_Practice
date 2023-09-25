@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PostDetailDTO;
-import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.PostSimpleDTO;
 import com.board.dto.post.UpdatePostDTO;
 
 @Mapper
@@ -74,7 +74,7 @@ public interface PostMapper {
          * @param searchDTO
          * @return
          */
-        public List<SelectPostListDTO> selectPostList(
+        public List<PostSimpleDTO> selectPostList(
                         @Param("authorNo") Integer authorNo,
                         @Param("pagingRequestDTO") PagingRequestWithSearchKeywordDTO pagingRequestDTO);
 

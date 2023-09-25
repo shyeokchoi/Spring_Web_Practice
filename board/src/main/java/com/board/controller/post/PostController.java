@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
-import com.board.dto.comment.SelectCommentListDTO;
+import com.board.dto.comment.CommentSimpleDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PostDetailDTO;
-import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.PostSimpleDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.PostStatusEnum;
 import com.board.framework.base.BaseController;
@@ -128,7 +128,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "게시글 리스트 불러오기")
     @GetMapping()
-    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectPostList(
+    public ResponseEntity<PagingResponseDTO<PostSimpleDTO>> selectPostList(
             @ModelAttribute @Valid PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
 
         return ok(postService.selectPostList(pagingRequestDTO));
@@ -220,7 +220,7 @@ public class PostController extends BaseController {
      */
     @Operation(summary = "댓글 리스트 조회")
     @GetMapping("/{postNo}/comments")
-    public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectCommentList(
+    public ResponseEntity<PagingResponseDTO<CommentSimpleDTO>> selectCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @ModelAttribute @Valid PagingRequestDTO pagingRequestDTO,
             @PathVariable @Min(1) int postNo) {

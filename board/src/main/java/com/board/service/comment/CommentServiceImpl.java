@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.board.dto.comment.CommentDTO;
+import com.board.dto.comment.CommentSimpleDTO;
 import com.board.dto.comment.InsCommentDTO;
-import com.board.dto.comment.SelectCommentListDTO;
 import com.board.dto.comment.UpdateCommentDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingResponseDTO;
@@ -40,18 +40,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PagingResponseDTO<SelectCommentListDTO> selectCommentList(Integer postNo, Integer memberNo,
+    public PagingResponseDTO<CommentSimpleDTO> selectCommentList(Integer postNo, Integer memberNo,
             PagingRequestDTO pagingRequestDTO) {
         // 검색 대상 댓글 수 반환
         int totalRows = commentMapper.selectTotalRows(postNo, memberNo, pagingRequestDTO);
 
         if (totalRows > 0) {
             // 댓글 목록 반환
-            List<SelectCommentListDTO> commentList = commentMapper.selectCommentList(postNo, memberNo,
+            List<CommentSimpleDTO> commentList = commentMapper.selectCommentList(postNo, memberNo,
                     pagingRequestDTO);
 
             // 페이징을 위한 정보에 댓글 목록 더해서 Response 만들기
-            PagingResponseDTO<SelectCommentListDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
+            PagingResponseDTO<CommentSimpleDTO> pagingResponseDTO = new PagingResponseDTO<>(commentList,
                     pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
 
             return pagingResponseDTO;

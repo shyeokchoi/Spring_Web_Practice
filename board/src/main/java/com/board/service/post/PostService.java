@@ -4,7 +4,7 @@ import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PostDetailDTO;
-import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.PostSimpleDTO;
 import com.board.dto.post.UpdatePostDTO;
 
 public interface PostService {
@@ -46,7 +46,7 @@ public interface PostService {
      * @param pagingRequestDTO
      * @return
      */
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestWithSearchKeywordDTO pagingRequestDTO);
+    public PagingResponseDTO<PostSimpleDTO> selectPostList(PagingRequestWithSearchKeywordDTO pagingRequestDTO);
 
     /**
      * 주어진 authorNo가 글쓴이인 글들을 pagingRequestDTO의 파라미터 값들에 맞게 리스트로 만들어 반환합니다.
@@ -55,7 +55,7 @@ public interface PostService {
      * @param pagingRequestDTO paging을 위한 파라미터
      * @return
      */
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo,
+    public PagingResponseDTO<PostSimpleDTO> selectPostList(Integer authorNo,
             PagingRequestWithSearchKeywordDTO pagingRequestDTO);
 
     /**

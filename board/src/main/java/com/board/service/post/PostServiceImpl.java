@@ -14,7 +14,7 @@ import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.PostDetailDTO;
-import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.PostSimpleDTO;
 import com.board.dto.post.UpdatePostDTO;
 import com.board.enums.FileInfoParentTypeEnum;
 import com.board.exception.AuthenticationException;
@@ -172,19 +172,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
+    public PagingResponseDTO<PostSimpleDTO> selectPostList(PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
         return selectPostList(null, pagingRequestDTO);
     }
 
     @Override
-    public PagingResponseDTO<SelectPostListDTO> selectPostList(Integer authorNo,
+    public PagingResponseDTO<PostSimpleDTO> selectPostList(Integer authorNo,
             PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
         int totalRows = postMapper.selectTotalRows(authorNo, pagingRequestDTO);
 
         if (totalRows > 0) {
-            List<SelectPostListDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);
+            List<PostSimpleDTO> postList = postMapper.selectPostList(authorNo, pagingRequestDTO);
 
-            PagingResponseDTO<SelectPostListDTO> pagingResponseDTO = new PagingResponseDTO<>(postList,
+            PagingResponseDTO<PostSimpleDTO> pagingResponseDTO = new PagingResponseDTO<>(postList,
                     pagingRequestDTO.getCurrPage(), pagingRequestDTO.getPageSize(), totalRows);
 
             return pagingResponseDTO;

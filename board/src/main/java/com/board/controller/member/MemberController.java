@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
-import com.board.dto.comment.SelectCommentListDTO;
+import com.board.dto.comment.CommentSimpleDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
@@ -24,7 +24,7 @@ import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
-import com.board.dto.post.SelectPostListDTO;
+import com.board.dto.post.PostSimpleDTO;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
 import com.board.service.member.MemberService;
@@ -125,7 +125,7 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "내 게시물 목록 보기")
     @GetMapping("/posts/self")
-    public ResponseEntity<PagingResponseDTO<SelectPostListDTO>> selectSelfPostList(
+    public ResponseEntity<PagingResponseDTO<PostSimpleDTO>> selectSelfPostList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @ModelAttribute @Valid PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
 
@@ -144,7 +144,7 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "내 댓글 목록 보기")
     @GetMapping("/comments/self")
-    public ResponseEntity<PagingResponseDTO<SelectCommentListDTO>> selectSelfCommentList(
+    public ResponseEntity<PagingResponseDTO<CommentSimpleDTO>> selectSelfCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @ModelAttribute @Valid PagingRequestDTO pagingRequestDTO) {
 

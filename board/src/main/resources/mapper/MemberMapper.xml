@@ -10,6 +10,7 @@
         , m.id
         , m.name
         , m.email 
+        , m.status
     </sql>
 
     <!-- 새로운 멤버 등록 (회원가입) -->
@@ -38,7 +39,7 @@
         FROM 
             member m
         <where>
-            m.withdrawn_at IS NULL
+            m.status = 'NORMAL'
             <if test="id != null">
                 AND m.id = #{id}
             </if>
@@ -81,7 +82,7 @@
     </update>
 
     <!-- selectMemberDetail -->
-    <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
+    <select id="selectMemberDetail" resultType="com.board.dto.member.MemberDetailDTO">
         SELECT
             m.no
             , m.name
