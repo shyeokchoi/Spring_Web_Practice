@@ -115,7 +115,7 @@
             member m
         SET
             m.withdrawn_at = UNIX_TIMESTAMP()
-            m.satus = 'WITHDRAWN' 
+            , m.status = 'WITHDRAWN' 
         WHERE
             m.no = #{memberNo}
     </update>
