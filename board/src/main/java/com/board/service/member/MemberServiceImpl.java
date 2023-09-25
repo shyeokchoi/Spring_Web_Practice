@@ -2,13 +2,10 @@ package com.board.service.member;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.board.dto.common.ReqInfoDTO;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberAuthDTO;
@@ -44,35 +41,8 @@ public class MemberServiceImpl implements MemberService {
         return insMemberDTO.getNo();
     }
 
-    /**
-     * member_auth 테이블에 저장될 행 하나를 만듭니다.
-     * 현재의 servletRequest로부터 User-Agent와 ip address를 뽑아와 추가해줍니다.
-     * 
-     * @param memberNo
-     * @param accessToken
-     * @return 만들어진 MemberAuthDTO
-     */
-    private MemberAuthDTO buildNewMemberAuth(Integer memberNo, String accessToken) {
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-
-        String userAgent = servletRequest.getHeader("User-Agent");
-        String ipAddr = servletRequest.getHeader("X-FORWARDED-FOR");
-        if (ipAddr == null) {
-            ipAddr = servletRequest.getRemoteAddr();
-        }
-
-        return MemberAuthDTO.builder()
-                .memberNo(memberNo)
-                .accessToken(accessToken)
-                .status(MemberAuthStatusEnum.VALID)
-                .ipAddr(ipAddr)
-                .userAgent(userAgent)
-                .build();
-    }
-
     @Override
-    public SigninResponseDTO signin(IdPwDTO idPwDTO) {
+    public SigninResponseDTO signin(IdPwDTO idPwDTO, ReqInfoDTO reqInfoDTO) {
         Integer memberNo = authService.checkIdPw(idPwDTO);
 
         // 기존에 로그인이 되어 있었다면, 기존 토큰들 expire.
@@ -81,7 +51,13 @@ public class MemberServiceImpl implements MemberService {
         // 토큰 생성 후 DB 저장
         String accessToken = UUID.randomUUID().toString();
 
-        MemberAuthDTO memberAuthDTO = buildNewMemberAuth(memberNo, accessToken);
+        MemberAuthDTO memberAuthDTO = MemberAuthDTO.builder()
+                .memberNo(memberNo)
+                .accessToken(accessToken)
+                .status(MemberAuthStatusEnum.VALID)
+                .ipAddr(reqInfoDTO.getIpAddr())
+                .userAgent(reqInfoDTO.getUserAgent())
+                .build();
 
         memberMapper.insMemberAuth(memberAuthDTO);
 

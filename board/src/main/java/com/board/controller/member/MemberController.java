@@ -19,6 +19,7 @@ import com.board.dto.comment.CommentSimpleDTO;
 import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.common.PagingResponseDTO;
+import com.board.dto.common.ReqInfoDTO;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberDetailDTO;
@@ -64,8 +65,10 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "signin", description = "로그인")
     @PostMapping("/signin")
-    public ResponseEntity<SigninResponseDTO> signin(@RequestBody @Valid IdPwDTO idPwDTO) {
-        return ok(memberService.signin(idPwDTO));
+    public ResponseEntity<SigninResponseDTO> signin(
+            @RequestBody @Valid IdPwDTO idPwDTO,
+            @RequestAttribute(name = RequestAttributeKeys.REQ_INFO) ReqInfoDTO reqInfoDTO) {
+        return ok(memberService.signin(idPwDTO, reqInfoDTO));
     }
 
     /**

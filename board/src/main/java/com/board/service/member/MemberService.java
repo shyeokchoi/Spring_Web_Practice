@@ -1,5 +1,6 @@
 package com.board.service.member;
 
+import com.board.dto.common.ReqInfoDTO;
 import com.board.dto.member.IdPwDTO;
 import com.board.dto.member.InsMemberDTO;
 import com.board.dto.member.MemberDetailDTO;
@@ -24,7 +25,7 @@ public interface MemberService {
      * @param idPwDTO
      * @return
      */
-    public SigninResponseDTO signin(IdPwDTO idPwDTO);
+    public SigninResponseDTO signin(IdPwDTO idPwDTO, ReqInfoDTO reqInfoDTO);
 
     /**
      * 로그아웃

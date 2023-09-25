@@ -23,14 +23,7 @@ public class SigninInterceptor implements HandlerInterceptor {
 
         Integer memberNo = authService.checkAccessTokenValidity(accessToken);
 
-        String userAgent = request.getHeader("User-Agent");
-
-        String ipAddr = request.getHeader("X-FORWARDED-FOR");
-        if (ipAddr == null) {
-            ipAddr = request.getRemoteAddr();
-        }
-
-        MemberInfoDTO memberInfoDTO = new MemberInfoDTO(accessToken, memberNo, userAgent, ipAddr);
+        MemberInfoDTO memberInfoDTO = new MemberInfoDTO(accessToken, memberNo);
 
         request.setAttribute(RequestAttributeKeys.MEMBER_INFO, memberInfoDTO);
 
