@@ -1,5 +1,6 @@
 package com.board.service.auth;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Integer checkAccessTokenValidity(String accessToken) {
-        if (accessToken == null) {
-            throw new AuthenticationException("Access-Token 값이 null 입니다.");
+        if (StringUtils.isBlank(accessToken)) {
+            throw new AuthenticationException("Access-Token 값이 비어있습니다.");
         }
         // 로그아웃하려고 하는 멤버의 member_no 얻기
         Integer memberNo = authMapper.selectMemberNoByAccessToken(accessToken);
