@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.board.dto.common.PagingRequestDTO;
 import com.board.dto.common.PagingRequestWithSearchKeywordDTO;
 import com.board.dto.post.InsPostDTO;
 import com.board.dto.post.SelectPostDetailDTO;
@@ -21,7 +20,7 @@ public interface PostMapper {
          * @return
          */
         public int selectTotalRows(@Param("authorNo") Integer authorNo,
-                        @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
+                        @Param("pagingRequestDTO") PagingRequestWithSearchKeywordDTO pagingRequestDTO);
 
         /**
          * 게시글 등록
