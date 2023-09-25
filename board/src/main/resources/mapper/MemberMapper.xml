@@ -20,12 +20,14 @@
             , pw
             , email
             , phone
+            , status
         ) VALUES (
             #{name}
             , #{id} 
             , #{pw} 
             , #{email} 
             , #{phone} 
+            , #{status}
         );
     </insert>
 
@@ -112,6 +114,7 @@
             member m
         SET
             m.withdrawn_at = UNIX_TIMESTAMP()
+            m.satus = 'WITHDRAWN' 
         WHERE
             m.no = #{memberNo}
     </update>

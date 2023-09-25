@@ -16,6 +16,7 @@ import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.enums.MemberAuthStatusEnum;
+import com.board.enums.MemberStatusEnum;
 import com.board.mapper.member.MemberMapper;
 import com.board.service.auth.AuthService;
 import com.board.util.PwEncryptor;
@@ -33,6 +34,9 @@ public class MemberServiceImpl implements MemberService {
     public Integer insMember(InsMemberDTO insMemberDTO) {
         // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
         insMemberDTO.setPw(PwEncryptor.encryptPw(insMemberDTO.getPw()));
+
+        // status 설정
+        insMemberDTO.setStatus(MemberStatusEnum.NORMAL);
 
         // DB에 저장
         memberMapper.insMember(insMemberDTO);

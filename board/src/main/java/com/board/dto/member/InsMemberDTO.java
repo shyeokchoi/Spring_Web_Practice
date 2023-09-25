@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.board.enums.MemberStatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,4 +47,7 @@ public class InsMemberDTO {
     @NotBlank(message = "전화번호는 공백일 수 없습니다.")
     @Schema(description = "전화번호", example = "01012341234")
     private String phone;
+
+    @JsonIgnore
+    private MemberStatusEnum status;
 }
