@@ -96,13 +96,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDetailDTO selectMemberDetailOfSelf(int memberNo) {
+    public MemberDetailDTO selectMemberDetail(int memberNo) {
         // 자기 자신의 정보 return
         return memberMapper.selectMemberDetail(memberNo);
     }
 
     @Override
-    public void updateMemberDetailOfSelf(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO) {
+    public void updateMemberDetail(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO) {
         // 멤버정보 수정을 위해 updateMemberDetailDTO에 member no, pw 세팅
         updateMemberDetailDTO.setNo(memberNo);
         updateMemberDetailDTO.setPw(PwEncryptor.encryptPw(updateMemberDetailDTO.getPw()));

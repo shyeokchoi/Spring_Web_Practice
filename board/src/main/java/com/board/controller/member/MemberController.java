@@ -86,9 +86,9 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
     @GetMapping("/self")
-    public ResponseEntity<MemberDetailDTO> memberDetailOfSelf(
+    public ResponseEntity<MemberDetailDTO> selectMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO) {
-        return ok(memberService.selectMemberDetailOfSelf(memberInfoDTO.getMemberNo()));
+        return ok(memberService.selectMemberDetail(memberInfoDTO.getMemberNo()));
     }
 
     /**
@@ -97,10 +97,10 @@ public class MemberController extends BaseController {
      */
     @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
     @PutMapping("/self")
-    public ResponseEntity<Void> putMemberDetailOfSelf(
+    public ResponseEntity<Void> updateMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateMemberDetailDTO updateMemberDetailDTO) {
-        memberService.updateMemberDetailOfSelf(memberInfoDTO.getMemberNo(), updateMemberDetailDTO);
+        memberService.updateMemberDetail(memberInfoDTO.getMemberNo(), updateMemberDetailDTO);
 
         return ok();
     }

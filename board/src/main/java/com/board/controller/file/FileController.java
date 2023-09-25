@@ -43,7 +43,7 @@ public class FileController extends BaseController {
      */
     @Operation(summary = "파일 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Integer> insertFile(
+    public ResponseEntity<Integer> insFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody MultipartFile file) {
 

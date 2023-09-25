@@ -33,10 +33,10 @@ public interface MemberService {
     public void signout(Integer memberNo);
 
     /**
-     * 자기 자신의 정보 가져오기
+     * 특정 멤버 정보 불러오기
      * 
      */
-    public MemberDetailDTO selectMemberDetailOfSelf(int memberNo);
+    public MemberDetailDTO selectMemberDetail(int memberNo);
 
     /**
      * 자기 자신의 정보 수정하기
@@ -44,7 +44,7 @@ public interface MemberService {
      * @param memberNo
      * @param updateMemberDetailDTO
      */
-    public void updateMemberDetailOfSelf(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO);
+    public void updateMemberDetail(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO);
 
     /**
      * 회원 탈퇴
