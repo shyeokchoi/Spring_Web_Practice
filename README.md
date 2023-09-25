@@ -9,7 +9,7 @@
 
 ![Spring Boot](https://img.shields.io/badge/Spring_boot-blue) ![MyBatis](https://img.shields.io/badge/MyBatis-orange) ![MySql](https://img.shields.io/badge/MySql-green)
 
-## DB 테이블 세팅
+## DB 테이블 정보
 ```mysql
 -- web_study.comment definition
 
@@ -114,7 +114,7 @@ CREATE TABLE `post` (
 ```
 
 ## API 확인 및 테스트  
-(`aplication.yml`에서 적절한 DB 포트, username, password 설정 후에)
+(`aplication.yml`에서 적절한 DB 포트, username, password 설정 후에)  
 IDE에서 프로젝트 실행 후 http://localhost:8080/swagger-ui/index.html#/ 접속  
 
 ## API 설명
