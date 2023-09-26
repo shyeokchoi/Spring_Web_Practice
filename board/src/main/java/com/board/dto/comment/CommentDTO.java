@@ -1,8 +1,16 @@
 package com.board.dto.comment;
 
-import lombok.Data;
+import com.board.enums.CommentStatusEnum;
 
-@Data
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@Builder
 public class CommentDTO {
     // PK
     private int no;
@@ -29,5 +37,5 @@ public class CommentDTO {
     private Integer modifierNo;
 
     // 상태 (POSTED, DELETED)
-    private String status;
+    private CommentStatusEnum status;
 }
