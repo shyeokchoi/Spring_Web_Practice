@@ -78,7 +78,7 @@
             , ma.expired_at = UNIX_TIMESTAMP()
         WHERE
             ma.member_no = #{memberNo}
-            AND ma.expired_at IS NULL
+            AND ma.status = 'VALID'
     </update>
 
     <!-- selectMemberDetail -->
