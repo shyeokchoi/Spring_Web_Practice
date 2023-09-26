@@ -61,7 +61,7 @@ public class FileController extends BaseController {
      */
     @Operation(summary = "파일 다운로드")
     @GetMapping("/{fileInfoNo}")
-    public ResponseEntity<Resource> selectFile(
+    public ResponseEntity<Resource> downloadFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) @Min(1) int fileInfoNo) {
         // 파일 불러오기
@@ -90,7 +90,7 @@ public class FileController extends BaseController {
      */
     @Operation(summary = "파일 삭제")
     @DeleteMapping("/{fileInfoNo}")
-    public ResponseEntity<Void> deleteFile(
+    public ResponseEntity<Void> deleteFileInfo(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) @Min(1) int fileInfoNo) {
 
