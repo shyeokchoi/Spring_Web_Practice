@@ -4,6 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.board.enums.CommentStatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,4 +25,7 @@ public class InsCommentDTO {
 
     @JsonIgnore
     private int authorNo;
+
+    @JsonIgnore
+    private CommentStatusEnum status;
 }

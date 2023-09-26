@@ -17,6 +17,7 @@ import com.board.constant.RequestAttributeKeys;
 import com.board.dto.auth.MemberInfoDTO;
 import com.board.dto.comment.InsCommentDTO;
 import com.board.dto.comment.UpdateCommentDTO;
+import com.board.enums.CommentStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
 
@@ -47,6 +48,9 @@ public class CommentController extends BaseController {
 
         // 댓글 작성자 author no 설정
         insCommentDTO.setAuthorNo(memberInfoDTO.getMemberNo());
+
+        // 댓글 상태 설정. POSTED로
+        insCommentDTO.setStatus(CommentStatusEnum.POSTED);
 
         // 파일 저장 후 DB 업데이트
         return ok(commentService.insComment(insCommentDTO));

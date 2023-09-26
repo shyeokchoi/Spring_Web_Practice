@@ -71,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // 댓글 수정
-        commentMapper.updatePost(updateCommentDTO);
+        commentMapper.updateComment(updateCommentDTO);
         return updateCommentDTO.getCommentNo();
     }
 

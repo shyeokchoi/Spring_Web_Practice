@@ -28,7 +28,7 @@ public interface CommentMapper {
                         @Param("memberNo") Integer memberNo,
                         @Param("pagingRequestDTO") PagingRequestDTO pagingRequestDTO);
 
-        void updatePost(UpdateCommentDTO updateCommentDTO);
+        void updateComment(UpdateCommentDTO updateCommentDTO);
 
         int retvAuthorNo(int commentNo);
 
