@@ -13,10 +13,8 @@ import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.enums.MemberAuthStatusEnum;
-import com.board.enums.MemberStatusEnum;
 import com.board.mapper.member.MemberMapper;
 import com.board.service.auth.AuthService;
-import com.board.util.PwEncryptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,12 +27,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Integer insMember(InsMemberDTO insMemberDTO) {
-        // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
-        insMemberDTO.setPw(PwEncryptor.encryptPw(insMemberDTO.getPw()));
-
-        // status 설정
-        insMemberDTO.setStatus(MemberStatusEnum.NORMAL);
-
         // DB에 저장
         memberMapper.insMember(insMemberDTO);
 
@@ -78,12 +70,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMemberDetail(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO) {
-        // 멤버정보 수정을 위해 updateMemberDetailDTO에 member no, pw 세팅
-        updateMemberDetailDTO.setNo(memberNo);
-        updateMemberDetailDTO.setPw(PwEncryptor.encryptPw(updateMemberDetailDTO.getPw()));
-
-        // 자기 자신의 정보 update
+    public void updateMemberDetail(UpdateMemberDetailDTO updateMemberDetailDTO) {
+        // 정보 update
         memberMapper.updateMemberDetail(updateMemberDetailDTO);
     }
 

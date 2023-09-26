@@ -42,10 +42,9 @@ public interface MemberService {
     /**
      * 자기 자신의 정보 수정하기
      * 
-     * @param memberNo
      * @param updateMemberDetailDTO
      */
-    public void updateMemberDetail(int memberNo, UpdateMemberDetailDTO updateMemberDetailDTO);
+    public void updateMemberDetail(UpdateMemberDetailDTO updateMemberDetailDTO);
 
     /**
      * 회원 탈퇴

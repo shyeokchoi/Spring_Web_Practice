@@ -26,10 +26,12 @@ import com.board.dto.member.MemberDetailDTO;
 import com.board.dto.member.SigninResponseDTO;
 import com.board.dto.member.UpdateMemberDetailDTO;
 import com.board.dto.post.PostSimpleDTO;
+import com.board.enums.MemberStatusEnum;
 import com.board.framework.base.BaseController;
 import com.board.service.comment.CommentService;
 import com.board.service.member.MemberService;
 import com.board.service.post.PostService;
+import com.board.util.PwEncryptor;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,6 +55,11 @@ public class MemberController extends BaseController {
     @Operation(summary = "signup", description = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
+        // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
+        insMemberDTO.setPw(PwEncryptor.encryptPw(insMemberDTO.getPw()));
+
+        // status 설정
+        insMemberDTO.setStatus(MemberStatusEnum.NORMAL);
 
         return ok(memberService.insMember(insMemberDTO));
     }
@@ -103,7 +110,14 @@ public class MemberController extends BaseController {
     public ResponseEntity<Void> updateMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateMemberDetailDTO updateMemberDetailDTO) {
-        memberService.updateMemberDetail(memberInfoDTO.getMemberNo(), updateMemberDetailDTO);
+
+        // 멤버정보 수정을 위해 updateMemberDetailDTO에 member no, pw 세팅
+        updateMemberDetailDTO.setNo(memberInfoDTO.getMemberNo());
+
+        updateMemberDetailDTO.setPw(PwEncryptor.encryptPw(updateMemberDetailDTO.getPw()));
+
+        // 멤버정보 수정
+        memberService.updateMemberDetail(updateMemberDetailDTO);
 
         return ok();
     }
