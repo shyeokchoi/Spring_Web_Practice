@@ -114,8 +114,8 @@ CREATE TABLE `post` (
 ```
 
 ## API 확인 및 테스트  
-(`aplication.yml`에서 적절한 DB 포트, username, password 설정 후에)  
-IDE에서 프로젝트 실행 후 http://localhost:8080/swagger-ui/index.html#/ 접속  
+1. `aplication.yml`에서 적절한 DB 포트, username, password 설정  
+2. IDE에서 프로젝트 실행 후 http://localhost:8080/swagger-ui/index.html#/ 접속  
 
 ## API 설명
 ### members
