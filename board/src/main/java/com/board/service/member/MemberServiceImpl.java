@@ -73,7 +73,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDetailDTO selectMemberDetail(int memberNo) {
-        // 자기 자신의 정보 return
+        // MemberDetail 반환
         return memberMapper.selectMemberDetail(memberNo);
     }
 

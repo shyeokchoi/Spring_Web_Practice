@@ -40,10 +40,10 @@
             member m
         <where>
             m.status = 'NORMAL'
-            <if test="id != null">
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(id)">
                 AND m.id = #{id}
             </if>
-            <if test="email != null">
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(email)">
                 AND m.email = #{email}
             </if>
         </where>
