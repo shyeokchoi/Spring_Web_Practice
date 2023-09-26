@@ -28,7 +28,6 @@ public interface StorageService {
      * file info 삭제
      * 
      * @param fileInfoNo
-     * @throws Exception
      */
     public void deleteFileInfo(int fileInfoNo);
 
@@ -64,6 +63,7 @@ public interface StorageService {
      * 디렉토리를 받아서 해당 디렉토리 아래 모든 파일을 삭제
      * 
      * @param string
+     * @throws IOException
      */
     public void recursiveDelete(String target) throws IOException;
 
