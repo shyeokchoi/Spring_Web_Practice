@@ -35,7 +35,7 @@ public interface PostMapper {
          * @param postNo
          * @return
          */
-        public PostDetailDTO selectPost(int postNo);
+        public PostDetailDTO selectOne(int postNo);
 
         /**
          * 게시글과 연결된 파일 no들 불러오기

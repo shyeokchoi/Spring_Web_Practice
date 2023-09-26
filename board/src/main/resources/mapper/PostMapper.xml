@@ -42,7 +42,7 @@
     </insert>
 
     <!-- select post -->
-    <select id="selectPost" resultType = "com.board.dto.post.PostDetailDTO">
+    <select id="selectOne" resultType = "com.board.dto.post.PostDetailDTO">
         SELECT
             p.title
             , p.content

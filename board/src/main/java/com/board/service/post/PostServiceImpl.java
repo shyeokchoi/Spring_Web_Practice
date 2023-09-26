@@ -37,13 +37,20 @@ public class PostServiceImpl implements PostService {
     private final StorageService storageService;
 
     private void checkIfPostFound(int postNo) {
-        PostDetailDTO postDetail = postMapper.selectPost(postNo);
+        PostDetailDTO postDetail = postMapper.selectOne(postNo);
 
         if (postDetail == null) {
             throw new NoDataFoundException("게시물이 존재하지 않습니다. 게시물 번호 : " + postNo);
         }
     }
 
+    /**
+     * 임시 파일들을 정식 파일들로 상태를 업데이트 하고,
+     * 부모 no.를 이름으로 갖는 하위폴더로 옮겨준다.
+     * 
+     * @param newPostNo      파일들이 첨부된 글의 no.
+     * @param fileInfoNoList 상태를 업데이트하고 경로를 옮길 파일 no. 리스트
+     */
     private void moveTempFilesAndUpdateFileInfo(Integer newPostNo, List<Integer> fileInfoNoList) {
         Queue<String> fileNamesForRollback = new LinkedList<>();
 
@@ -97,7 +104,7 @@ public class PostServiceImpl implements PostService {
         List<Integer> fileNoList = postMapper.selectFileNoList(postNo);
 
         // 해당 postNo에 해당하는 게시물 검색
-        PostDetailDTO post = postMapper.selectPost(postNo);
+        PostDetailDTO post = postMapper.selectOne(postNo);
 
         if (post != null) {
             // PostDetailDTO 에 해당 게시글과 연결된 파일 이름들 넣어주기
