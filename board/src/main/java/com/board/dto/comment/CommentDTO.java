@@ -17,7 +17,7 @@ public class CommentDTO {
     private Long deletedAt;
 
     // 작성자 no.
-    private int author_no;
+    private int authorNo;
 
     // 내용
     private String content;

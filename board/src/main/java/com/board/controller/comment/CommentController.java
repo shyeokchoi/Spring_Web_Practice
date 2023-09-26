@@ -71,7 +71,11 @@ public class CommentController extends BaseController {
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateCommentDTO updateCommentDTO,
             @PathVariable @Min(1) int commentNo) {
+
+        // 수정의 대상이 되는 comment의 no. 설정
         updateCommentDTO.setCommentNo(commentNo);
+
+        // 수정하는 사람의 no. 설정
         updateCommentDTO.setModifierNo(memberInfoDTO.getMemberNo());
 
         return ok(commentService.updateComment(updateCommentDTO));

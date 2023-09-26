@@ -97,14 +97,4 @@
         WHERE
             c.no = #{commentNo}
     </update>
-
-    <select id="retvAuthorNo">
-        SELECT
-            c.author_no
-        FROM
-            comment c
-        WHERE
-            c.no = #{commentNo}
-            AND c.status = 'POSTED'
-    </select>
 </mapper>

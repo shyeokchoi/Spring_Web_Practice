@@ -21,13 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
-    private void checkIfCommentFound(int commentNo) {
-        CommentDTO comment = selectOne(commentNo);
-        if (comment == null) {
-            throw new NoDataFoundException("댓글이 존재하지 않습니다 : " + commentNo);
-        }
-    }
-
     @Override
     public CommentDTO selectOne(int commentNo) {
         return commentMapper.selectOne(commentNo);
@@ -63,10 +56,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int updateComment(UpdateCommentDTO updateCommentDTO) {
         // commentNo 유효성 체크
-        checkIfCommentFound(updateCommentDTO.getCommentNo());
+        Integer commentNo = updateCommentDTO.getCommentNo();
+        CommentDTO comment = selectOne(commentNo);
+
+        if (comment == null) {
+            throw new NoDataFoundException("댓글이 존재하지 않습니다 : " + commentNo);
+        }
 
         // 자기 자신의 댓글만 수정 가능
-        if (commentMapper.retvAuthorNo(updateCommentDTO.getCommentNo()) != updateCommentDTO.getModifierNo()) {
+        if (comment.getAuthorNo() != updateCommentDTO.getModifierNo()) {
             throw new AuthenticationException("자신의 댓글만 수정할 수 있습니다");
         }
 
@@ -78,10 +76,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(int memberNo, int commentNo) {
         // commentNo 유효성 체크
-        checkIfCommentFound(commentNo);
+        CommentDTO comment = selectOne(commentNo);
 
-        // 자신의 댓글만 삭제할 수 있음.
-        if (commentMapper.retvAuthorNo(commentNo) != memberNo) {
+        if (comment == null) {
+            throw new NoDataFoundException("댓글이 존재하지 않습니다 : " + commentNo);
+        }
+
+        // 자신의 댓글만 삭제 가능
+        if (comment.getAuthorNo() != memberNo) {
             throw new AuthenticationException("자신의 댓글만 삭제할 수 있습니다");
         }
 

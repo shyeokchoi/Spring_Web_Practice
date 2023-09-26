@@ -30,8 +30,6 @@ public interface CommentMapper {
 
         void updateComment(UpdateCommentDTO updateCommentDTO);
 
-        int retvAuthorNo(int commentNo);
-
         void deleteComment(int commentNo);
 
 }
