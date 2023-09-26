@@ -106,6 +106,7 @@ public class FileSystemStorageService implements StorageService {
         // 파일 유효성 확인
         checkIfFileFound(fileInfoNo, fileInfo);
 
+        // 부모가 존재하는지 확인
         if (fileInfo.getParentCnt() != 1) {
             throw new NoDataFoundException("부모가 존재하지 않습니다. fileInfo : " + fileInfo.toString());
         }
@@ -117,12 +118,7 @@ public class FileSystemStorageService implements StorageService {
         String parentNoStr = fileInfo.getParentNo().toString();
 
         // 파일 시스템에 저장된 최종 경로
-        Path filePath;
-        if (parentNoStr == null) {
-            filePath = Paths.get(uploadPath).resolve(saveName);
-        } else {
-            filePath = Paths.get(uploadPath).resolve(parentNoStr).resolve(saveName);
-        }
+        Path filePath = Paths.get(uploadPath).resolve(parentNoStr).resolve(saveName);
 
         // Resource 가져와서 반환
         try {
@@ -189,14 +185,14 @@ public class FileSystemStorageService implements StorageService {
         Path srcPath = src == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(src);
         Path dstPath = dst == null ? Paths.get(uploadPath) : Paths.get(uploadPath).resolve(dst);
 
-        // dstPath 가 존재하지 않으면 만들어준다
-        if (!Files.exists(dstPath)) {
-            initDirectory(dstPath);
-        }
-
         // 만약 옮길 파일이 존재하지 않으면 함수 종료
         if (!Files.exists(srcPath.resolve(fileName))) {
             return;
+        }
+
+        // dstPath 가 존재하지 않으면 만들어준다
+        if (!Files.exists(dstPath)) {
+            initDirectory(dstPath);
         }
 
         // 파일 옮기기
