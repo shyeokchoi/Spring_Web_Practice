@@ -159,7 +159,7 @@ Saves a new post draft.
 Previous drafts are deleted.    
 - `[GET] posts/temp` Retrieve your saved draft  
 Retrieves the number of the previously saved draft.  
-Clients can use this number and the [GET] posts/{no} API to view the draft content.  
+Clients can use this number and the `[GET] posts/{no}` API to view the draft content.  
 - `[PUT] posts/temp/{no}` Edit a saved draft  
 - `[POST] posts/temp/{no}` Finalize a saved draft   
 
