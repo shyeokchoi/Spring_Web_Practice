@@ -138,19 +138,19 @@ Expire the Access Token passed in the Header.
 
 ### posts
 
-- `[POST] posts` 게시물 등록  
-게시물에 첨부된 파일들의 no.의 리스트를 HTTP body로 받습니다.  
-해당 파일들을 게시글 no.를 이름으로 갖는 디렉토리로 옮겨줍니다. (게시글이 삭제될 때 파일들도 한 번에 삭제하기 용이하도록)  
-또한 이렇게 옮겨진 파일 정보를 DB에 업데이트합니다.  
-- `[GET] posts/{no}` 게시물 상세조회  
-- `[PUT] posts/{no}` 게시물 수정  
-- `[DELETE] posts/{no}` 게시물 삭제  
-게시물과 연관된 파일들도 모두 삭제해줍니다.  
-DB에 있는 파일 정보들도 삭제해줍니다.  
-만약 등록된 파일들, 파일 정보들을 삭제하는 과정에서 예외가 발생하더라도 로그만 남기고 진행합니다. 즉, 이 경우 게시물 삭제는 롤백되지 않습니다.  
-따라서, 파일이나 파일 정보 삭제가 실패한 경우 남게 되는 쓰레기 파일과 DB row는 추후 삭제해줄 필요가 있습니다.  
-- `[GET] posts` 게시물 목록 조회  
-- `[GET] posts/{postNo}/comments` 특정 게시물의 댓글 목록 조회  
+- `[POST] posts` Post submission  
+Receives a list of file numbers attached to the post in the HTTP body.  
+Moves these files to a directory named after the post number for easier deletion along with the post.  
+Also updates the moved file information in the DB.  
+- `[GET] posts/{no}` Detailed view of a post    
+- `[PUT] posts/{no}` Edit a post  
+- `[DELETE] posts/{no}` Delete a post  
+Deletes all files associated with the post.  
+Also deletes the file information in the DB.  
+If an exception occurs during file or file information deletion, it is logged, and the post deletion is not rolled back.  
+Thus, any leftover files and DB rows need to be cleaned up later.  
+- `[GET] posts` View the list of posts  
+- `[GET] posts/{postNo}/comments` View the list of comments for a specific post  
 
 ### temp
 
