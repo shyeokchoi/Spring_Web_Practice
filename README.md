@@ -2,7 +2,7 @@
 This is a simple bulletin board project that supports features like user registration, authentication, post writing, comment writing, file upload/download, and temporary storage of posts.  
 
 ## Purpose
-1. Learn how to use the Spring Boot framework.  
+1. Learn how to use the Spring Boot MVC framework.  
 2. Practice handling exceptions for various cases.  
 3. Experience trial and error while developing a bulletin board app that supports more complex features like file uploading and post draft saving, rather than just simple post submissions.  
 4. Write basic unit tests for the Service Layer.  
