@@ -11,6 +11,10 @@ This is a simple bulletin board project that supports features like user registr
 
 ![Spring Boot](https://img.shields.io/badge/Spring_boot-blue) ![MyBatis](https://img.shields.io/badge/MyBatis-orange) ![MySql](https://img.shields.io/badge/MySql-green)  
 
+### Why MyBatis over JPA?  
+As this is my first foray into server-side development, I opted to use MyBatis to familiarize myself with writing SQL queries directly.  
+I wanted some hands-on experience of writing various SQL queries.  
+
 ## DB Table Information
 ```mysql
 -- web_study.comment definition
