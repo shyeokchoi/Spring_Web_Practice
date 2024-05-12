@@ -7,7 +7,7 @@ public class SetOperations {
 
     public static <T> List<T> findDifference(List<T> list1, List<T> list2) {
         return list1.stream()
-                .filter(item -> !list2.stream().anyMatch(item::equals))
+                .filter(item -> list2.stream().noneMatch(item::equals))
                 .collect(Collectors.toList());
     }
 }

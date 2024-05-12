@@ -13,7 +13,6 @@ import com.board.dto.common.PagingRequestDTO;
 
 @Mapper
 public interface CommentMapper {
-
         CommentDTO selectOne(int commentNo);
 
         void insComment(InsCommentDTO insCommentDTO);
@@ -31,5 +30,4 @@ public interface CommentMapper {
         void updateComment(UpdateCommentDTO updateCommentDTO);
 
         void deleteComment(int commentNo);
-
 }

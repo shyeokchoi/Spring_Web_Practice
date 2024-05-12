@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class MemberInfoDTO {
     private final String accessToken;
-    private final int memberNo;
+    private final Integer memberNo;
 }

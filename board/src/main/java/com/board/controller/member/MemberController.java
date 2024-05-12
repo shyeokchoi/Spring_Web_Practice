@@ -46,30 +46,14 @@ public class MemberController extends BaseController {
     private final PostService postService;
     private final CommentService commentService;
 
-    /**
-     * 회원가입
-     * 
-     * @param insMemberDTO 회원가입에 필요한 정보
-     * @return 회원 no가 body에 들어간 ResponseEntity
-     */
     @Operation(summary = "signup", description = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<Integer> insMember(@RequestBody @Valid InsMemberDTO insMemberDTO) {
-        // 비밀번호 암호화 후 DTO에 대체해서 넣어줌
         insMemberDTO.setPw(PwEncryptor.encryptPw(insMemberDTO.getPw()));
-
-        // status 설정
         insMemberDTO.setStatus(MemberStatusEnum.NORMAL);
-
         return ok(memberService.insMember(insMemberDTO));
     }
 
-    /**
-     * 로그인
-     * 
-     * @param idPwDTO
-     * @return accessToken이 body로 들어간 ResponseEntity
-     */
     @Operation(summary = "signin", description = "로그인")
     @PostMapping("/signin")
     public ResponseEntity<SigninResponseDTO> signin(
@@ -78,9 +62,6 @@ public class MemberController extends BaseController {
         return ok(memberService.signin(idPwDTO, reqInfoDTO));
     }
 
-    /**
-     * 로그아웃
-     */
     @Operation(summary = "signout", description = "로그아웃")
     @PostMapping("/signout")
     public ResponseEntity<Void> signout(
@@ -89,11 +70,6 @@ public class MemberController extends BaseController {
         return ok();
     }
 
-    /**
-     * 자기 자신의 정보 조회
-     * 
-     * @return 회원정보
-     */
     @Operation(summary = "member details of oneself", description = "자기 자신의 회원정보 조회")
     @GetMapping("/self")
     public ResponseEntity<MemberDetailDTO> selectMemberDetailOfSelf(
@@ -101,30 +77,17 @@ public class MemberController extends BaseController {
         return ok(memberService.selectMemberDetail(memberInfoDTO.getMemberNo()));
     }
 
-    /**
-     * 자기 자신의 정보 수정
-     * 
-     */
     @Operation(summary = "modify member detail", description = "자기 자신의 정보 수정")
     @PutMapping("/self")
     public ResponseEntity<Void> updateMemberDetailOfSelf(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateMemberDetailDTO updateMemberDetailDTO) {
-
-        // 멤버정보 수정을 위해 updateMemberDetailDTO에 member no, pw 세팅
         updateMemberDetailDTO.setNo(memberInfoDTO.getMemberNo());
-
         updateMemberDetailDTO.setPw(PwEncryptor.encryptPw(updateMemberDetailDTO.getPw()));
-
-        // 멤버정보 수정
         memberService.updateMemberDetail(updateMemberDetailDTO);
-
         return ok();
     }
 
-    /**
-     * 회원탈퇴
-     */
     @Operation(summary = "withdraw", description = "회원탈퇴")
     @DeleteMapping("/self")
     public ResponseEntity<Void> withdraw(
@@ -133,38 +96,21 @@ public class MemberController extends BaseController {
         return ok();
     }
 
-    /**
-     * 내 게시물 목록을 불러옵니다.
-     * 
-     * @param memberInfoDTO
-     * @param PagingRequestDTO
-     * @return
-     */
     @Operation(summary = "내 게시물 목록 보기")
     @GetMapping("/posts/self")
     public ResponseEntity<PagingResponseDTO<PostSimpleDTO>> selectSelfPostList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @ModelAttribute @Valid PagingRequestWithSearchKeywordDTO pagingRequestDTO) {
-
         return ok(postService.selectPostList(
                 memberInfoDTO.getMemberNo(),
                 pagingRequestDTO));
     }
 
-    /**
-     * 내가 작성한 댓글 목록 보기
-     * 
-     * @param memberInfoDTO
-     * @param currPage
-     * @param pageSize
-     * @return
-     */
     @Operation(summary = "내 댓글 목록 보기")
     @GetMapping("/comments/self")
     public ResponseEntity<PagingResponseDTO<CommentSimpleDTO>> selectSelfCommentList(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @ModelAttribute @Valid PagingRequestDTO pagingRequestDTO) {
-
         return ok(commentService.selectCommentList(null, memberInfoDTO.getMemberNo(), pagingRequestDTO));
     }
 }

@@ -13,11 +13,11 @@ public class PagingResponseDTO<T> {
     private List<T> dataList;
 
     @Schema(description = "현재 페이지")
-    private long currPage; // 현재 Page 번호
+    private long currPage;
 
     @Schema(description = "페이지 사이즈")
-    private long pageSize; // 페이지당 사이즈
+    private long pageSize;
 
     @Schema(description = "전체 카운트")
-    private long totalCount; // 전체
+    private long totalCount;
 }

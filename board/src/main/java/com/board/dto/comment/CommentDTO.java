@@ -12,30 +12,13 @@ import lombok.ToString;
 @ToString
 @Builder
 public class CommentDTO {
-    // PK
-    private int no;
-
-    // 댓글이 달린 게시물
-    private int postNo;
-
-    // 생성 시점
-    private long createdAt;
-
-    // 삭제 시점
+    private Integer no;
+    private Integer postNo;
+    private Long createdAt;
     private Long deletedAt;
-
-    // 작성자 no.
-    private int authorNo;
-
-    // 내용
+    private Integer authorNo;
     private String content;
-
-    // 수정 시점
     private Long modifiedAt;
-
-    // 수정자 no.
     private Integer modifierNo;
-
-    // 상태 (POSTED, DELETED)
     private CommentStatusEnum status;
 }

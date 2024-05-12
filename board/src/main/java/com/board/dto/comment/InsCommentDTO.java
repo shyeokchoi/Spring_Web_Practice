@@ -24,7 +24,7 @@ public class InsCommentDTO {
     private String content;
 
     @JsonIgnore
-    private int authorNo;
+    private Integer authorNo;
 
     @JsonIgnore
     private CommentStatusEnum status;

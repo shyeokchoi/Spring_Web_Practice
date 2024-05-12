@@ -10,6 +10,7 @@
         , m.id
         , m.name
         , m.email 
+        , m.status
     </sql>
 
     <!-- 새로운 멤버 등록 (회원가입) -->
@@ -20,12 +21,14 @@
             , pw
             , email
             , phone
+            , status
         ) VALUES (
             #{name}
             , #{id} 
             , #{pw} 
             , #{email} 
             , #{phone} 
+            , #{status}
         );
     </insert>
 
@@ -36,11 +39,11 @@
         FROM 
             member m
         <where>
-            m.withdrawn_at IS NULL
-            <if test="id != null">
+            m.status = 'NORMAL'
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(id)">
                 AND m.id = #{id}
             </if>
-            <if test="email != null">
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(email)">
                 AND m.email = #{email}
             </if>
         </where>
@@ -75,11 +78,11 @@
             , ma.expired_at = UNIX_TIMESTAMP()
         WHERE
             ma.member_no = #{memberNo}
-            AND ma.expired_at IS NULL
+            AND ma.status = 'VALID'
     </update>
 
     <!-- selectMemberDetail -->
-    <select id="selectMemberDetail" resultType="com.board.dto.member.SelectMemberDetailDTO">
+    <select id="selectMemberDetail" resultType="com.board.dto.member.MemberDetailDTO">
         SELECT
             m.no
             , m.name
@@ -112,6 +115,7 @@
             member m
         SET
             m.withdrawn_at = UNIX_TIMESTAMP()
+            , m.status = 'WITHDRAWN' 
         WHERE
             m.no = #{memberNo}
     </update>

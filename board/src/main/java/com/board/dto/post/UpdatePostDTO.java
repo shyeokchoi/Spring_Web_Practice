@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class UpdatePostDTO {
     @JsonIgnore
-    private int postNo;
+    private Integer postNo;
 
     @Size(min = 0, max = 150, message = "제목은 150글자 이하입니다.")
     @NotBlank(message = "제목은 공백일 수 없습니다.")

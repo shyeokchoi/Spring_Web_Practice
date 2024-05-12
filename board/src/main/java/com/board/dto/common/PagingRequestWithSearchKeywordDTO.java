@@ -8,8 +8,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PagingRequestWithSearchKeywordDTO extends PagingRequestDTO {
-    /**
-     * 검색어. 작성자 이름과 제목을 동시에 검색한다
-     */
     private String searchKeyword;
 }

@@ -33,44 +33,23 @@ import lombok.RequiredArgsConstructor;
 public class FileController extends BaseController {
     private final StorageService storageService;
 
-    /**
-     * 파일 등록
-     * 
-     * @param memberInfoDTO
-     * @param file
-     * @return
-     * @throws Exception
-     */
     @Operation(summary = "파일 등록")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Integer> insFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody MultipartFile file) {
-
-        // 파일 저장 후 DB 업데이트
         return ok(storageService.insFile(file, memberInfoDTO.getMemberNo()));
 
     }
 
-    /**
-     * 파일 다운로드
-     * 
-     * @param memberInfoDTO
-     * @param fileName
-     * @return
-     */
     @Operation(summary = "파일 다운로드")
     @GetMapping("/{fileInfoNo}")
     public ResponseEntity<Resource> downloadFile(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) @Min(1) int fileInfoNo) {
-        // 파일 불러오기
         ResourceAndOriginName fileAndName = storageService.loadAsResource(fileInfoNo);
-
         Resource file = fileAndName.getResource();
         String fileName = fileAndName.getOriginName();
-
-        // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData(fileName, fileName);
@@ -80,20 +59,11 @@ public class FileController extends BaseController {
                 .body(file);
     }
 
-    /**
-     * 파일 삭제
-     * 
-     * @param memberInfoDTO
-     * @param fileInfoNo
-     * @return
-     * @throws Exception
-     */
     @Operation(summary = "파일 삭제")
     @DeleteMapping("/{fileInfoNo}")
     public ResponseEntity<Void> deleteFileInfo(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable(name = "fileInfoNo", required = true) @Min(1) int fileInfoNo) {
-
         storageService.deleteFile(fileInfoNo);
         return ok();
     }

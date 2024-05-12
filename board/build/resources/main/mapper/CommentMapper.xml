@@ -33,7 +33,7 @@
             , UNIX_TIMESTAMP()
             , #{authorNo}
             , #{content}
-            , 'POSTED'
+            , #{status}
         )
     </insert>
 
@@ -76,7 +76,7 @@
         LIMIT #{pagingRequestDTO.pageSize} OFFSET #{pagingRequestDTO.offset}
     </select>
 
-    <update id="updatePost">
+    <update id="updateComment">
         UPDATE
             comment c
         SET
@@ -85,25 +85,16 @@
             , c.modifier_no = #{modifierNo}
         WHERE
             c.no = #{commentNo}
-            AND c.status != 'DELETED'
+            AND c.status = 'POSTED'
     </update>
 
     <update id="deleteComment">
         UPDATE
             comment c
         SET
-            deleted_at = UNIX_TIMESTAMP()
-            , status = 'DELETED'
+            c.deleted_at = UNIX_TIMESTAMP()
+            , c.status = 'DELETED'
         WHERE
             c.no = #{commentNo}
     </update>
-
-    <select id="retvAuthorNo">
-        SELECT
-            c.author_no
-        FROM
-            comment c
-        WHERE
-            c.no = #{commentNo}
-    </select>
 </mapper>

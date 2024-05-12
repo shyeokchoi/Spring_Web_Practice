@@ -3,9 +3,6 @@ package com.board.dto.member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-/**
- * 회원 정보를 받아오기 위한 DTO
- */
 @Data
 @Schema(description = "회원 정보")
 public class MemberDTO {

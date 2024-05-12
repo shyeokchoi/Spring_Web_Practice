@@ -32,69 +32,32 @@ import lombok.RequiredArgsConstructor;
 public class CommentController extends BaseController {
     private final CommentService commentService;
 
-    /**
-     * 댓글 등록
-     * 
-     * @param memberInfoDTO
-     * @param insCommentDTO
-     * @param postNo        path에 포함된 post no.
-     * @return 새롭게 등록된 댓글의 no.
-     */
     @Operation(summary = "댓글 등록")
     @PostMapping("")
     public ResponseEntity<Integer> insComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid InsCommentDTO insCommentDTO) {
-
-        // 댓글 작성자 author no 설정
         insCommentDTO.setAuthorNo(memberInfoDTO.getMemberNo());
-
-        // 댓글 상태 설정. POSTED로
         insCommentDTO.setStatus(CommentStatusEnum.POSTED);
-
-        // 파일 저장 후 DB 업데이트
         return ok(commentService.insComment(insCommentDTO));
     }
 
-    /**
-     * 댓글 수정
-     * 
-     * @param memberInfoDTO
-     * @param updateCommentDTO
-     * @param postNo
-     * @param commentNo
-     * @return
-     */
     @Operation(summary = "댓글 수정")
     @PutMapping("/{commentNo}")
     public ResponseEntity<Integer> updateComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @RequestBody @Valid UpdateCommentDTO updateCommentDTO,
             @PathVariable @Min(1) int commentNo) {
-
-        // 수정의 대상이 되는 comment의 no. 설정
         updateCommentDTO.setCommentNo(commentNo);
-
-        // 수정하는 사람의 no. 설정
         updateCommentDTO.setModifierNo(memberInfoDTO.getMemberNo());
-
         return ok(commentService.updateComment(updateCommentDTO));
     }
 
-    /**
-     * 댓글 삭제
-     * 
-     * @param memberInfoDTO
-     * @param postNo
-     * @param commentNo
-     * @return
-     */
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{commentNo}")
     public ResponseEntity<Void> deleteComment(
             @RequestAttribute(name = RequestAttributeKeys.MEMBER_INFO) MemberInfoDTO memberInfoDTO,
             @PathVariable @Min(1) int commentNo) {
-
         commentService.deleteComment(memberInfoDTO.getMemberNo(), commentNo);
         return ok();
     }

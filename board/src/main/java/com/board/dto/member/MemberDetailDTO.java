@@ -4,9 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * [GET] members/self 로 조회했을 때 멤버 정보를 반환하기 위한 DTO.
- */
 @Getter
 @Setter
 public class MemberDetailDTO {

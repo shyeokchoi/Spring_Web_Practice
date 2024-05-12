@@ -4,9 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-/**
- * 게시글 리스트를 반환할 때 사용하는 DTO
- */
 public class PostSimpleDTO {
     @Schema(description = "게시물의 Primary Key")
     private Integer no;
